@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: gateway
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 500MB
+      max-request-size: 500MB
+      file-size-threshold: 1MB
+      location: /
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+server:
+  port: 8888
+eureka:
+  instance:
+    hostname: localhost
+    port: 8761
+  client:
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/eureka/
+logging:
+  level:
+    org.springframework.cloud.gateway: debug
