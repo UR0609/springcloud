@@ -1,4 +1,4 @@
-package com.ljryh.client.config;
+package com.ljryh.client.config.mybatis;
 
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
