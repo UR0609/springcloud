@@ -24,4 +24,4 @@
 
 微信：
 
-![cmd-markdown-logo](http://wp.aipaopao.top/wp-content/uploads/2019/03/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20190323125438-300x300.jpg)
+![微信](http://wp.aipaopao.top/wp-content/uploads/2019/03/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20190323125438-300x300.jpg)
