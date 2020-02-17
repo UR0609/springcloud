@@ -39,4 +39,9 @@ public class UserController {
         return userService.page(page,wrapper);
     }
 
+    @RequestMapping(value = "/hello",method = RequestMethod.POST)
+    public String hello() {
+        return "wp.ljryh.com";
+    }
+
 }
