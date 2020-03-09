@@ -16,7 +16,7 @@ spring:
       max-lifetime: 1800000
       pool-name: DatebookHikariCP
       maximum-pool-size: 30
-      jdbc-url: jdbc:mysql://127.0.0.1:3306/springcloud?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/springcloud?characterEncoding=utf8&useSSL=true&serverTimezone=CTT
       username: root
       password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
