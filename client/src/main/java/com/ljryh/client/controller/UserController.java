@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljryh.client.entity.User;
-import com.ljryh.client.service.impl.UserServiceImpl;
+import com.ljryh.client.service.IUserService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 public class UserController {
 
     @Resource
-    private UserServiceImpl userService;
+    private IUserService userService;
 
     @RequestMapping(value = "/list",method = RequestMethod.POST)
     public Object findAll(User user, HttpServletRequest request){
