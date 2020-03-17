@@ -4,8 +4,10 @@ package com.ljryh.client.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ljryh.client.entity.CallResult;
 import com.ljryh.client.entity.User;
 import com.ljryh.client.service.IUserService;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,6 +39,46 @@ public class UserController {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.setEntity(user);
         return userService.page(page,wrapper);
+    }
+
+    @RequestMapping(value = "/add",method = RequestMethod.POST)
+    public Object add(@RequestBody User user){
+        boolean judge = userService.save(user);
+        if (judge) {
+            return CallResult.success();
+        } else {
+            return CallResult.fail();
+        }
+    }
+
+    @RequestMapping(value = "/mod",method = RequestMethod.POST)
+    public Object mod(@RequestBody User user){
+        boolean judge = userService.updateById(user);
+        if (judge) {
+            return CallResult.success();
+        } else {
+            return CallResult.fail();
+        }
+    }
+
+    @RequestMapping(value = "/del",method = RequestMethod.POST)
+    public Object del(@RequestBody User user){
+        boolean judge = userService.removeById(user.getId());
+        if (judge) {
+            return CallResult.success();
+        } else {
+            return CallResult.fail();
+        }
+    }
+
+    @RequestMapping(value = "/sel",method = RequestMethod.POST)
+    public Object sel(@RequestBody User user){
+        User result = userService.getById(user.getId());
+        if (result != null) {
+            return CallResult.success(result);
+        } else {
+            return CallResult.fail();
+        }
     }
 
     @RequestMapping(value = "/hello",method = RequestMethod.POST)
