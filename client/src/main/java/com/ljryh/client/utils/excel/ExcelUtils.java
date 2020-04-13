@@ -24,8 +24,8 @@ public class ExcelUtils {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String time = sdf.format(date);
             String[][] list = {
-                    {"白滚滚上神","1000000","20100914001000000000","http://baigungun.blog.com.cn/index",time},
-                    {"天族夜华","300000","20100914002","http://yehua.com.cn/index",time}
+//                    {"白滚滚上神","1000000","20100914001000000000","http://baigungun.blog.com.cn/index",time},
+//                    {"天族夜华","300000","20100914002","http://yehua.com.cn/index",time}
             };
             transToExcel.exporteExcel("学生表",headers,list,os);
             os.close();
