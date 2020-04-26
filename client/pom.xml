@@ -123,11 +123,11 @@
         </dependency>
 
 <!--        最近阿里json总是出问题 &lt;!&ndash;fastjson&ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>com.alibaba</groupId>-->
-<!--            <artifactId>fastjson</artifactId>-->
-<!--            <version>1.2.67</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.68</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

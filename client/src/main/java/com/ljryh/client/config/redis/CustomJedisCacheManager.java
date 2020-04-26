@@ -32,7 +32,6 @@ import java.util.*;
  *      通过自定义 CustomRedisCacheManager 并继承 RedisCacheManager 来处理异常可以解决这个问题。
  * </pre>
  *
- * @author Created by YL on 2017/10/2
  */
 @Slf4j
 public class CustomJedisCacheManager extends RedisCacheManager implements ApplicationContextAware, InitializingBean {
