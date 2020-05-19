@@ -1,19 +1,16 @@
 package com.ljryh.client.utils.JWT;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.google.gson.Gson;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.codec.binary.Base64;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 public class JWT {
@@ -103,45 +100,96 @@ public class JWT {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UnsupportedEncodingException {
 
-        Map<String,String> map = new HashMap<>();
-        map.put("name","knight");
-        map.put("id","001");
-        String subject = new Gson().toJson(map);
 
-        try {
-            JWT util = new JWT();
-            String jwt = util.createJWT(Constant.JWT_ID, "Anson", subject, Constant.JWT_TTL,"Anson");
-            System.out.println("JWT：" + jwt);
+        Map<String,Object> map = new HashMap<>();
 
-            System.out.println("\n解密\n");
-//            String jwt= "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzaW5vd2VsIiwiZXhwIjoxNTcyOTQyMjk2LCJpYXQiOjE1NzI5Mzg2OTYsImp0aSI6IjViYTQ3MjE3LTQxMDMtNDQ3MS1iNmMwLWU3ODhlMTRhYzIxYyIsInVzZXJuYW1lIjoic2lub3dlbCJ9.qxIJw8s7whGqQW2soyRfmELeISOOiGFQa9uMxPDCHKA";
+        map.put("q","在微信智言与微信智聆两大技术的支持下，微信AI团队推出了“微信对话开放平台”和“腾讯小微”智能硬件两大核心产品。微信支付团队最新发布的“微信青蛙Pro”在现场设置了体验区，让大家感受AI认脸的本事。");
 
-            JWTUtils JWTUtils = new JWTUtils();
+        String s = Jwts.builder()
+//                .claim("data", map)
+                .claim("userid", UUID.randomUUID().toString())
+                .signWith(SignatureAlgorithm.HS256, "Cu4PggtnhQfFq6m7GxKwDS3E8TwGqwkXXbgFH7k54k3".getBytes("UTF-8"))
+                .compact();
 
-            JWTUtils.parseJWT(jwt,false);
+        System.out.println(s);
 
-            DecodedJWT DecodedJWT = com.auth0.jwt.JWT.decode(jwt);
-            String str = DecodedJWT.getClaim("username").asString();
-            String publicKey = DecodedJWT.getIssuer();
-            System.out.println(str);
+        Claims claims = Jwts.parser()
+                .setSigningKey("Cu4PggtnhQfFq6m7GxKwDS3E8TwGqwkXXbgFH7k54k3".getBytes("UTF-8"))
+                .parseClaimsJws(s).getBody();
+        System.out.println(claims);
 
-            System.out.println(publicKey);
+//        Map<String,Object> map = new HashMap<>();
+//
+//        map.put("q","在微信智言与微信智聆两大技术的支持下，微信AI团队推出了“微信对话开放平台”和“腾讯小微”智能硬件两大核心产品。微信支付团队最新发布的“微信青蛙Pro”在现场设置了体验区，让大家感受AI认脸的本事。");
+//
+//        String s = Jwts.builder()
+//                .claim("data", map)
+//                .claim("uid", UUID.randomUUID().toString())
+//                .signWith(SignatureAlgorithm.HS256, "Cu4PggtnhQfFq6m7GxKwDS3E8TwGqwkXXbgFH7k54k3".getBytes("UTF-8"))
+//                .compact();
+//
+//        System.out.println(s);
+//
+//        Claims claims = Jwts.parser()
+//                .setSigningKey("Cu4PggtnhQfFq6m7GxKwDS3E8TwGqwkXXbgFH7k54k3".getBytes("UTF-8"))
+//                .parseClaimsJws(s).getBody();
+//        System.out.println(claims);
 
-            Map<String, Object> result = util.parseJWT(jwt);
-            if(Boolean.valueOf(result.get("result").toString())){
-                Claims c = (Claims) result.get("data");
-                System.out.println(c.getId());
-                System.out.println(c.getIssuedAt());
-                System.out.println(c.getSubject());
-                System.out.println(c.getIssuer());
-                System.out.println(c.get("username", String.class));
-                System.out.println(c.get("password", String.class));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+
+
+//        String s = Jwts.builder()
+//                .setSubject("1234567890")
+//                .setId("74dd18d3-40f2-419d-b54e-26c49335959e")
+//                .setIssuedAt(Date.from(Instant.ofEpochSecond(1589265811)))
+//                .setExpiration(Date.from(Instant.ofEpochSecond(1589269411)))
+//                .claim("name", "John Doe")
+//                .claim("admin", true)
+//                .signWith(SignatureAlgorithm.HS256, "Cu4PggtnhQfFq6m7GxKwDS3E8TwGqwkXXbgFH7k54k3".getBytes("UTF-8"))
+//                .compact();
+//
+//        System.out.println(s);
+
+
+//        Map<String,String> map = new HashMap<>();
+//        map.put("name","knight");
+//        map.put("id","001");
+//        String subject = new Gson().toJson(map);
+//
+//        try {
+//            JWT util = new JWT();
+//            String jwt = util.createJWT(Constant.JWT_ID, "Anson", subject, Constant.JWT_TTL,"Anson");
+//            System.out.println("JWT：" + jwt);
+//
+//            System.out.println("\n解密\n");
+////            String jwt= "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzaW5vd2VsIiwiZXhwIjoxNTcyOTQyMjk2LCJpYXQiOjE1NzI5Mzg2OTYsImp0aSI6IjViYTQ3MjE3LTQxMDMtNDQ3MS1iNmMwLWU3ODhlMTRhYzIxYyIsInVzZXJuYW1lIjoic2lub3dlbCJ9.qxIJw8s7whGqQW2soyRfmELeISOOiGFQa9uMxPDCHKA";
+//
+//            JWTUtils JWTUtils = new JWTUtils();
+//
+//            JWTUtils.parseJWT(jwt,false);
+//
+//            DecodedJWT DecodedJWT = com.auth0.jwt.JWT.decode(jwt);
+//            String str = DecodedJWT.getClaim("username").asString();
+//            String publicKey = DecodedJWT.getIssuer();
+//            System.out.println(str);
+//
+//            System.out.println(publicKey);
+//
+//            Map<String, Object> result = util.parseJWT(jwt);
+//            if(Boolean.valueOf(result.get("result").toString())){
+//                Claims c = (Claims) result.get("data");
+//                System.out.println(c.getId());
+//                System.out.println(c.getIssuedAt());
+//                System.out.println(c.getSubject());
+//                System.out.println(c.getIssuer());
+//                System.out.println(c.get("username", String.class));
+//                System.out.println(c.get("password", String.class));
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
     }
 }
