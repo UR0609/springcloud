@@ -24,6 +24,16 @@ public class ClientApplication {
 
     }
 
+    @Resource
+    private DelaySender sender;
+//	@Autowired
+//	private QueueSender sender;
+
+    @RequestMapping("/send")
+    public String helloworld(String data) {
+        return sender.sendDelay(data);
+    }
+
     @Value("${server.port}")
     private String port;
 
