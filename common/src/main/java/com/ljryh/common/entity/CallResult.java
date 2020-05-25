@@ -1,4 +1,4 @@
-package com.ljryh.client.entity;
+package com.ljryh.common.entity;
 
 import java.io.Serializable;
 
@@ -53,19 +53,19 @@ public class CallResult<T> implements Serializable {
     }
 
     public static <T> CallResult<T> success() {
-        return new CallResult(true, CallResult.ResponseCode.SUCCESS.getCode());
+        return new CallResult(true, ResponseCode.SUCCESS.getCode());
     }
 
     public static <T> CallResult<T> success(String msg) {
-        return new CallResult(true, CallResult.ResponseCode.SUCCESS.getCode(), msg);
+        return new CallResult(true, ResponseCode.SUCCESS.getCode(), msg);
     }
 
     public static <T> CallResult<T> success(T data) {
-        return new CallResult(true, CallResult.ResponseCode.SUCCESS.getCode(), data);
+        return new CallResult(true, ResponseCode.SUCCESS.getCode(), data);
     }
 
     public static <T> CallResult<T> success(String msg, T data) {
-        return new CallResult(true, CallResult.ResponseCode.SUCCESS.getCode(), msg, data);
+        return new CallResult(true, ResponseCode.SUCCESS.getCode(), msg, data);
     }
 
     public static <T> CallResult<T> success(int code, String msg, T data) {
@@ -73,11 +73,11 @@ public class CallResult<T> implements Serializable {
     }
 
     public static <T> CallResult<T> fail() {
-        return new CallResult(false, CallResult.ResponseCode.ERROR.getCode(), CallResult.ResponseCode.ERROR.getDesc());
+        return new CallResult(false, ResponseCode.ERROR.getCode(), ResponseCode.ERROR.getDesc());
     }
 
     public static <T> CallResult<T> fail(String msg) {
-        return new CallResult(false, CallResult.ResponseCode.ERROR.getCode(), msg);
+        return new CallResult(false, ResponseCode.ERROR.getCode(), msg);
     }
 
     public static <T> CallResult<T> fail(int code, String msg) {

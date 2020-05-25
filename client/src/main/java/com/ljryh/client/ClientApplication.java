@@ -1,6 +1,9 @@
 package com.ljryh.client;
 
+import com.ljryh.client.config.queue.DelaySender;
 import com.ljryh.client.utils.RedisUtils;
+import net.hasor.spring.boot.EnableHasor;
+import net.hasor.spring.boot.EnableHasorWeb;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -10,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
+@EnableHasor()
+@EnableHasorWeb()
 @SpringBootApplication
 @EnableDiscoveryClient
 @MapperScan("com.ljryh.client.mapper")

@@ -1,10 +1,10 @@
-package com.ljryh.client.utils;
+package com.ljryh.common.utils;
 
 import com.google.gson.Gson;
 
 import java.lang.reflect.Type;
 
-public class GsonUtils {
+public class GsonUtil {
     private static Gson GsonUtilsGson = new Gson();
 
     /**

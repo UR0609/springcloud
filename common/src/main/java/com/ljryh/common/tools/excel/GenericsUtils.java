@@ -1,4 +1,4 @@
-package com.ljryh.client.utils.excel;
+package com.ljryh.common.tools.excel;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;

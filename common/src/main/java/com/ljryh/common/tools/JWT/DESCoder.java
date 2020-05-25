@@ -1,4 +1,4 @@
-package com.ljryh.client.utils.JWT;
+package com.ljryh.common.tools.JWT;
 
 import sun.misc.BASE64Decoder;
 
@@ -7,7 +7,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 import java.security.Key;
 
-import static com.ljryh.client.utils.JWT.DESBuilder.KEY_ALGORTHM;
+import static com.ljryh.common.tools.JWT.DESBuilder.KEY_ALGORTHM;
 
 
 public class DESCoder {

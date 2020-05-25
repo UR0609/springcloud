@@ -1,4 +1,4 @@
-package com.ljryh.client.utils.JWT;
+package com.ljryh.common.tools.JWT;
 
 import sun.misc.BASE64Encoder;
 

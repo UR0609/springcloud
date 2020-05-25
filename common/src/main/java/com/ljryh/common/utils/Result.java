@@ -1,4 +1,4 @@
-package com.ljryh.client.utils;
+package com.ljryh.common.utils;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
