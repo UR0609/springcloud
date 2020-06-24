@@ -111,15 +111,14 @@ public class JWT {
         map.put("q","在微信智言与微信智聆两大技术的支持下，微信AI团队推出了“微信对话开放平台”和“腾讯小微”智能硬件两大核心产品。微信支付团队最新发布的“微信青蛙Pro”在现场设置了体验区，让大家感受AI认脸的本事。");
 
         String s = Jwts.builder()
-//                .claim("data", map)
                 .claim("userid", UUID.randomUUID().toString())
-                .signWith(SignatureAlgorithm.HS256, "Cu4PggtnhQfFq6m7GxKwDS3E8TwGqwkXXbgFH7k54k3".getBytes("UTF-8"))
+                .signWith(SignatureAlgorithm.HS256, "FG1vMoYBCjtc3s5osSN2SBDUy2iTrECCBKs3ln6N6wy".getBytes("UTF-8"))
                 .compact();
 
         System.out.println(s);
 
         Claims claims = Jwts.parser()
-                .setSigningKey("Cu4PggtnhQfFq6m7GxKwDS3E8TwGqwkXXbgFH7k54k3".getBytes("UTF-8"))
+                .setSigningKey("FG1vMoYBCjtc3s5osSN2SBDUy2iTrECCBKs3ln6N6wy".getBytes("UTF-8"))
                 .parseClaimsJws(s).getBody();
         System.out.println(claims);
 
