@@ -13,6 +13,12 @@
     </properties>
 
     <dependencies>
+        <!--Lombok-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.72</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
         <dependency>
             <groupId>org.apache.poi</groupId>
@@ -111,7 +117,7 @@
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-core</artifactId>
-            <version>9.0.27</version>
+            <version>9.0.37</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
