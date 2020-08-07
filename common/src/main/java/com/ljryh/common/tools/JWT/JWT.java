@@ -11,9 +11,9 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 public class JWT {
@@ -53,7 +53,7 @@ public class JWT {
         Date now = new Date(nowMillis);
 
         // 创建payload的私有声明（根据特定的业务需要添加，如果要拿这个做验证，一般是需要和jwt的接收方提前沟通好验证方式的）
-        Map<String, Object> claims = new HashMap<>();
+        Map<String, Object> claims = new ConcurrentHashMap<>();
         claims.put("username", "admin");
         claims.put("password", "admin");
 
@@ -88,7 +88,7 @@ public class JWT {
      * @throws Exception
      */
     public Map<String, Object> parseJWT(String jwt) throws Exception {
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new ConcurrentHashMap<>();
         try {
             SecretKey key = generalKey(jwt);  //签名秘钥，和生成的签名的秘钥一模一样
             Claims claims = Jwts.parser()  //得到DefaultJwtParser
@@ -106,7 +106,7 @@ public class JWT {
     public static void main(String[] args) throws UnsupportedEncodingException {
 
 
-        Map<String,Object> map = new HashMap<>();
+        Map<String,Object> map = new ConcurrentHashMap<>();
 
         map.put("q","在微信智言与微信智聆两大技术的支持下，微信AI团队推出了“微信对话开放平台”和“腾讯小微”智能硬件两大核心产品。微信支付团队最新发布的“微信青蛙Pro”在现场设置了体验区，让大家感受AI认脸的本事。");
 
@@ -122,7 +122,7 @@ public class JWT {
                 .parseClaimsJws(s).getBody();
         System.out.println(claims);
 
-//        Map<String,Object> map = new HashMap<>();
+//        Map<String,Object> map = new ConcurrentHashMap<>();
 //
 //        map.put("q","在微信智言与微信智聆两大技术的支持下，微信AI团队推出了“微信对话开放平台”和“腾讯小微”智能硬件两大核心产品。微信支付团队最新发布的“微信青蛙Pro”在现场设置了体验区，让大家感受AI认脸的本事。");
 //
@@ -155,7 +155,7 @@ public class JWT {
 //        System.out.println(s);
 
 
-//        Map<String,String> map = new HashMap<>();
+//        Map<String,String> map = new ConcurrentHashMap<>();
 //        map.put("name","knight");
 //        map.put("id","001");
 //        String subject = new Gson().toJson(map);
