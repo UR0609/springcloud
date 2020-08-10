@@ -9,7 +9,6 @@ public class CorsConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        System.out.println("----------------------");
         registry.addMapping("/**")
                 .allowedOrigins("*")
                 .allowCredentials(true)
