@@ -4,8 +4,8 @@ import org.springframework.amqp.core.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Configuration
 public class DelayRabbitConfig {
@@ -46,7 +46,7 @@ public class DelayRabbitConfig {
      **/
     @Bean
     public Queue delayOrderQueue() {
-        Map<String, Object> params = new HashMap<>();
+        Map<String, Object> params = new ConcurrentHashMap<>();
         // x-dead-letter-exchange 声明了队列里的死信转发到的DLX名称，
         params.put("x-dead-letter-exchange", EXCHANGE_NAME);
         // x-dead-letter-routing-key 声明了这些死信在转发时携带的 routing-key 名称。

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
+// 自动化接口生成
 @EnableHasor()
 @EnableHasorWeb()
 @SpringBootApplication

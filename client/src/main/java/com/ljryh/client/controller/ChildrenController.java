@@ -29,11 +29,11 @@ public class ChildrenController {
     private ChildrenServiceImpl childrenService;
 
     @RequestMapping(value = "/list",method = RequestMethod.POST)
-    public Object findAll(Children children, HttpServletRequest request){
-        //获取前台发送过来的数据
-        Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
-        Integer pageSize = Integer.valueOf(request.getParameter("pageSize"));
-        IPage<Children> page = new Page<>(pageNo, pageSize);
+    public Object findAll(Children children/*, HttpServletRequest request*/){
+//        //获取前台发送过来的数据
+//        Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
+//        Integer pageSize = Integer.valueOf(request.getParameter("pageSize"));
+        IPage<Children> page = new Page<>(children.getPageNo(), children.getPageSize());
         QueryWrapper<Children> wrapper = new QueryWrapper<>();
         wrapper.setEntity(children);
         return childrenService.page(page,wrapper);

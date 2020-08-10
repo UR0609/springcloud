@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ljryh.client.mapper.shiro.UserMapper">
+<mapper namespace="com.ljryh.client.mapper.shiro.SysTokenMapper">
 
-    <select id="findByUsername" resultType="com.ljryh.client.entity.shiro.User">
+    <select id="findByToken" resultType="com.ljryh.client.entity.shiro.SysToken">
         select
             a.*
         from
-            user a
+            sys_token a
         WHERE
             1=1
-        AND a.username = #{username}
+        AND a.token = #{token}
     </select>
 
-    <select id="findByUserId" resultType="com.ljryh.client.entity.shiro.User">
+    <select id="findByUserId" resultType="com.ljryh.client.entity.shiro.SysToken">
         select
             a.*
         from
-            user a
+            sys_token a
         WHERE
             1=1
         AND a.user_id = #{userId}

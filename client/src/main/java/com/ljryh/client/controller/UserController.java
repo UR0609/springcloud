@@ -4,7 +4,7 @@ package com.ljryh.client.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ljryh.client.entity.User;
+import com.ljryh.client.entity.shiro.User;
 import com.ljryh.client.service.IUserService;
 import com.ljryh.common.entity.CallResult;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,11 +31,11 @@ public class UserController {
     private IUserService userService;
 
     @RequestMapping(value = "/list",method = RequestMethod.POST)
-    public Object findAll(User user, HttpServletRequest request){
+    public Object findAll(User user/*, HttpServletRequest request*/){
         //获取前台发送过来的数据
-        Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
-        Integer pageSize = Integer.valueOf(request.getParameter("pageSize"));
-        IPage<User> page = new Page<>(pageNo, pageSize);
+//        Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
+//        Integer pageSize = Integer.valueOf(request.getParameter("pageSize"));
+        IPage<User> page = new Page<>(user.getPageNo(), user.getPageSize());
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.setEntity(user);
         return userService.page(page,wrapper);

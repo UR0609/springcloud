@@ -17,10 +17,10 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class Children implements Serializable {
+public class Children extends PageResponse implements Serializable {
 
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = -2132020383075642190L;
     /**
      * 主键ID
      */

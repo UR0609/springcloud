@@ -1,6 +1,6 @@
-package com.ljryh.client.mapper;
+package com.ljryh.client.mapper.shiro;
 
-import com.ljryh.client.entity.User;
+import com.ljryh.client.entity.shiro.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -12,5 +12,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2020-02-13
  */
 public interface UserMapper extends BaseMapper<User> {
+
+    User findByUsername(String username);
+
+    User findByUserId(Long userId);
 
 }

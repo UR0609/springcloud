@@ -2,7 +2,7 @@ package com.ljryh.client.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.ljryh.client.entity.User;
+import com.ljryh.client.entity.shiro.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
