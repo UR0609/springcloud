@@ -1,7 +1,6 @@
 package com.ljryh.client.config.redis;
 
 
-import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
@@ -16,6 +15,7 @@ import org.springframework.data.redis.cache.RedisCache;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.util.ReflectionUtils;
@@ -51,7 +51,7 @@ public class CustomJedisCacheManager extends RedisCacheManager implements Applic
      *     FastJsonRedisSerializer<Object> fastSerializer = new FastJsonRedisSerializer<>(Object.class);
      * </pre>
      */
-    public static final GenericFastJsonRedisSerializer FASTJSON_SERIALIZER = new GenericFastJsonRedisSerializer();
+    /*public static final GenericFastJsonRedisSerializer FASTJSON_SERIALIZER = new GenericFastJsonRedisSerializer();*/
 
     /**
      * key serializer pair
@@ -61,8 +61,12 @@ public class CustomJedisCacheManager extends RedisCacheManager implements Applic
     /**
      * value serializer pair
      */
-    public static final RedisSerializationContext.SerializationPair<Object> FASTJSON_PAIR = RedisSerializationContext
-            .SerializationPair.fromSerializer(FASTJSON_SERIALIZER);
+    /*public static final RedisSerializationContext.SerializationPair<Object> FASTJSON_PAIR = RedisSerializationContext
+            .SerializationPair.fromSerializer(FASTJSON_SERIALIZER);*/
+    /**
+     * jackson 替换 fastjson
+     */
+    public static final Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
 
     public CustomJedisCacheManager(RedisCacheWriter cacheWriter, RedisCacheConfiguration defaultCacheConfiguration) {
         super(cacheWriter, defaultCacheConfiguration);
@@ -125,7 +129,8 @@ public class CustomJedisCacheManager extends RedisCacheManager implements Applic
                         .disableCachingNullValues()
                         // .prefixKeysWith(cacheName)
                         .serializeKeysWith(STRING_PAIR)
-                        .serializeValuesWith(FASTJSON_PAIR);
+                        .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer));
+                        /*.serializeValuesWith(FASTJSON_PAIR);*/
                 initialCacheConfiguration.put(cacheName, config);
             } else {
                 log.warn("{} use default expiration.", cacheName);

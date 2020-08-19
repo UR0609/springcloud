@@ -6,7 +6,7 @@
         select
             a.*
         from
-            user a
+            s_user a
         WHERE
             1=1
         AND a.username = #{username}
@@ -16,10 +16,10 @@
         select
             a.*
         from
-            user a
+            s_user a
         WHERE
             1=1
-        AND a.user_id = #{userId}
+        AND a.id = #{Id}
     </select>
 
 </mapper>

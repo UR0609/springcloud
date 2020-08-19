@@ -1,9 +1,11 @@
 package com.ljryh.client.config.redis;
 
 
-
-import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -11,16 +13,27 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
+import org.springframework.cache.interceptor.SimpleKeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
+import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializationContext;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import java.lang.reflect.Method;
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 初始化 redis 相关
@@ -33,6 +46,10 @@ import java.time.Duration;
 @EnableCaching(proxyTargetClass = true) // 加上这个注解是为了支持 @Cacheable、@CachePut、@CacheEvict 等缓存注解
 @Slf4j
 public class SpringRedisConfiguration extends CachingConfigurerSupport {
+
+    @Value("${spring.cache.redis.time-to-live.seconds}")
+    private Long seconds;
+
     private final RedisConnectionFactory redisConnectionFactory;
 
     public SpringRedisConfiguration(RedisConnectionFactory redisConnectionFactory) {
@@ -47,32 +64,27 @@ public class SpringRedisConfiguration extends CachingConfigurerSupport {
      * </pre>
      */
     @Bean
-    public RedisTemplate<String, Object> redisTemplate() {
+    public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
+        //StringRedisTemplate的构造方法中默认设置了stringSerializer
         RedisTemplate<String, Object> template = new RedisTemplate<>();
-        // set key serializer
-        StringRedisSerializer serializer = CustomJedisCacheManager.STRING_SERIALIZER;
-        // 设置key序列化类，否则key前面会多了一些乱码
-        template.setKeySerializer(serializer);
-        template.setHashKeySerializer(serializer);
+        //set key serializer
+        StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
+        template.setKeySerializer(stringRedisSerializer);
+        template.setHashKeySerializer(stringRedisSerializer);
 
-        // fastjson serializer
-        GenericFastJsonRedisSerializer fastSerializer = CustomJedisCacheManager.FASTJSON_SERIALIZER;
-        template.setValueSerializer(fastSerializer);
-        template.setHashValueSerializer(fastSerializer);
-        // 如果 KeySerializer 或者 ValueSerializer 没有配置，则对应的 KeySerializer、ValueSerializer 才使用这个 Serializer
-        template.setDefaultSerializer(fastSerializer);
 
-        log.info("redis: {}", redisConnectionFactory);
-        LettuceConnectionFactory factory = (LettuceConnectionFactory) redisConnectionFactory;
-        log.info("spring.redis.database: {}", factory.getDatabase());
-        log.info("spring.redis.host: {}", factory.getHostName());
-        log.info("spring.redis.port: {}", factory.getPort());
-        log.info("spring.redis.timeout: {}", factory.getTimeout());
-        log.info("spring.redis.password: {}", factory.getPassword());
+        //set value serializer
+        template.setDefaultSerializer(jackson2JsonRedisSerializer());
 
-        // factory
-        template.setConnectionFactory(redisConnectionFactory);
+        template.setConnectionFactory(lettuceConnectionFactory);
         template.afterPropertiesSet();
+        return template;
+    }
+
+    @Bean
+    public StringRedisTemplate stringRedisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
+        StringRedisTemplate template = new StringRedisTemplate();
+        template.setConnectionFactory(lettuceConnectionFactory);
         return template;
     }
 
@@ -83,57 +95,110 @@ public class SpringRedisConfiguration extends CachingConfigurerSupport {
      * </pre>
      */
     @Override
+    @Bean
     public KeyGenerator keyGenerator() {
-        return (o, method, objects) -> {
-            StringBuilder sb = new StringBuilder(32);
-            sb.append(o.getClass().getSimpleName());
-            sb.append(".");
-            sb.append(method.getName());
-            if (objects.length > 0) {
-                sb.append("#");
-            }
-            String sp = "";
-            for (Object object : objects) {
-                sb.append(sp);
-                if (object == null) {
-                    sb.append("NULL");
-                } else {
-                    sb.append(object.toString());
+        return new SimpleKeyGenerator() {
+
+            @Override
+            public Object generate(Object target, Method method, Object... params) {
+                StringBuilder sb = new StringBuilder();
+                sb.append(target.getClass().getName());
+                sb.append(".").append(method.getName());
+
+                StringBuilder paramsSb = new StringBuilder();
+                for (Object param : params) {
+                    // 如果不指定，默认生成包含到键值中
+                    if (param != null) {
+                        paramsSb.append(param.toString());
+                    }
                 }
-                sp = ".";
+
+                if (paramsSb.length() > 0) {
+                    sb.append("_").append(paramsSb);
+                }
+                return sb.toString();
             }
-            return sb.toString();
+
         };
+
     }
 
     /**
      * 配置 RedisCacheManager，使用 cache 注解管理 redis 缓存
      */
     @Bean
-    @Override
-    public CacheManager cacheManager() {
+    public CacheManager cacheManager(LettuceConnectionFactory lettuceConnectionFactory) {
+
+        // 生成一个默认配置，通过config对象即可对缓存进行自定义配置
+        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig();
+
+        // 设置缓存的默认过期时间，也是使用Duration设置
+        config = config.entryTtl(Duration.ofSeconds(seconds))
+                // 设置 key为string序列化
+                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
+                // 设置value为json序列化
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer()))
+                // 不缓存空值
+                .disableCachingNullValues();
+
+        // 设置一个初始化的缓存空间set集合
+        Set<String> cacheNames = new HashSet<>();
+        cacheNames.add("company_goods_info");
+
+        // 对每个缓存空间应用不同的配置
+        Map<String, RedisCacheConfiguration> configMap = new HashMap<>();
+        configMap.put("company_goods_info", config);
+
+        // 使用自定义的缓存配置初始化一个cacheManager
+        RedisCacheManager cacheManager = RedisCacheManager.builder(lettuceConnectionFactory)
+                // 一定要先调用该方法设置初始化的缓存名，再初始化相关的配置
+                .initialCacheNames(cacheNames)
+                .withInitialCacheConfigurations(configMap)
+                .build();
+//        return cacheManager;
+
         // 初始化一个 RedisCacheWriter
         RedisCacheWriter cacheWriter = RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory);
-
-        // 设置默认过期时间：30 min
-        RedisCacheConfiguration defaultCacheConfig = RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofMinutes(30))
-                // .disableCachingNullValues()
-                // 使用注解时 key、value 的序列化方式
-                .serializeKeysWith(CustomJedisCacheManager.STRING_PAIR)
-                .serializeValuesWith(CustomJedisCacheManager.FASTJSON_PAIR);
-
-        // Map<String, RedisCacheConfiguration> caches = new HashMap<>();
-        // // 缓存配置
-        // RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
-        //         .entryTtl(Duration.ofSeconds(60))
-        //         .disableCachingNullValues()
-        //         // .prefixKeysWith("redis.service")
-        //         .serializeKeysWith(stringPair)
-        //         .serializeValuesWith(fastJsonPair);
-        // caches.put("redis.service", config);
-        // return new CustomJedisCacheManager(cacheWriter, defaultCacheConfig, caches);
-
-        return new CustomJedisCacheManager(cacheWriter, defaultCacheConfig);
+//
+//        // 设置默认过期时间：30 min
+//        RedisCacheConfiguration defaultCacheConfig = RedisCacheConfiguration.defaultCacheConfig()
+////                .entryTtl(Duration.ofMinutes(30))
+//                .entryTtl(Duration.ofSeconds(seconds))
+//                // .disableCachingNullValues()
+//                // 使用注解时 key、value 的序列化方式
+//                .serializeKeysWith(CustomJedisCacheManager.STRING_PAIR)
+//                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(CustomJedisCacheManager.jackson2JsonRedisSerializer));
+//
+//        // Map<String, RedisCacheConfiguration> caches = new HashMap<>();
+//        // // 缓存配置
+//        // RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
+//        //         .entryTtl(Duration.ofSeconds(60))
+//        //         .disableCachingNullValues()
+//        //         // .prefixKeysWith("redis.service")
+//        //         .serializeKeysWith(stringPair)
+//        //         .serializeValuesWith(fastJsonPair);
+//        // caches.put("redis.service", config);
+//        // return new CustomJedisCacheManager(cacheWriter, defaultCacheConfig, caches);
+//
+        // 解决序列化乱码问题
+        return new CustomJedisCacheManager(cacheWriter, config);
     }
+
+    /**
+     * json序列化
+     *
+     * @return
+     */
+    @Bean
+    public RedisSerializer<Object> jackson2JsonRedisSerializer() {
+        //使用Jackson2JsonRedisSerializer来序列化和反序列化redis的value值
+        Jackson2JsonRedisSerializer serializer = new Jackson2JsonRedisSerializer(Object.class);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+        serializer.setObjectMapper(mapper);
+        return serializer;
+    }
+
 }
