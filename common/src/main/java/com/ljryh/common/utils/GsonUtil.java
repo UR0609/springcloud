@@ -21,6 +21,9 @@ public class GsonUtil {
     }
 
     public static <T> T josnToModule(String jsonString, Type typeOfT) {
+
+        // List<T> list = GsonUtils.josnToModule(jsonString, new TypeToken<List<T>>() {}.getType());
+
         T list;
         list = GsonUtilsGson.fromJson(jsonString, typeOfT);
         return list;
