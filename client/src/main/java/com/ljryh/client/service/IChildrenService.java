@@ -1,7 +1,10 @@
 package com.ljryh.client.service;
 
-import com.ljryh.client.entity.Children;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ljryh.client.entity.Children;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IChildrenService extends IService<Children> {
 
+    IPage<Children> page(@Param("page") IPage<Children> page, @Param("ew") QueryWrapper<Children> wrapper);
 }

@@ -5,6 +5,7 @@ import com.ljryh.client.entity.shiro.User;
 import com.ljryh.client.service.shiro.ShiroService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @RestController
 public class ShiroController {
 
+    @Lazy // 懒加载 避免shiro与cache同时加载
     @Resource
     private ShiroService shiroService;
 
@@ -48,7 +50,7 @@ public class ShiroController {
             result.put("msg", "账号或密码有误");
         } else {
             //生成token，并保存到数据库
-            result = shiroService.createToken(user.getUserId());
+            result = shiroService.createToken(user);
             result.put("status", 200);
             result.put("msg", "登陆成功");
         }

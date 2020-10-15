@@ -29,7 +29,7 @@ public class RedisUtils {
 
     /**
      * 加锁
-     * @param targetId   targetId - 商品的唯一标志
+     * @param targetId   targetId - 唯一标志
      * @param timeStamp  当前时间+超时时间 也就是时间戳
      * @return
      */
@@ -133,6 +133,12 @@ public class RedisUtils {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    public void likeDel(String key) {
+        Set<String> keys = redisTemplate.keys(key + "*");
+
+        redisTemplate.delete(keys);
+    }
     //============================String=============================
 
     /**

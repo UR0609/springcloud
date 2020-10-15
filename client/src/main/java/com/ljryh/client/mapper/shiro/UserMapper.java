@@ -15,6 +15,6 @@ public interface UserMapper extends BaseMapper<User> {
 
     User findByUsername(String username);
 
-    User findByUserId(Long userId);
+    User findByUserId(Long id);
 
 }

@@ -1,6 +1,6 @@
 package com.ljryh.client.service.shiro;
 
-import com.ljryh.client.entity.shiro.Role;
+import com.ljryh.client.entity.Role;
 import com.ljryh.client.entity.shiro.SysToken;
 import com.ljryh.client.entity.shiro.User;
 
@@ -17,10 +17,10 @@ public interface ShiroService {
 
     /**
      * create token by userId
-     * @param userId
+     * @param user
      * @return
      */
-    Map<String,Object> createToken(Long userId);
+    Map<String,Object> createToken(User user);
 
     /**
      * logout

@@ -1,16 +1,16 @@
 package com.ljryh.client.config.auth;
 
-import com.ljryh.client.entity.shiro.Permission;
-import com.ljryh.client.entity.shiro.Role;
+import com.ljryh.client.entity.Permission;
+import com.ljryh.client.entity.Role;
 import com.ljryh.client.entity.shiro.SysToken;
 import com.ljryh.client.entity.shiro.User;
 import com.ljryh.client.service.shiro.ShiroService;
-import com.ljryh.common.utils.GsonUtil;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -20,6 +20,7 @@ import java.util.Set;
 @Component
 public class AuthRealm extends AuthorizingRealm {
 
+    @Lazy // 懒加载 避免shiro与cache同时加载
     @Resource
     private ShiroService shiroService;
 
@@ -67,7 +68,7 @@ public class AuthRealm extends AuthorizingRealm {
         if (user == null) {
             throw new UnknownAccountException("用户不存在!");
         }
-        Set<Role> roles = shiroService.findRoleByUserId(user.getUserId());
+        Set<Role> roles = shiroService.findRoleByUserId(user.getId());
         user.setRoles(roles);
         //5. 根据用户的情况, 来构建 AuthenticationInfo 对象并返回. 通常使用的实现类为: SimpleAuthenticationInfo
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, accessToken, this.getName());

@@ -50,11 +50,11 @@ public class MysqlGenerator {
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://127.0.0.1:3306/springcloud?useUnicode=true&useSSL=false&characterEncoding=utf8");
+        dsc.setUrl("jdbc:mysql://116.62.205.255:63306/demo?characterEncoding=utf8&useSSL=true&serverTimezone=CTT");
         // dsc.setSchemaName("public");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
-        dsc.setPassword("root");
+        dsc.setPassword("J@^S%TCE9dTXusVC");
         mpg.setDataSource(dsc);
 
         // 包配置
