@@ -21,8 +21,15 @@ module.exports = {
                 pathRewrite: {
                     '^/test': '' //请求的时候使用这个api就可以
                 }
+            },
+            '/web': {
+                target: 'http://localhost:8661/', //这里后台的地址模拟的;应该填写你们真实的后台接口
+                ws: true,
+                changOrigin: true, //允许跨域
+                pathRewrite: {
+                    '^/web': '' //请求的时候使用这个api就可以
+                }
             }
-
         }
     },
     configureWebpack: {
