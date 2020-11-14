@@ -7,13 +7,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljryh.client.entity.shiro.User;
 import com.ljryh.client.service.IUserService;
 import com.ljryh.common.entity.CallResult;
+import com.ljryh.common.utils.GsonUtil;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>
@@ -81,8 +81,12 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/hello",method = RequestMethod.POST)
-    public String hello() {
+    @RequestMapping(value = "/test",method = RequestMethod.POST)
+    public String hello(@RequestBody User user,String access_token) {
+
+        System.out.println(access_token);
+        System.out.println(GsonUtil.ModuleTojosn(user));
+
         return "wp.ljryh.com";
     }
 

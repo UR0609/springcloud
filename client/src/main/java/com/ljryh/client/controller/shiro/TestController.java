@@ -1,6 +1,7 @@
 package com.ljryh.client.controller.shiro;
 
 import com.ljryh.client.entity.shiro.User;
+import com.ljryh.client.utils.annotation.OperLog;
 import com.ljryh.common.utils.GsonUtil;
 import io.swagger.annotations.Api;
 import org.apache.shiro.SecurityUtils;
@@ -17,7 +18,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TestController {
     @RequiresPermissions({"save"}) //没有的话 AuthorizationException
     @PostMapping("/save")
-    public Map<String, Object> save(@RequestHeader("token")String token) {
+    @OperLog(operModul = "保存功能", operType = "save", operDesc = "保存测试")
+    public Map<String, Object> save(@RequestHeader("token") String token) {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         System.out.println(GsonUtil.ModuleTojosn(user));
         System.out.println("save");
@@ -29,7 +31,7 @@ public class TestController {
 
     @RequiresPermissions({"delete"}) //没有的话 AuthorizationException
     @DeleteMapping("/delete")
-    public Map<String, Object> delete(@RequestHeader("token")String token) {
+    public Map<String, Object> delete(@RequestHeader("token") String token) {
         System.out.println("delete");
         Map<String, Object> map = new ConcurrentHashMap<String, Object>();
         map.put("status", 200);
@@ -39,7 +41,7 @@ public class TestController {
 
     @RequiresPermissions({"update"}) //没有的话 AuthorizationException
     @PutMapping("update")
-    public Map<String, Object> update(@RequestHeader("token")String token) {
+    public Map<String, Object> update(@RequestHeader("token") String token) {
         System.out.println("update");
         Map<String, Object> map = new ConcurrentHashMap<String, Object>();
         map.put("status", 200);
@@ -49,7 +51,7 @@ public class TestController {
 
     @RequiresPermissions({"select"}) //没有的话 AuthorizationException
     @GetMapping("select")
-    public Map<String, Object> select(@RequestHeader("token")String token) {
+    public Map<String, Object> select(@RequestHeader("token") String token) {
         System.out.println("select");
         Map<String, Object> map = new ConcurrentHashMap<String, Object>();
         map.put("status", 200);
@@ -59,25 +61,27 @@ public class TestController {
 
     @RequiresRoles({"vip"}) //没有的话 AuthorizationException
     @GetMapping("/vip")
-    public Map<String, Object> vip(@RequestHeader("token")String token) {
+    public Map<String, Object> vip(@RequestHeader("token") String token) {
         System.out.println("vip");
         Map<String, Object> map = new ConcurrentHashMap<String, Object>();
         map.put("status", 200);
         map.put("msg", "当前用户有VIP角色");
         return map;
     }
+
     @RequiresRoles({"svip"}) //没有的话 AuthorizationException
     @GetMapping("/svip")
-    public Map<String, Object> svip(@RequestHeader("token")String token) {
+    public Map<String, Object> svip(@RequestHeader("token") String token) {
         System.out.println("svip");
         Map<String, Object> map = new ConcurrentHashMap<String, Object>();
         map.put("status", 200);
         map.put("msg", "当前用户有SVIP角色");
         return map;
     }
+
     @RequiresRoles({"p"}) //没有的话 AuthorizationException
     @GetMapping("/p")
-    public Map<String, Object> p(@RequestHeader("token")String token) {
+    public Map<String, Object> p(@RequestHeader("token") String token) {
         System.out.println("p");
         Map<String, Object> map = new ConcurrentHashMap<String, Object>();
         map.put("status", 200);

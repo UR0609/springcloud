@@ -18,11 +18,16 @@ public class RedisTest {
     @Test
     public void testSave1() {
 
-//        redisUtils.set("process:role:1","1");
-//        redisUtils.set("process:role:2","2");
-//        redisUtils.set("process:role:3","3");
 
-        redisUtils.likeDel("process:role");
+
+//        for (int i = 0; i < 5; i++) {
+//            Children children = new Children();
+//            children.setId((long) i);
+//            children.setName(i+"");
+//            redisUtils.lSet("children", GsonUtil.ModuleTojosn(children));
+//        }
+//        redisUtils.del("children");
+//        redisUtils.likeDel("process:role");
 
     }
 

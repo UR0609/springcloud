@@ -2,6 +2,7 @@ spring:
   profiles:
     active: test
 
+version: 1.0
 # 是否启用 Dataway 功能（必选：默认false）
 HASOR_DATAQL_DATAWAY: true
 # 是否开启 Dataway 后台管理界面（必选：默认false）
