@@ -13,6 +13,20 @@
     </properties>
 
     <dependencies>
+
+        <!-- https://mvnrepository.com/artifact/org.freemarker/freemarker -->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.30</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/tw.edu.ntu.csie/libsvm -->
+        <dependency>
+            <groupId>tw.edu.ntu.csie</groupId>
+            <artifactId>libsvm</artifactId>
+            <version>3.24</version>
+        </dependency>
         <!--Lombok-->
         <dependency>
             <groupId>com.alibaba</groupId>

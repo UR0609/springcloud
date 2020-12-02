@@ -89,7 +89,7 @@ public class HttpRequestUtil {
             conn.setDoOutput(true);
             conn.setDoInput(true);
             // 获取URLConnection对象对应的输出流
-            out = new PrintWriter(conn.getOutputStream());
+            out = new PrintWriter(new OutputStreamWriter(conn.getOutputStream(), "utf-8"));
             // 发送请求参数
             out.print(param);
             // flush输出流的缓冲
@@ -100,6 +100,7 @@ public class HttpRequestUtil {
             while ((line = in.readLine()) != null) {
                 result += line;
             }
+
         } catch (Exception e) {
             System.out.println("发送 POST 请求出现异常！" + e);
             e.printStackTrace();
@@ -204,7 +205,7 @@ public class HttpRequestUtil {
             conn.setDoOutput(true);
             conn.setDoInput(true);
             // 获取URLConnection对象对应的输出流
-            out = new PrintWriter(conn.getOutputStream());
+            out = new PrintWriter(new OutputStreamWriter(conn.getOutputStream(), "utf-8"));
             // 发送请求参数
             out.print(param);
             // flush输出流的缓冲
