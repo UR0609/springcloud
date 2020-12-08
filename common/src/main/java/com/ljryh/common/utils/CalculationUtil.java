@@ -7,12 +7,12 @@ import java.text.DecimalFormat;
  * 工具类 - 运算
  */
 
-public class ArithUtil {
+public class CalculationUtil {
 
 	// 默认除法运算精度
 	private static final int DEF_DIV_SCALE = 10;
 
-	private ArithUtil() {
+	private CalculationUtil() {
 		
 	}
 

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Component
@@ -130,73 +131,85 @@ public class MongodbUtils {
     /**
      * 根据条件查询出所有结果集 集合为数据对象中@Document 注解所配置的collection
      *
-     * @param obj        数据对象
-     * @param findKeys   查询条件 key
-     * @param findValues 查询条件 value
+     * @param entityClass 数据对象
+     * @param map         查询条件 key 查询条件 value
      * @return
      */
-    public static List<? extends Object> find(Object obj, String[] findKeys, Object[] findValues) {
+    public static <T> List<T> find(Map<String, Object> map, Class<T> entityClass) {
 
         Criteria criteria = null;
-        for (int i = 0; i < findKeys.length; i++) {
-            if (i == 0) {
-                criteria = Criteria.where(findKeys[i]).is(findValues[i]);
-            } else {
-                criteria.and(findKeys[i]).is(findValues[i]);
+        int count = 0;
+        if (map != null) {
+            for (Map.Entry<String, Object> entry : map.entrySet()) {
+                if (count == 0)
+                    criteria = Criteria.where(entry.getKey()).is(entry.getValue());
+                else
+                    criteria.and(entry.getKey()).is(entry.getValue());
+                count++;
             }
         }
+
         Query query = Query.query(criteria);
-        List<? extends Object> resultList = mongodbUtils.mongoTemplate.find(query, obj.getClass());
+        List<T> resultList = mongodbUtils.mongoTemplate.find(query, entityClass);
+
         return resultList;
     }
 
     /**
      * 指定集合 根据条件查询出所有结果集
      *
-     * @param obj            数据对象
-     * @param findKeys       查询条件 key
-     * @param findValues     查询条件 value
+     * @param entityClass    数据对象
+     * @param map            查询条件 key 查询条件 value
      * @param collectionName 集合名
      * @return
      */
-    public static List<? extends Object> find(Object obj, String[] findKeys, Object[] findValues, String collectionName) {
+    public static <T> List<T> find(Map<String, Object> map, Class<T> entityClass, String collectionName) {
 
         Criteria criteria = null;
-        for (int i = 0; i < findKeys.length; i++) {
-            if (i == 0) {
-                criteria = Criteria.where(findKeys[i]).is(findValues[i]);
-            } else {
-                criteria.and(findKeys[i]).is(findValues[i]);
+        if (map != null) {
+            int count = 0;
+            for (Map.Entry<String, Object> entry : map.entrySet()) {
+                if (count == 0)
+                    criteria = Criteria.where(entry.getKey()).is(entry.getValue());
+                else
+                    criteria.and(entry.getKey()).is(entry.getValue());
+                count++;
             }
         }
+
         Query query = Query.query(criteria);
-        List<? extends Object> resultList = mongodbUtils.mongoTemplate.find(query, obj.getClass(), collectionName);
+        List<T> resultList = mongodbUtils.mongoTemplate.find(query, entityClass, collectionName);
+
         return resultList;
     }
 
     /**
      * 指定集合 根据条件查询出所有结果集 并排倒序
      *
-     * @param obj            数据对象
-     * @param findKeys       查询条件 key
-     * @param findValues     查询条件 value
+     * @param entityClass    数据对象
+     * @param map            查询条件 key 查询条件 value
      * @param collectionName 集合名
      * @param sort           排序字段
      * @return
      */
-    public static List<? extends Object> find(Object obj, String[] findKeys, Object[] findValues, String collectionName, String sort) {
+    public static <T> List<T> find(Map<String, Object> map, Class<T> entityClass, String collectionName, String sort) {
 
         Criteria criteria = null;
-        for (int i = 0; i < findKeys.length; i++) {
-            if (i == 0) {
-                criteria = Criteria.where(findKeys[i]).is(findValues[i]);
-            } else {
-                criteria.and(findKeys[i]).is(findValues[i]);
+        int count = 0;
+        if (map != null) {
+            for (Map.Entry<String, Object> entry : map.entrySet()) {
+                if (count == 0)
+                    criteria = Criteria.where(entry.getKey()).is(entry.getValue());
+                else
+                    criteria.and(entry.getKey()).is(entry.getValue());
+                count++;
             }
         }
+
         Query query = Query.query(criteria);
         query.with(new Sort(Sort.Direction.DESC, sort));
-        List<? extends Object> resultList = mongodbUtils.mongoTemplate.find(query, obj.getClass(), collectionName);
+        List<T> resultList = mongodbUtils.mongoTemplate.find(query, entityClass, collectionName);
+
         return resultList;
     }
 
@@ -250,25 +263,25 @@ public class MongodbUtils {
     /**
      * 查询出所有结果集 集合为数据对象中 @Document 注解所配置的collection
      *
-     * @param obj 数据对象
+     * @param entityClass 数据对象
      * @return
      */
-    public static List<? extends Object> findAll(Object obj) {
+    public static <T> List<T> findAll(Class<T> entityClass) {
 
-        List<? extends Object> resultList = mongodbUtils.mongoTemplate.findAll(obj.getClass());
+        List<T> resultList = mongodbUtils.mongoTemplate.findAll(entityClass);
         return resultList;
     }
 
     /**
      * 指定集合 查询出所有结果集
      *
-     * @param obj            数据对象
+     * @param entityClass    数据对象
      * @param collectionName 集合名
      * @return
      */
-    public static List<? extends Object> findAll(Object obj, String collectionName) {
+    public static <T> List<T> findAll(Class<T> entityClass, String collectionName) {
 
-        List<? extends Object> resultList = mongodbUtils.mongoTemplate.findAll(obj.getClass(), collectionName);
+        List<T> resultList = mongodbUtils.mongoTemplate.findAll(entityClass, collectionName);
         return resultList;
     }
 
