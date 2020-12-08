@@ -2,7 +2,6 @@ package com.ljryh.client.utils;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -11,6 +10,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +26,7 @@ public class MongodbUtils {
         mongodbUtils.mongoTemplate = this.mongoTemplate;
     }
 
-    @Autowired
+    @Resource
     private MongoTemplate mongoTemplate;
 
     /**
