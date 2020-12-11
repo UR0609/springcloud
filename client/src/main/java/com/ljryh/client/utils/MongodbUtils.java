@@ -6,7 +6,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -14,6 +13,12 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 用于Mongodb处理的工具类
+ *
+ * @author ljryh
+ * @date 2020-12-8
+ */
 @Slf4j
 @Component
 public class MongodbUtils {
@@ -28,6 +33,28 @@ public class MongodbUtils {
 
     @Resource
     private MongoTemplate mongoTemplate;
+
+
+    /**
+     * 删除集合，根据集合名称
+     *
+     * @param collectionName
+     */
+    public static void removeAll(String collectionName) {
+
+        mongodbUtils.mongoTemplate.dropCollection(collectionName);
+    }
+
+    /**
+     * 保存数据对象，
+     *
+     * @param list           数据对象
+     * @param collectionName 集合名
+     */
+    public static <T> void insert(List<T> list, String collectionName) {
+
+        mongodbUtils.mongoTemplate.insert(list, collectionName);
+    }
 
     /**
      * 保存数据对象，集合为数据对象中@Document 注解所配置的collection
@@ -87,48 +114,6 @@ public class MongodbUtils {
     }
 
     /**
-     * 指定集合 修改数据，且仅修改找到的第一条数据
-     *
-     * @param accordingKey   修改条件 key
-     * @param accordingValue 修改条件 value
-     * @param updateKeys     修改内容 key数组
-     * @param updateValues   修改内容 value数组
-     * @param collectionName 集合名
-     */
-    public static void updateFirst(String accordingKey, Object accordingValue, String[] updateKeys, Object[] updateValues,
-                                   String collectionName) {
-
-        Criteria criteria = Criteria.where(accordingKey).is(accordingValue);
-        Query query = Query.query(criteria);
-        Update update = new Update();
-        for (int i = 0; i < updateKeys.length; i++) {
-            update.set(updateKeys[i], updateValues[i]);
-        }
-        mongodbUtils.mongoTemplate.updateFirst(query, update, collectionName);
-    }
-
-    /**
-     * 指定集合 修改数据，且修改所找到的所有数据
-     *
-     * @param accordingKey   修改条件 key
-     * @param accordingValue 修改条件 value
-     * @param updateKeys     修改内容 key数组
-     * @param updateValues   修改内容 value数组
-     * @param collectionName 集合名
-     */
-    public static void updateMulti(String accordingKey, Object accordingValue, String[] updateKeys, Object[] updateValues,
-                                   String collectionName) {
-
-        Criteria criteria = Criteria.where(accordingKey).is(accordingValue);
-        Query query = Query.query(criteria);
-        Update update = new Update();
-        for (int i = 0; i < updateKeys.length; i++) {
-            update.set(updateKeys[i], updateValues[i]);
-        }
-        mongodbUtils.mongoTemplate.updateMulti(query, update, collectionName);
-    }
-
-    /**
      * 根据条件查询出所有结果集 集合为数据对象中@Document 注解所配置的collection
      *
      * @param entityClass 数据对象
@@ -184,6 +169,24 @@ public class MongodbUtils {
     }
 
     /**
+     * 指定集合 根据条件查询出所有结果集
+     *
+     * @param entityClass    数据对象
+     * @param start          查询条件 开始范围
+     * @param end            查询条件 结束范围
+     * @param collectionName 集合名
+     * @return
+     */
+    public static <T> List<T> findRange(String str, Object start, Object end, Class<T> entityClass, String collectionName) {
+        if (str == null || start == null || end == null) {
+            return null;
+        }
+        Query query = Query.query(Criteria.where(str).gt(start).lt(end));
+        List<T> resultList = mongodbUtils.mongoTemplate.find(query, entityClass, collectionName);
+        return resultList;
+    }
+
+    /**
      * 指定集合 根据条件查询出所有结果集 并排倒序
      *
      * @param entityClass    数据对象
@@ -216,47 +219,51 @@ public class MongodbUtils {
     /**
      * 根据条件查询出符合的第一条数据 集合为数据对象中 @Document 注解所配置的collection
      *
-     * @param obj        数据对象
-     * @param findKeys   查询条件 key
-     * @param findValues 查询条件 value
+     * @param entityClass 数据对象
+     * @param map         查询条件 key 查询条件 value
      * @return
      */
-    public static Object findOne(Object obj, String[] findKeys, Object[] findValues) {
+    public static <T> T findOne(Class<T> entityClass, Map<String, Object> map) {
 
         Criteria criteria = null;
-        for (int i = 0; i < findKeys.length; i++) {
-            if (i == 0) {
-                criteria = Criteria.where(findKeys[i]).is(findValues[i]);
-            } else {
-                criteria.and(findKeys[i]).is(findValues[i]);
+        int count = 0;
+        if (map != null) {
+            for (Map.Entry<String, Object> entry : map.entrySet()) {
+                if (count == 0)
+                    criteria = Criteria.where(entry.getKey()).is(entry.getValue());
+                else
+                    criteria.and(entry.getKey()).is(entry.getValue());
+                count++;
             }
         }
         Query query = Query.query(criteria);
-        Object resultObj = mongodbUtils.mongoTemplate.findOne(query, obj.getClass());
+        T resultObj = mongodbUtils.mongoTemplate.findOne(query, entityClass);
         return resultObj;
     }
 
     /**
      * 指定集合 根据条件查询出符合的第一条数据
      *
-     * @param obj            数据对象
-     * @param findKeys       查询条件 key
-     * @param findValues     查询条件 value
+     * @param entityClass    数据对象
+     * @param map            查询条件 key 查询条件 value
      * @param collectionName 集合名
      * @return
      */
-    public static Object findOne(Object obj, String[] findKeys, Object[] findValues, String collectionName) {
+    public static <T> T findOne(Class<T> entityClass, Map<String, Object> map, String collectionName) {
 
         Criteria criteria = null;
-        for (int i = 0; i < findKeys.length; i++) {
-            if (i == 0) {
-                criteria = Criteria.where(findKeys[i]).is(findValues[i]);
-            } else {
-                criteria.and(findKeys[i]).is(findValues[i]);
+        int count = 0;
+        if (map != null) {
+            for (Map.Entry<String, Object> entry : map.entrySet()) {
+                if (count == 0)
+                    criteria = Criteria.where(entry.getKey()).is(entry.getValue());
+                else
+                    criteria.and(entry.getKey()).is(entry.getValue());
+                count++;
             }
         }
         Query query = Query.query(criteria);
-        Object resultObj = mongodbUtils.mongoTemplate.findOne(query, obj.getClass(), collectionName);
+        T resultObj = mongodbUtils.mongoTemplate.findOne(query, entityClass, collectionName);
         return resultObj;
     }
 
