@@ -8,9 +8,12 @@ import com.ljryh.client.mapper.shiro.UserMapper;
 import com.ljryh.client.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,14 +29,23 @@ import java.io.Serializable;
  */
 @Slf4j
 @Service
+@PropertySource("classpath:ljryh.properties")
 @Transactional(rollbackFor = Exception.class)
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
 
+    @Value("${task.replay.count}")
+    private Integer taskReplayCount;
+
     @Override
-    @Cacheable(value = "cache:userList", key = "'user-' + #page.current+'_'+#page.size")
+    @Cacheable(value = "cache:userList", key = "'user-' + #page.current+'_'+#page.size+'_'+#wrapper.entity.name+'_'+#wrapper.entity.username")
     public IPage<User> page(@Param("page") IPage<User> page, @Param("ew") QueryWrapper<User> wrapper) {
         log.info("<--------------------------查询数据List  : 第{}页，{}条数据------------------------------>", page.getCurrent(), page.getSize());
         return this.baseMapper.selectPage(page, wrapper);
+    }
+
+    @Override
+    public void test() {
+
     }
 
     @Override
@@ -56,7 +68,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             @CachePut(cacheNames = "cache:user", key = "'id-' + #user.id"),
             @CachePut(cacheNames = "cache:shiro:user", key = "'id-' + #user.id"),
     }*/)
-//    @CachePut(cacheNames = "cache:user", key = "'id-' + #user.id")
+    @CachePut(cacheNames = "cache:user", key = "'id-' + #user.id")
     public boolean updateById(User user) {
         int result = this.baseMapper.updateById(user);
         log.info("<--------------------------更新数据 id : {}------------------------------>", user.getId());

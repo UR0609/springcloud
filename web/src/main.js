@@ -43,7 +43,6 @@ Vue.prototype.getToken = function() {
   return token;
 }
 Vue.prototype.setToken = function(token) {
-  console.log(token);
   localStorage.setItem("token", token);
 }
 new Vue({

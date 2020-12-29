@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JavaPostJson {
 
@@ -15,6 +17,17 @@ public class JavaPostJson {
             + "\"classTopic\":\"112\"" + "\"eventTag\":\"22\"" + "}";
 
     public static void main(String[] args) {
+
+        List<String> list = new ArrayList<>();
+        list.add("1");
+        list.add("2");
+        list.add("3");
+        list.add("4");
+        list.add("5");
+        list.add("6");
+        list.add("7");
+        list.add("8");
+
 
         String res = post(url, params);
         System.out.println(res);

@@ -6,24 +6,24 @@
     </div>
     <div class="row">
       <el-input
-        class="input"
-        id="username"
-        type="text"
-        placeholder="请输入用户名"
-        v-model="username"
-        clearable
-        @keyup.enter.native="login"
+          class="input"
+          id="username"
+          type="text"
+          placeholder="请输入用户名"
+          v-model="username"
+          clearable
+          @keyup.enter.native="login"
       />
     </div>
     <div class="row">
       <el-input
-        class="input"
-        id="password"
-        type="password"
-        placeholder="请输入密码"
-        v-model="password"
-        clearable
-        @keyup.enter.native="login"
+          class="input"
+          id="password"
+          type="password"
+          placeholder="请输入密码"
+          v-model="password"
+          clearable
+          @keyup.enter.native="login"
       />
     </div>
     <div class="row">
@@ -75,7 +75,7 @@ export default {
             this.username = "";
             this.password = "";
             this.setToken(data.token);
-            this.$router.push({ path: "/Home" });
+            this.$router.push({path: "/Home"});
           } else {
             this.$message({
               showClose: true,
@@ -99,12 +99,13 @@ export default {
 </script>
 
 
-<style  scoped>
+<style scoped>
 .input {
   width: 300px;
   margin: 0;
   padding: 0;
 }
+
 .row {
   padding: 10px 0px;
 }

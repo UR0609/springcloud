@@ -16,7 +16,6 @@ export const initMenu = (router, store)=> {
             token: token
         }
     }).then(result => {
-        console.log(result);
         if (result && result.status == 200) {
             // 将服务器返回的 JSON 格式的数据转成 router 需要的格式
             var fmtRoutes = formatRoutes(result.data);

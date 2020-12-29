@@ -2,6 +2,40 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ljryh.client.mapper.shiro.UserMapper">
 
+    <select id="selectPage"
+            resultType="com.ljryh.client.entity.shiro.User">
+        SELECT a.* FROM s_user a
+        where 1=1
+        AND a.del = 0
+        <if test="ew.entity.name != null and ew.entity.name != ''">
+            and a.Name like concat('%',#{ew.entity.name},'%')
+        </if>
+        <if test="ew.entity.username != null and ew.entity.username != ''">
+            and a.username like concat('%',#{ew.entity.username},'%')
+        </if>
+        ORDER BY a.id
+        <!-- <if test="ew.entity.checkerName != null"> -->
+        <!-- and a.checker_name like concat('%',#{ew.entity.checkerName},'%') -->
+        <!-- </if> -->
+        <!-- <if test="ew.entity.source != null"> -->
+        <!-- and a.source=#{ew.entity.source} -->
+        <!-- </if> -->
+        <!-- <if test="ew.entity.id != null"> -->
+        <!-- and a.id=#{ew.entity.id} -->
+        <!-- </if> -->
+        <!-- <if test="ew.entity.checkerExtId != null"> -->
+        <!-- and a.checker_ext_id=#{ew.entity.checkerExtId} -->
+        <!-- </if> -->
+        <!-- <if test="ew.entity.comExtId != null"> -->
+        <!-- and a.com_ext_id=#{ew.entity.comExtId} -->
+        <!-- </if> -->
+        <!-- <if test="ew.entity.publicKey != null"> -->
+        <!-- and a.com_ext_id = (select com_extid from t_company where id = (select
+            com_id FROM s_jwt where public_key = -->
+        <!-- #{ew.entity.publicKey})) -->
+        <!-- </if> -->
+    </select>
+
     <select id="findByUsername" resultType="com.ljryh.client.entity.shiro.User">
         select
             a.*
@@ -21,5 +55,9 @@
             1=1
         AND a.id = #{Id}
     </select>
+
+    <update id="deleteById" >
+        update s_user set del = 1 where id = ${id};
+    </update>
 
 </mapper>

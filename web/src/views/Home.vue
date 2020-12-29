@@ -9,17 +9,17 @@
           <div style="display: flex;justify-content: flex-start;width: 180px;text-align: left;">
             <el-menu style="background: #ececec;width: 180px;" unique-opened router>
               <!-- 遍历routes数据，根据routes中的数据渲染出el-submenu和el-menu-item -->
-              <template v-for="(item,index) in this.routes" >
+              <template v-for="(item,index) in this.routes">
                 <el-submenu :key="index" :index="index+''">
                   <template slot="title">
                     <i :class="item.iconCls" style="color: #20a0ff;width: 14px;"></i>
-                    <span slot="title">{{item.name}}</span>
+                    <span slot="title">{{ item.name }}</span>
                   </template>
                   <el-menu-item width="180px"
                                 style="padding-left: 30px;width: 170px;text-align: left"
                                 v-for="child in item.children"
                                 :index="child.path"
-                                :key="child.path">{{child.name}}
+                                :key="child.path">{{ child.name }}
                   </el-menu-item>
                 </el-submenu>
               </template>
@@ -36,8 +36,8 @@
           </keep-alive>
           <router-view v-if="!this.$route.meta.keepAlive"></router-view>
 
-          <Head></Head>
-          <World></World>
+          <!--          <Head></Head>-->
+          <!--          <World></World>-->
 
         </el-main>
       </el-container>
@@ -48,27 +48,25 @@
 
 <script>
 // @ is an alias to /src
-import World from "@/components/World.vue";
-
-import Head from "@/components/Head.vue";
+// import World from "@/components/World.vue";
+//
+// import Head from "@/components/Head.vue";
 
 export default {
   name: "Home",
-  methods: {
-  },
-  data(){
-    return {
-    }
+  methods: {},
+  data() {
+    return {}
   },
   computed: {
     // 在计算属性中返回 routes 数据
-    routes(){
+    routes() {
       return this.$store.state.routes
     }
   },
   components: {
-    World,
-    Head
+    // World,
+    // Head
   }
 };
 </script>
@@ -83,6 +81,7 @@ export default {
 }
 
 .home-header {
+  width: 100%;
   background-color: #20a0ff;
   color: #333;
   text-align: center;

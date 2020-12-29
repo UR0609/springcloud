@@ -19,7 +19,7 @@ public class TestController {
     @RequiresPermissions({"save"}) //没有的话 AuthorizationException
     @PostMapping("/save")
     @OperLog(operModul = "保存功能", operType = "save", operDesc = "保存测试")
-    public Map<String, Object> save(@RequestHeader("token") String token) {
+    public Map<String, Object> save(@RequestHeader("token") String token,@RequestBody String path) {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         System.out.println(GsonUtil.ModuleTojosn(user));
         System.out.println("save");

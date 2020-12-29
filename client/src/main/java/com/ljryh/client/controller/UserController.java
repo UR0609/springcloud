@@ -24,14 +24,14 @@ import javax.annotation.Resource;
  * @since 2020-02-13
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/sys/user")
 public class UserController {
 
     @Resource
     private IUserService userService;
 
     @RequestMapping(value = "/list",method = RequestMethod.POST)
-    public Object findAll(User user/*, HttpServletRequest request*/){
+    public Object findAll(@RequestBody User user/*, HttpServletRequest request*/){
         //获取前台发送过来的数据
 //        Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
 //        Integer pageSize = Integer.valueOf(request.getParameter("pageSize"));
@@ -45,9 +45,9 @@ public class UserController {
     public Object add(@RequestBody User user){
         boolean judge = userService.save(user);
         if (judge) {
-            return CallResult.success();
+            return CallResult.success("添加成功");
         } else {
-            return CallResult.fail();
+            return CallResult.fail("添加失败");
         }
     }
 
@@ -55,9 +55,9 @@ public class UserController {
     public Object mod(@RequestBody User user){
         boolean judge = userService.updateById(user);
         if (judge) {
-            return CallResult.success();
+            return CallResult.success("修改成功");
         } else {
-            return CallResult.fail();
+            return CallResult.fail("修改失败");
         }
     }
 
@@ -65,9 +65,9 @@ public class UserController {
     public Object del(@RequestBody User user){
         boolean judge = userService.removeById(user.getId());
         if (judge) {
-            return CallResult.success();
+            return CallResult.success("删除成功");
         } else {
-            return CallResult.fail();
+            return CallResult.fail("删除失败");
         }
     }
 
@@ -77,13 +77,15 @@ public class UserController {
         if (result != null) {
             return CallResult.success(result);
         } else {
-            return CallResult.fail();
+            return CallResult.fail("查询数据失败！");
         }
     }
 
     @RequestMapping(value = "/test",method = RequestMethod.POST)
     public String hello(@RequestBody User user,String access_token) {
-
+        int age = 15;
+        userService.test();
+        user.setAge(++age);
         System.out.println(access_token);
         System.out.println(GsonUtil.ModuleTojosn(user));
 

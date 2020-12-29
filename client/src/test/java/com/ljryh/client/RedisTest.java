@@ -27,6 +27,7 @@ public class RedisTest {
 //            redisUtils.lSet("children", GsonUtil.ModuleTojosn(children));
 //        }
 //        redisUtils.del("children");
+        redisUtils.likeDel("TID74");
 //        redisUtils.likeDel("process:role");
 
     }

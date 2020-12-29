@@ -20,7 +20,8 @@ export default {
   name: "World",
   data() {
     return {
-      token: this.getToken()
+      token: this.getToken(),
+      path: this.$route.path
     };
   },
   methods: {
@@ -55,7 +56,7 @@ export default {
       this.$axios({
         method: "POST",
         url: "/test/save",
-        data: {},
+        data: {path:this.path},
         headers: {
           token: this.token
         }
