@@ -28,7 +28,7 @@
         </el-aside>
         <el-main>
           <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/Home' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item v-text="this.$router.currentRoute.name"></el-breadcrumb-item>
           </el-breadcrumb>
           <keep-alive>
@@ -36,8 +36,10 @@
           </keep-alive>
           <router-view v-if="!this.$route.meta.keepAlive"></router-view>
 
-          <!--          <Head></Head>-->
-          <!--          <World></World>-->
+          <div v-show="this.$router.currentRoute.name === 'Home'">
+            <Head></Head>
+            <World></World>
+          </div>
 
         </el-main>
       </el-container>
@@ -48,9 +50,8 @@
 
 <script>
 // @ is an alias to /src
-// import World from "@/components/World.vue";
-//
-// import Head from "@/components/Head.vue";
+import World from "@/components/World.vue";
+import Head from "@/components/Head.vue";
 
 export default {
   name: "Home",
@@ -65,8 +66,8 @@ export default {
     }
   },
   components: {
-    // World,
-    // Head
+    World,
+    Head
   }
 };
 </script>

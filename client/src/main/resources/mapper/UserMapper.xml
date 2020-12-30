@@ -36,6 +36,20 @@
         <!-- </if> -->
     </select>
 
+    <select id="selectList"
+            resultType="com.ljryh.client.entity.shiro.User">
+        SELECT a.* FROM s_user a
+        where 1=1
+        AND a.del = 0
+        <if test="ew.entity.name != null and ew.entity.name != ''">
+            and a.Name like concat('%',#{ew.entity.name},'%')
+        </if>
+        <if test="ew.entity.username != null and ew.entity.username != ''">
+            and a.username like concat('%',#{ew.entity.username},'%')
+        </if>
+        ORDER BY a.id
+    </select>
+
     <select id="findByUsername" resultType="com.ljryh.client.entity.shiro.User">
         select
             a.*

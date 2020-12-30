@@ -8,7 +8,7 @@ const routes = [
     {
         path: '/Home',
         name: 'Home',
-        component: Home
+        component: Home,
     },
     {
         path: '/',
@@ -20,6 +20,12 @@ const routes = [
             import ( /* webpackChunkName: "about" */ '../views/Login.vue')
     }
 ]
+
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location, onResolve, onReject) {
+    if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject)
+    return originalPush.call(this, location).catch(err => err)
+}
 
 const router = new VueRouter({
     mode: 'hash',

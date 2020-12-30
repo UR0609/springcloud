@@ -41,6 +41,17 @@ public class UserController {
         return userService.page(page,wrapper);
     }
 
+    @RequestMapping(value = "/exportExcel",method = RequestMethod.POST)
+    public Object exportExcel(@RequestBody User user/*, HttpServletRequest request*/){
+        //获取前台发送过来的数据
+//        Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
+//        Integer pageSize = Integer.valueOf(request.getParameter("pageSize"));
+//        IPage<User> page = new Page<>(user.getPageNo(), user.getPageSize());
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.setEntity(user);
+        return userService.list(wrapper);
+    }
+
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     public Object add(@RequestBody User user){
         boolean judge = userService.save(user);

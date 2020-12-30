@@ -137,10 +137,12 @@
 </template>
 
 <script>
+import {parseTime} from '@/utils'
 import {validEmail, validPhone} from '@/utils/validate';
 import {showResult, showEntity} from '@/utils/show-resutl';
 import axios from 'axios';
-import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import Pagination from '@/components/Pagination'
+import {Message} from "element-ui"; // secondary package based on el-pagination
 
 const token = localStorage.getItem("token");
 
@@ -174,7 +176,6 @@ export default {
         if (result && result.status == 200) {
           this.total = result.data.total;
           this.tableData = result.data.records;
-          console.log(result.data.records);
           setTimeout(() => {
             this.listLoading = false
           }, 0.5 * 1000)
@@ -303,8 +304,51 @@ export default {
     // 导出
     handleDownload() {
       this.downloadLoading = true
+      import('@/vendor/Export2Excel').then(excel => {
+        axios({
+          method: "POST",
+          url: this.path + "/exportExcel",
+          data: {
+            name: this.listQuery.name,
+            username: this.listQuery.username,
+          },
+          headers: {
+            token: token
+          }
+        }).then(result => {
+          if (result && result.status == 200) {
+            const tHeader = ['姓名', '用户名', '密码', '年龄', '邮箱', '电话', '备注','创建时间']
+            const filterVal = ['name', 'username', 'password', 'age', 'email', 'phone', 'remarks','createTime']
+            const list = result.data;
+            const data = this.formatJson(filterVal, list)
+            excel.export_json_to_excel({
+              header: tHeader,
+              data,
+              filename: '用户列表',
+              autoWidth: true,
+              bookType: 'xlsx'
+            })
+            this.downloadLoading = false
+          } else {
+            Message({
+              showClose: true,
+              message: "操作失败，请联系管理员",
+              type: "error",
+              duration: "3000"
+            });
+          }
+        });
+      })
     },
-
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => {
+        if (j === 'timestamp') {
+          return parseTime(v[j])
+        } else {
+          return v[j]
+        }
+      }))
+    }
   },
   data() {
     var checkAge = (rule, value, callback) => {
