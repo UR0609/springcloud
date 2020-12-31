@@ -13,4 +13,17 @@
         AND b.user_id = #{userId}
     </select>
 
+    <select id="selectPage" resultType="com.ljryh.client.entity.Role">
+        SELECT a.* FROM s_role a
+        where 1=1
+        AND a.del = 0
+        <if test="ew.entity.roleName != null and ew.entity.roleName != ''">
+            and a.role_name like concat('%',#{ew.entity.roleName},'%')
+        </if>
+        <if test="ew.entity.remarks != null and ew.entity.remarks != ''">
+            and a.remarks like concat('%',#{ew.entity.remarks},'%')
+        </if>
+        ORDER BY a.id
+    </select>
+
 </mapper>

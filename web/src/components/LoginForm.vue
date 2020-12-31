@@ -64,8 +64,7 @@ export default {
         }
       }).then(result => {
         if (result.status === 200) {
-          var data = result.data;
-          if (data.status === 200) {
+          if (result.status === 200) {
             this.$message({
               showClose: true,
               message: "登录成功",
@@ -74,12 +73,12 @@ export default {
             });
             this.username = "";
             this.password = "";
-            this.setToken(data.token);
+            this.setToken(result.token);
             this.$router.push({path: "/Home"});
           } else {
             this.$message({
               showClose: true,
-              message: "登录失败，原因: " + data.msg,
+              message: "登录失败，原因: " + result.msg,
               type: "error",
               duration: "3000"
             });

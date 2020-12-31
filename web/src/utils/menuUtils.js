@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // 请求菜单数据并初始化
 export const initMenu = (router, store) => {
-    const token = localStorage.getItem("token");
+    let token = localStorage.getItem("token");
     // 首先判断 store 中数据是否存在，如果存在，则说明这次跳转是正常的跳转
     // 而不是用户按F5键或者直接在地址栏输入某个地址进入的，这时直接返回，不必执行菜单初始化
     if (store.state.routes.length > 0) {

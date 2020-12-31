@@ -5,10 +5,12 @@ import store from './store';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import {initMenu} from './utils/menuUtils';
+import service from './utils/request.js'
 
-var axios = require('axios')
+const axios = require('axios');
 axios.defaults.baseURL = 'http://localhost:8661/'
-Vue.prototype.$axios = axios
+
+Vue.prototype.$axios = service
 Vue.use(ElementUI);
 Vue.config.productionTip = false
 
@@ -30,16 +32,7 @@ router.beforeEach((to, from, next)=> {
 )
 
 Vue.prototype.getToken = function() {
-  const token = localStorage.getItem("token");
-  if (token === "" || token == null) {
-    this.$message({
-      showClose: true,
-      message: "请先登录",
-      type: "error",
-      duration: "3000"
-    });
-    this.$router.push({ path: "/" });
-  }
+  let token = localStorage.getItem("token");
   return token;
 }
 Vue.prototype.setToken = function(token) {

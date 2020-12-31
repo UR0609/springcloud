@@ -74,12 +74,8 @@ public class ShiroServiceImpl implements ShiroService {
         //过期时间
         LocalDateTime expireTime = now.plusHours(EXPIRE);
 
-        if (redisUtils.get("shiro:user:" + user.getId()) == null) {
-            token = TokenGenerator.generateValue();
-            redisUtils.set("shiro:user:" + user.getId(), token, 3600 * EXPIRE);
-        } else {
-            token = redisUtils.get("shiro:user:" + user.getId()).toString();
-        }
+        token = TokenGenerator.generateValue();
+        redisUtils.set("shiro:user:" + user.getId(), token, 3600 * EXPIRE);
 
         SysToken sysToken = new SysToken();
 

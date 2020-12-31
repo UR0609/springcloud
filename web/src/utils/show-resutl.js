@@ -1,29 +1,19 @@
-import { Message } from 'element-ui';
+import {Message} from 'element-ui';
 
 export function showResult(result) {
-    var judge = false;
-    if (result.status === 200) {
-        const data = result.data;
-        if (data.isSuccess === true) {
-            Message({
-                showClose: true,
-                message: data.msg,
-                type: "success",
-                duration: "600"
-            });
-            judge = true;
-        } else {
-            Message({
-                showClose: true,
-                message: data.msg,
-                type: "error",
-                duration: "3000"
-            });
-        }
+    let judge = false;
+    if (result.isSuccess === true) {
+        Message({
+            showClose: true,
+            message: result.msg,
+            type: "success",
+            duration: "600"
+        });
+        judge = true;
     } else {
         Message({
             showClose: true,
-            message: "操作失败，请联系管理员",
+            message: result.msg,
             type: "error",
             duration: "3000"
         });
@@ -32,25 +22,14 @@ export function showResult(result) {
 }
 
 export function showEntity(result) {
-    if (result.status === 200) {
-        const data = result.data;
-        if (data.isSuccess === true) {
-            return data.data
-        } else {
-            Message({
-                showClose: true,
-                message: data.msg,
-                type: "error",
-                duration: "3000"
-            });
-        }
+    if (result.isSuccess === true) {
+        return result.data
     } else {
         Message({
             showClose: true,
-            message: "操作失败，请联系管理员",
+            message: result.msg,
             type: "error",
             duration: "3000"
         });
     }
-
 }

@@ -23,21 +23,18 @@ import javax.annotation.Resource;
  * @since 2020-08-12
  */
 @RestController
-@RequestMapping("/role")
+@RequestMapping("/sys/role")
 public class RoleController {
 
     @Resource
     private IRoleService roleService;
 
     @RequestMapping(value = "/list",method = RequestMethod.POST)
-    public Object findAll(Role entity/*, HttpServletRequest request*/){
-        //获取前台发送过来的数据
-//        Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
-//        Integer pageSize = Integer.valueOf(request.getParameter("pageSize"));
+    public Object findAll(@RequestBody Role entity/*, HttpServletRequest request*/){
         IPage<Role> page = new Page<>(entity.getPageNo(), entity.getPageSize());
         QueryWrapper<Role> wrapper = new QueryWrapper<>();
         wrapper.setEntity(entity);
-        return roleService.page(page,wrapper);
+        return CallResult.success(roleService.page(page,wrapper));
     }
 
     @RequestMapping(value = "/add",method = RequestMethod.POST)

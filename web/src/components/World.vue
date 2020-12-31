@@ -6,7 +6,7 @@
       <el-button type="info" @click="select">Select</el-button>
       <el-button type="danger" @click="del">Delete</el-button>
     </el-row>
-    <br />
+    <br/>
     <el-row>
       <el-button type="primary" @click="p">进入P的世界</el-button>
       <el-button type="success" @click="vip">进入VIP的世界</el-button>
@@ -20,33 +20,22 @@ export default {
   name: "World",
   data() {
     return {
-      token: this.getToken(),
       path: this.$route.path
     };
   },
   methods: {
     showMsg(result) {
       if (result.status === 200) {
-        const data = result.data;
-        if (data.status === 200) {
-          this.$message({
-            showClose: true,
-            message: data.msg,
-            type: "success",
-            duration: "600"
-          });
-        } else {
-          this.$message({
-            showClose: true,
-            message: data.msg,
-            type: "error",
-            duration: "3000"
-          });
-        }
+        this.$message({
+          showClose: true,
+          message: result.msg,
+          type: "success",
+          duration: "600"
+        });
       } else {
         this.$message({
           showClose: true,
-          message: "操作失败，请联系管理员",
+          message: result.msg,
           type: "error",
           duration: "3000"
         });
@@ -56,10 +45,7 @@ export default {
       this.$axios({
         method: "POST",
         url: "/test/save",
-        data: {path:this.path},
-        headers: {
-          token: this.token
-        }
+        data: {path: this.path},
       }).then(result => {
         this.showMsg(result);
       });
@@ -69,9 +55,6 @@ export default {
         method: "PUT",
         url: "/test/update",
         data: {},
-        headers: {
-          token: this.token
-        }
       }).then(result => {
         this.showMsg(result);
       });
@@ -81,9 +64,6 @@ export default {
         method: "GET",
         url: "/test/select",
         data: {},
-        headers: {
-          token: this.token
-        }
       }).then(result => {
         this.showMsg(result);
       });
@@ -93,9 +73,6 @@ export default {
         method: "DELETE",
         url: "/test/delete",
         data: {},
-        headers: {
-          token: this.token
-        }
       }).then(result => {
         this.showMsg(result);
       });
@@ -105,9 +82,6 @@ export default {
         method: "GET",
         url: "/test/p",
         data: {},
-        headers: {
-          token: this.token
-        }
       }).then(result => {
         this.showMsg(result);
       });
@@ -117,9 +91,6 @@ export default {
         method: "GET",
         url: "/test/vip",
         data: {},
-        headers: {
-          token: this.token
-        }
       }).then(result => {
         this.showMsg(result);
       });
@@ -129,9 +100,6 @@ export default {
         method: "GET",
         url: "/test/svip",
         data: {},
-        headers: {
-          token: this.token
-        }
       }).then(result => {
         this.showMsg(result);
       });
@@ -141,37 +109,24 @@ export default {
         method: "POST",
         url: "/sys/logout",
         data: {},
-        headers: {
-          token: this.token
-        }
       }).then(result => {
         if (result.status === 200) {
-          const data = result.data;
-          if (data.status === 200) {
-            this.$message({
-              showClose: true,
-              message: data.msg,
-              type: "success",
-              duration: "1600"
-            });
-          } else {
-            this.$message({
-              showClose: true,
-              message: data.msg,
-              type: "error",
-              duration: "3000"
-            });
-          }
-          this.setToken("");
-          this.$router.push({ path: "/" });
+          this.$message({
+            showClose: true,
+            message: result.msg,
+            type: "success",
+            duration: "1600"
+          });
         } else {
           this.$message({
             showClose: true,
-            message: "操作失败，请联系管理员",
+            message: result.msg,
             type: "error",
             duration: "3000"
           });
         }
+        this.setToken("");
+        this.$router.push({path: "/"});
       });
     }
   }

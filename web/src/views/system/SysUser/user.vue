@@ -76,7 +76,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="操作" min-width="200">
+        <el-table-column label="操作" align="center" min-width="160">
           <template slot-scope="scope">
             <el-button
                 size="mini"
@@ -140,11 +140,8 @@
 import {parseTime} from '@/utils'
 import {validEmail, validPhone} from '@/utils/validate';
 import {showResult, showEntity} from '@/utils/show-resutl';
-import axios from 'axios';
 import Pagination from '@/components/Pagination'
 import {Message} from "element-ui"; // secondary package based on el-pagination
-
-const token = localStorage.getItem("token");
 
 export default {
   name: "SysUser",
@@ -160,7 +157,7 @@ export default {
     // 列表加载
     getList() {
       this.listLoading = true
-      axios({
+      this.$axios({
         method: "POST",
         url: this.path + "/list",
         data: {
@@ -169,9 +166,6 @@ export default {
           pageNo: this.listQuery.page,
           pageSize: this.listQuery.limit
         },
-        headers: {
-          token: token
-        }
       }).then(result => {
         if (result && result.status == 200) {
           this.total = result.data.total;
@@ -204,9 +198,6 @@ export default {
               phone: this.dataFrom.phone,
               remarks: this.dataFrom.remarks,
             },
-            headers: {
-              token: this.token
-            }
           }).then(result => {
             var judge = showResult(result);
             if (judge) {
@@ -219,16 +210,12 @@ export default {
     },
     // 修改弹出页
     handleUpdate(index, row) {
-      console.log(row.id);
       this.$axios({
         method: "POST",
         url: this.path + "/sel",
         data: {
           id: row.id
         },
-        headers: {
-          token: this.token
-        }
       }).then(result => {
         var entity = showEntity(result);
         // 隐藏域赋值
@@ -263,9 +250,6 @@ export default {
               phone: this.dataFrom.phone,
               remarks: this.dataFrom.remarks,
             },
-            headers: {
-              token: this.token
-            }
           }).then(result => {
             var judge = showResult(result);
             if (judge) {
@@ -279,16 +263,12 @@ export default {
     },
     // 删除
     deleteData(index, row) {
-      console.log(index, row);
       this.$axios({
         method: "POST",
         url: this.path + "/del",
         data: {
           id: row.id
         },
-        headers: {
-          token: this.token
-        }
       }).then(result => {
         var judge = showResult(result);
         if (judge) {
@@ -305,16 +285,13 @@ export default {
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        axios({
+        this.$axios({
           method: "POST",
           url: this.path + "/exportExcel",
           data: {
             name: this.listQuery.name,
             username: this.listQuery.username,
           },
-          headers: {
-            token: token
-          }
         }).then(result => {
           if (result && result.status == 200) {
             const tHeader = ['姓名', '用户名', '密码', '年龄', '邮箱', '电话', '备注','创建时间']
@@ -432,7 +409,6 @@ export default {
       },
       // 请求url
       path: this.$route.path,
-      token: this.getToken(),
       // 数据总数
       total: 0,
       // 分页组件

@@ -38,7 +38,7 @@ public class UserController {
         IPage<User> page = new Page<>(user.getPageNo(), user.getPageSize());
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.setEntity(user);
-        return userService.page(page,wrapper);
+        return CallResult.success(userService.page(page,wrapper));
     }
 
     @RequestMapping(value = "/exportExcel",method = RequestMethod.POST)
@@ -49,7 +49,7 @@ public class UserController {
 //        IPage<User> page = new Page<>(user.getPageNo(), user.getPageSize());
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.setEntity(user);
-        return userService.list(wrapper);
+        return CallResult.success(userService.list(wrapper));
     }
 
     @RequestMapping(value = "/add",method = RequestMethod.POST)
