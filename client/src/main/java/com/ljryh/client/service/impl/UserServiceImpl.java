@@ -37,7 +37,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private Integer taskReplayCount;
 
     @Override
-    @Cacheable(value = "cache:userList", key = "'user-' + #page.current+'_'+#page.size+'_'+#wrapper.entity.name+'_'+#wrapper.entity.username")
+    @Cacheable(value = "cache:userList", key = "'user-' + #page.current+'-'+#page.size+'-'+#wrapper.entity.name+'-'+#wrapper.entity.username")
     public IPage<User> page(@Param("page") IPage<User> page, @Param("ew") QueryWrapper<User> wrapper) {
         log.info("<--------------------------查询数据List  : 第{}页，{}条数据------------------------------>", page.getCurrent(), page.getSize());
         return this.baseMapper.selectPage(page, wrapper);

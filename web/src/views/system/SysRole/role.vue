@@ -40,7 +40,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="备注" prop="id" align="center" min-width="200px">
+        <el-table-column label="备注" prop="id" align="center" min-width="200px" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             <span>{{ scope.row.remarks }}</span>
           </template>

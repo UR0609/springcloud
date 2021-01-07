@@ -29,6 +29,10 @@ public class JacksonUtil {
         return objectMapper.writeValueAsString(obj);
     }
 
+    public static <T> String entityToJson(T t) throws Exception {
+        return objectMapper.writeValueAsString(t);
+    }
+
     /**
      * 转换为 JSON 字符串，忽略空值
      *

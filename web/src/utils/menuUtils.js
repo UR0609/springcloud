@@ -10,7 +10,7 @@ export const initMenu = (router, store) => {
     }
     axios({
         method: "GET",
-        url: "/sys/sysmenu",
+        url: "/sys/menu/sysmenu",
         data: {},
         headers: {
             token: token
