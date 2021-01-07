@@ -188,7 +188,6 @@ export default {
         data: {},
       }).then(result => {
         if (result && result.status == 200) {
-          console.log(result.data);
           this.selectTreeList = result.data;
         }
       });
@@ -231,7 +230,13 @@ export default {
             method: "POST",
             url: this.path + "/add",
             data: {
-              roleName: this.dataFrom.roleName,
+              name: this.dataFrom.name,
+              parentId: this.dataFrom.parentId,
+              path: this.dataFrom.path,
+              component: this.dataFrom.component,
+              icon: this.dataFrom.icon,
+              sort: this.dataFrom.sort,
+              remarks: this.dataFrom.remarks,
             },
           }).then(result => {
             var judge = showResult(result);
@@ -261,6 +266,9 @@ export default {
         this.titleType = '修改菜单';
         this.dialogStatus = 'updata';
         this.dialogFormVisible = true;
+        this.$nextTick(()=>{
+          this.$refs.TreeSelect.clearHandle();
+        })
       });
     },
     // 修改
@@ -272,7 +280,13 @@ export default {
             url: this.path + "/mod",
             data: {
               id: this.dataFrom.id,
-              roleName: this.dataFrom.roleName,
+              name: this.dataFrom.name,
+              parentId: this.dataFrom.parentId,
+              path: this.dataFrom.path,
+              component: this.dataFrom.component,
+              icon: this.dataFrom.icon,
+              sort: this.dataFrom.sort,
+              remarks: this.dataFrom.remarks,
             },
           }).then(result => {
             var judge = showResult(result);
@@ -352,7 +366,6 @@ export default {
     },
     // select树形取值取值
     getValue(value) {
-      console.log(value)
       this.dataFrom.parentId = value;
     },
   },

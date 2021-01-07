@@ -16,6 +16,7 @@ export const initMenu = (router, store) => {
             token: token
         }
     }).then(result => {
+
         if (result && result.status === 200) {
             if (result.data.status === 403) {
                 router.push({path: "/"}).catch(err => {
@@ -25,7 +26,7 @@ export const initMenu = (router, store) => {
             }
             // 将服务器返回的 JSON 格式的数据转成 router 需要的格式
             var fmtRoutes = formatRoutes(result.data);
-
+            console.log(fmtRoutes);
             // let home = router.find(r => r.path === '/Home');
             // console.log(home);
             // home.children = fmtRoutes
