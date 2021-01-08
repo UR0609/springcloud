@@ -26,4 +26,8 @@
         ORDER BY a.id
     </select>
 
+    <update id="deleteById" >
+        update s_role set del = 1 where id = ${id};
+    </update>
+
 </mapper>

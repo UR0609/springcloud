@@ -1,18 +1,18 @@
 <template>
   <div class="app-container">
     <div class="filter-container" style="float:left;margin-top: 20px;">
-      <el-input v-model="listQuery.roleName" placeholder="姓名" style="width: 200px;" class="filter-item"
+      <el-input v-model="listQuery.roleName" placeholder="规则名称" style="width: 200px;" class="filter-item"
                 @keyup.enter.native="handleFilter" clearable/>
-      <el-input v-model="listQuery.remarks" placeholder="用户名" style="width: 200px;" class="filter-item"
+      <el-input v-model="listQuery.remarks" placeholder="备注" style="width: 200px;" class="filter-item"
                 @keyup.enter.native="handleFilter" clearable/>
 
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
-      <el-button :loading="downloadLoading" class="filter-item" type="warning" icon="el-icon-download"
-                 @click="handleDownload">
-        导出
-      </el-button>
+<!--      <el-button :loading="downloadLoading" class="filter-item" type="warning" icon="el-icon-download"-->
+<!--                 @click="handleDownload">-->
+<!--        导出-->
+<!--      </el-button>-->
       <el-button class="filter-item" style="margin-left: 10px;" type="success" icon="el-icon-edit"
                  @click="handleCreate">
         添加
@@ -75,10 +75,10 @@
     <el-dialog :title="this.titleType" :visible.sync="dialogFormVisible">
       <el-form :model="dataFrom" :rules="dataRules" ref="dataFrom" label-position="left" label-width="70px"
                style="width: 400px; margin-left:50px;">
-        <el-form-item label="权限名称" :label-width="formLabelWidth" prop="username">
+        <el-form-item label="权限名称" :label-width="formLabelWidth" prop="roleName">
           <el-input v-model="dataFrom.roleName" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="备注" :label-width="formLabelWidth" prop="password">
+        <el-form-item label="备注" :label-width="formLabelWidth" prop="remarks">
           <el-input v-model="dataFrom.remarks" autocomplete="off"></el-input>
         </el-form-item>
         <!--        <el-form-item label="活动区域" :label-width="formLabelWidth">-->
@@ -142,6 +142,9 @@ export default {
       this.titleType = '添加权限';
       this.dialogStatus = 'create';
       this.dialogFormVisible = true;
+      this.dataFrom.id = '';
+      this.dataFrom.roleName = '';
+      this.dataFrom.remarks = '';
     },
     // 新增
     createData() {
@@ -202,6 +205,8 @@ export default {
               this.getList();
               this.dialogFormVisible = false;
               this.dataFrom.id = '';
+              this.dataFrom.roleName = '';
+              this.dataFrom.remarks = '';
             }
           });
         }

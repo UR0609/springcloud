@@ -16,5 +16,8 @@ import java.util.List;
  */
 public interface ISMenuService extends IService<SMenu> {
 
-    List<SMenu> selectTree(QueryWrapper<SMenu> wrapper);
+    List<SMenu> list(Long id);
+    
+    List<SMenu> selectTree(Long id);
+
 }

@@ -1,16 +1,18 @@
 package com.ljryh.client.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ljryh.client.entity.SMenu;
 import com.ljryh.client.mapper.SMenuMapper;
 import com.ljryh.client.service.ISMenuService;
 import com.ljryh.client.utils.TreeUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -26,10 +28,17 @@ import java.util.List;
 @Transactional(rollbackFor = Exception.class)
 public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenu> implements ISMenuService {
 
+    /**
+     * 列表 与 菜单
+     *
+     * @param id
+     * @return
+     */
     @Override
-    public List<SMenu> list(Wrapper<SMenu> wrapper) {
+    @Cacheable(value = "cache:menuList", key = "#id")
+    public List<SMenu> list(Long id) {
 
-        List<SMenu> list = this.baseMapper.selectList(wrapper);
+        List<SMenu> list = this.baseMapper.selectList(null);
 
         // 封装树形
         TreeUtils menuTree = new TreeUtils(list);
@@ -38,9 +47,59 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenu> implements
         return list;
     }
 
-    @Override
-    public List<SMenu> selectTree(QueryWrapper<SMenu> wrapper) {
-        List<SMenu> list = this.baseMapper.selectList(wrapper);
+    /**
+     * 下拉select
+     *
+     * @param id
+     * @return
+     */
+    @Cacheable(value = "cache:menuTree", key = "#id")
+    public List<SMenu> selectTree(Long id) {
+        List<SMenu> list = this.baseMapper.selectList(null);
         return list;
     }
+
+    @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "cache:menuList", allEntries = true),
+            @CacheEvict(cacheNames = "cache:menuTree", allEntries = true),
+    })
+    public boolean save(SMenu menu) {
+        int result = this.baseMapper.insert(menu);
+        log.info("<--------------------------插入数据 id : {}------------------------------>", menu.getId());
+        return result == 1;
+    }
+
+    @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "cache:menuList", allEntries = true),
+            @CacheEvict(cacheNames = "cache:menuTree", allEntries = true),
+            @CacheEvict(cacheNames = "cache:menu", allEntries = true)
+    })
+    public boolean updateById(SMenu menu) {
+        int result = this.baseMapper.updateById(menu);
+        log.info("<--------------------------更新数据 id : {}------------------------------>", menu.getId());
+        return result == 1;
+    }
+
+    @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "cache:menuList", allEntries = true),
+            @CacheEvict(cacheNames = "cache:menuTree", allEntries = true),
+            @CacheEvict(cacheNames = "cache:menu", key = "'id-' + #id"),
+    })
+    public boolean removeById(Serializable id) {
+        int result = this.baseMapper.deleteById(id);
+        log.info("<--------------------------清除缓存 id : {}------------------------------>", id);
+        return result == 1;
+    }
+
+    @Override
+    @Cacheable(cacheNames = "cache:menu", key = "'id-' + #id")
+    public SMenu getById(Serializable id) {
+        SMenu result = this.baseMapper.selectById(id);
+        log.info("<--------------------------没有走缓存 查询 id : {}------------------------------>", id);
+        return result;
+    }
+
 }

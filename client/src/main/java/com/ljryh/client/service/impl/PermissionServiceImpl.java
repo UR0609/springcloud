@@ -29,10 +29,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     public boolean save(Permission entity) {
         int result = this.baseMapper.insert(entity);
         log.info("<--------------------------插入数据 id : {}------------------------------>",entity.getId());
-        if (result != 1)
-            return false;
-        else
-            return true;
+        return result == 1;
     }
 
     @Override
@@ -40,10 +37,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     public boolean updateById(Permission entity) {
         int result = this.baseMapper.updateById(entity);
         log.info("<--------------------------更新数据 id : {}------------------------------>",entity.getId());
-        if (result != 1)
-            return false;
-        else
-            return true;
+        return result == 1;
     }
 
     @Override
@@ -51,9 +45,6 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     public boolean removeById(Serializable id) {
         int result = this.baseMapper.deleteById(id);
         log.info("<--------------------------清除缓存 id : {}------------------------------>",id);
-        if (result != 1)
-            return false;
-        else
-            return true;
+        return result == 1;
     }
 }

@@ -243,6 +243,7 @@ export default {
             if (judge) {
               this.getList();
               this.dialogFormVisible = false;
+              localStorage.setItem("updateStatus", "update");
             }
           });
         }
@@ -260,7 +261,12 @@ export default {
         var entity = showEntity(result);
         // 隐藏域赋值
         this.dataFrom.id = row.id;
-        this.dataFrom.roleName = entity.roleName;
+        this.dataFrom.name = entity.name;
+        this.dataFrom.parentId = entity.parentId;
+        this.dataFrom.path = entity.path;
+        this.dataFrom.component = entity.component;
+        this.dataFrom.icon = entity.icon;
+        this.dataFrom.sort = entity.sort;
         this.dataFrom.remarks = entity.remarks;
         // 页面属性更改
         this.titleType = '修改菜单';
@@ -268,6 +274,10 @@ export default {
         this.dialogFormVisible = true;
         this.$nextTick(()=>{
           this.$refs.TreeSelect.clearHandle();
+          if(entity.parentId !== 0){
+            this.$refs.TreeSelect.valueIDAssignment(entity.parentId);
+            console.log(this.$refs.TreeSelect.valueId);
+          }
         })
       });
     },
@@ -294,6 +304,7 @@ export default {
               this.getList();
               this.dialogFormVisible = false;
               this.dataFrom.id = '';
+              localStorage.setItem("updateStatus", "update");
             }
           });
         }
@@ -311,6 +322,7 @@ export default {
         var judge = showResult(result);
         if (judge) {
           this.getList();
+          localStorage.setItem("updateStatus", "update");
         }
       });
     },

@@ -54,10 +54,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public boolean save(User user) {
         int result = this.baseMapper.insert(user);
         log.info("<--------------------------插入数据 id : {}------------------------------>", user.getId());
-        if (result != 1)
-            return false;
-        else
-            return true;
+        return result == 1;
     }
 
     @Override
@@ -72,10 +69,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public boolean updateById(User user) {
         int result = this.baseMapper.updateById(user);
         log.info("<--------------------------更新数据 id : {}------------------------------>", user.getId());
-        if (result != 1)
-            return false;
-        else
-            return true;
+        return result == 1;
     }
 
     @Override
@@ -87,10 +81,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public boolean removeById(Serializable id) {
         int result = this.baseMapper.deleteById(id);
         log.info("<--------------------------清除缓存 id : {}------------------------------>", id);
-        if (result != 1)
-            return false;
-        else
-            return true;
+        return result == 1;
     }
 
     @Override
