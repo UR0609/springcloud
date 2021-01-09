@@ -2,6 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ljryh.client.mapper.PermissionMapper">
 
+    <select id="selectPage" resultType="com.ljryh.client.entity.Permission">
+        SELECT a.* FROM s_permission a
+        where 1=1
+        AND a.del = 0
+        <if test="ew.entity.permissionName != null and ew.entity.permissionName != ''">
+            and a.permission_name like concat('%',#{ew.entity.permissionName},'%')
+        </if>
+        ORDER BY a.id
+    </select>
+
     <select id="selectPermissionByRoleId" resultType="com.ljryh.client.entity.Permission">
         select
             a.*

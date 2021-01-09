@@ -205,7 +205,6 @@ export default {
       }).then(result => {
         if (result && result.status == 200) {
           // this.total = result.data.total;
-          // console.log(result.data);
           this.tableData = result.data;
           setTimeout(() => {
             this.listLoading = false
@@ -243,7 +242,7 @@ export default {
             if (judge) {
               this.getList();
               this.dialogFormVisible = false;
-              localStorage.setItem("updateStatus", "update");
+              // localStorage.setItem("updateStatus", "update");
             }
           });
         }
@@ -276,7 +275,6 @@ export default {
           this.$refs.TreeSelect.clearHandle();
           if(entity.parentId !== 0){
             this.$refs.TreeSelect.valueIDAssignment(entity.parentId);
-            console.log(this.$refs.TreeSelect.valueId);
           }
         })
       });
@@ -304,7 +302,7 @@ export default {
               this.getList();
               this.dialogFormVisible = false;
               this.dataFrom.id = '';
-              localStorage.setItem("updateStatus", "update");
+              // localStorage.setItem("updateStatus", "update");
             }
           });
         }
@@ -322,7 +320,7 @@ export default {
         var judge = showResult(result);
         if (judge) {
           this.getList();
-          localStorage.setItem("updateStatus", "update");
+          // localStorage.setItem("updateStatus", "update");
         }
       });
     },
