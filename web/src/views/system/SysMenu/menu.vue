@@ -169,7 +169,7 @@ export default {
       });
     }
   },
-  components: {TreeSelect:TreeSelect},
+  components: {TreeSelect: TreeSelect},
   created() {
     // 在模板渲染成html前调用
     this.getList();
@@ -212,7 +212,7 @@ export default {
         }
       });
     },
-    clearData(){
+    clearData() {
       // 清空内容
       this.dataFrom.id = '';
       this.dataFrom.name = '';
@@ -222,7 +222,7 @@ export default {
       this.dataFrom.icon = '';
       this.dataFrom.sort = '';
       this.dataFrom.remarks = '';
-      this.$nextTick(()=>{
+      this.$nextTick(() => {
         this.$refs.TreeSelect.clearHandle();
       })
     },
@@ -282,9 +282,9 @@ export default {
         this.titleType = '修改菜单';
         this.dialogStatus = 'updata';
         this.dialogFormVisible = true;
-        this.$nextTick(()=>{
+        this.$nextTick(() => {
           this.$refs.TreeSelect.clearHandle();
-          if(entity.parentId !== 0){
+          if (entity.parentId !== 0) {
             this.$refs.TreeSelect.valueIDAssignment(entity.parentId);
           }
         })
@@ -391,6 +391,16 @@ export default {
     },
   },
   data() {
+    //自定义下拉框校验函数
+    // const isSelect = (rule, value, callback) => {
+    //   console.log(value);
+    //   if (value === 0) { //如果值是 0，提示用户选择正确的选项
+    //     return callback(new Error("请正确选择一级标题"));
+    //   } else {
+    //     callback();
+    //   }
+    // };
+
     return {
       // 规则验证
       dataRules: {
@@ -401,6 +411,9 @@ export default {
         parentId: [
           {required: true, message: "请选择父级", trigger: 'blur'}
         ],
+        // parentId: [
+        //   {required: true, message: "请选择父级", trigger: 'change',validator: isSelect}
+        // ],
         path: [
           {required: true, message: "请填写跳转路径", trigger: 'blur'},
           {min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur'}

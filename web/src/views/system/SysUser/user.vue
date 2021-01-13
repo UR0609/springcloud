@@ -176,7 +176,7 @@ export default {
         }
       });
     },
-    clearData(){
+    clearData() {
       // 清空内容
       this.dataFrom.id = '';
       this.dataFrom.username = '';
@@ -307,8 +307,8 @@ export default {
           },
         }).then(result => {
           if (result && result.status == 200) {
-            const tHeader = ['姓名', '用户名', '密码', '年龄', '邮箱', '电话', '备注','创建时间']
-            const filterVal = ['name', 'username', 'password', 'age', 'email', 'phone', 'remarks','createTime']
+            const tHeader = ['姓名', '用户名', '密码', '年龄', '邮箱', '电话', '备注', '创建时间']
+            const filterVal = ['name', 'username', 'password', 'age', 'email', 'phone', 'remarks', 'createTime']
             const list = result.data;
             const data = this.formatJson(filterVal, list)
             excel.export_json_to_excel({
@@ -341,7 +341,7 @@ export default {
     }
   },
   data() {
-    var checkAge = (rule, value, callback) => {
+    const checkAge = (rule, value, callback) => {
       // if (!value) {
       //   return callback(new Error('年龄不能为空'))
       // }
@@ -358,9 +358,9 @@ export default {
       } else {
         callback()
       }
-    }
+    };
     // 年龄验证方法
-    var checkPhone = (rule, value, callback) => {
+    const checkPhone = (rule, value, callback) => {
       // // if (!value) {
       // //   return callback(new Error('电话号码不能为空'))
       // // }
@@ -376,9 +376,9 @@ export default {
       } else {
         callback()
       }
-    }
+    };
     // 邮箱验证方法
-    var checkEmail = (rule, value, callback) => {
+    const checkEmail = (rule, value, callback) => {
       // if (!value) {
       //   return callback(new Error('邮箱不能为空'))
       // }
@@ -394,7 +394,7 @@ export default {
       } else {
         callback()
       }
-    }
+    };
     return {
       // 规则验证
       dataRules: {
