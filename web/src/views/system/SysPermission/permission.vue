@@ -86,7 +86,7 @@
           <el-input v-model="dataFrom.permission" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="排序" :label-width="formLabelWidth" prop="sort">
-          <el-input v-model="dataFrom.sort" autocomplete="off"></el-input>
+          <el-input v-model.number="dataFrom.sort" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="备注" :label-width="formLabelWidth">
           <el-input type="textarea" :rows="4" v-model="dataFrom.remarks" maxlength="200" autocomplete="off"></el-input>
@@ -147,14 +147,19 @@ export default {
         }
       });
     },
+    clearData(){
+      // 清空内容
+      this.dataFrom.id = '';
+      this.dataFrom.permissionName = '';
+      this.dataFrom.permission = '';
+      this.dataFrom.sort = '';
+      this.dataFrom.remarks = '';
+    },
     // 新增弹出页
     handleCreate() {
       this.titleType = '添加权限';
       this.dialogStatus = 'create';
       this.dialogFormVisible = true;
-      this.dataFrom.id = '';
-      this.dataFrom.roleName = '';
-      this.dataFrom.remarks = '';
     },
     // 新增
     createData() {
@@ -164,13 +169,16 @@ export default {
             method: "POST",
             url: this.path + "/add",
             data: {
-              roleName: this.dataFrom.roleName,
+              permissionName: this.dataFrom.permissionName,
+              permission: this.dataFrom.permission,
+              sort: this.dataFrom.sort,
               remarks: this.dataFrom.remarks
             },
           }).then(result => {
             var judge = showResult(result);
             if (judge) {
               this.getList();
+              this.clearData();
               this.dialogFormVisible = false;
             }
           });
@@ -206,17 +214,17 @@ export default {
             url: this.path + "/mod",
             data: {
               id: this.dataFrom.id,
-              roleName: this.dataFrom.roleName,
+              permissionName: this.dataFrom.permissionName,
+              permission: this.dataFrom.permission,
+              sort: this.dataFrom.sort,
               remarks: this.dataFrom.remarks
             },
           }).then(result => {
             var judge = showResult(result);
             if (judge) {
               this.getList();
+              this.clearData();
               this.dialogFormVisible = false;
-              this.dataFrom.id = '';
-              this.dataFrom.roleName = '';
-              this.dataFrom.remarks = '';
             }
           });
         }
@@ -234,6 +242,7 @@ export default {
         var judge = showResult(result);
         if (judge) {
           this.getList();
+          this.clearData();
         }
       });
     },
@@ -256,13 +265,19 @@ export default {
     return {
       // 规则验证
       dataRules: {
-        roleName: [
-          {required: true, message: "请填写规则名称", trigger: 'blur'},
+        permissionName: [
+          {required: true, message: "请填写按钮类型", trigger: 'blur'},
           {min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur'}
         ],
+        permission: [
+          {required: true, message: "请填写允许名称", trigger: 'blur'},
+          {min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur'}
+        ],
+        sort: [
+          {type: 'number',message: '数量必须为数字值', trigger: 'blur'}
+        ],
         remarks: [
-          {required: true, message: "请填写备注", trigger: 'blur'},
-          {min: 2, max: 18, message: '长度在 2 到 18 个字符', trigger: 'blur'}
+          {max: 18, message: '长度小于 50 个字符', trigger: 'blur'}
         ]
       },
       // 请求url

@@ -29,7 +29,7 @@ public class Permission extends PageResponse implements Serializable {
 
     private static final long serialVersionUID = -4816453797275500733L;
 
-    private Integer id;
+    private Long id;
 
     private String permission;
 

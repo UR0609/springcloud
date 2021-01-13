@@ -176,6 +176,17 @@ export default {
         }
       });
     },
+    clearData(){
+      // 清空内容
+      this.dataFrom.id = '';
+      this.dataFrom.username = '';
+      this.dataFrom.password = '';
+      this.dataFrom.name = '';
+      this.dataFrom.age = '';
+      this.dataFrom.email = '';
+      this.dataFrom.phone = '';
+      this.dataFrom.remarks = '';
+    },
     // 新增弹出页
     handleCreate() {
       this.titleType = '添加用户';
@@ -202,6 +213,7 @@ export default {
             var judge = showResult(result);
             if (judge) {
               this.getList();
+              this.clearData();
               this.dialogFormVisible = false;
             }
           });
@@ -254,8 +266,8 @@ export default {
             var judge = showResult(result);
             if (judge) {
               this.getList();
+              this.clearData();
               this.dialogFormVisible = false;
-              this.dataFrom.id = '';
             }
           });
         }
@@ -273,6 +285,7 @@ export default {
         var judge = showResult(result);
         if (judge) {
           this.getList();
+          this.clearData();
         }
       });
     },

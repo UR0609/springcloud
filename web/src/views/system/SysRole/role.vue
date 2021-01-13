@@ -137,14 +137,17 @@ export default {
         }
       });
     },
+    clearData(){
+      // 清空内容
+      this.dataFrom.id = '';
+      this.dataFrom.roleName = '';
+      this.dataFrom.remarks = '';
+    },
     // 新增弹出页
     handleCreate() {
       this.titleType = '添加权限';
       this.dialogStatus = 'create';
       this.dialogFormVisible = true;
-      this.dataFrom.id = '';
-      this.dataFrom.roleName = '';
-      this.dataFrom.remarks = '';
     },
     // 新增
     createData() {
@@ -161,6 +164,7 @@ export default {
             var judge = showResult(result);
             if (judge) {
               this.getList();
+              this.clearData();
               this.dialogFormVisible = false;
             }
           });
@@ -203,10 +207,8 @@ export default {
             var judge = showResult(result);
             if (judge) {
               this.getList();
+              this.clearData();
               this.dialogFormVisible = false;
-              this.dataFrom.id = '';
-              this.dataFrom.roleName = '';
-              this.dataFrom.remarks = '';
             }
           });
         }
@@ -224,6 +226,7 @@ export default {
         var judge = showResult(result);
         if (judge) {
           this.getList();
+          this.clearData();
         }
       });
     },

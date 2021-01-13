@@ -102,10 +102,10 @@
     <el-dialog :title="this.titleType" :visible.sync="dialogFormVisible">
       <el-form :model="dataFrom" :rules="dataRules" ref="dataFrom" label-position="left" label-width="70px"
                style="width: 400px; margin-left:50px;">
-        <el-form-item label="菜单名称" :label-width="formLabelWidth" prop="username">
+        <el-form-item label="菜单名称" :label-width="formLabelWidth" prop="name">
           <el-input v-model="dataFrom.name" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="父级" :label-width="formLabelWidth" prop="username">
+        <el-form-item label="父级" :label-width="formLabelWidth" prop="parentId">
           <TreeSelect
               ref="TreeSelect"
               style="width: 100%"
@@ -117,16 +117,16 @@
               @getValue="getValue($event)"
           />
         </el-form-item>
-        <el-form-item label="跳转路径" :label-width="formLabelWidth" prop="username">
+        <el-form-item label="跳转路径" :label-width="formLabelWidth" prop="path">
           <el-input v-model="dataFrom.path" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="菜单组件" :label-width="formLabelWidth" prop="username">
+        <el-form-item label="菜单组件" :label-width="formLabelWidth" prop="component">
           <el-input v-model="dataFrom.component" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="图标" :label-width="formLabelWidth" prop="username">
+        <el-form-item label="图标" :label-width="formLabelWidth">
           <el-input v-model="dataFrom.icon" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="排序" :label-width="formLabelWidth" prop="username">
+        <el-form-item label="排序" :label-width="formLabelWidth">
           <el-input v-model="dataFrom.sort" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="备注" :label-width="formLabelWidth">
@@ -212,14 +212,25 @@ export default {
         }
       });
     },
+    clearData(){
+      // 清空内容
+      this.dataFrom.id = '';
+      this.dataFrom.name = '';
+      this.dataFrom.parentId = '';
+      this.dataFrom.path = '';
+      this.dataFrom.component = '';
+      this.dataFrom.icon = '';
+      this.dataFrom.sort = '';
+      this.dataFrom.remarks = '';
+      this.$nextTick(()=>{
+        this.$refs.TreeSelect.clearHandle();
+      })
+    },
     // 新增弹出页
     handleCreate() {
       this.titleType = '添加菜单';
       this.dialogStatus = 'create';
       this.dialogFormVisible = true;
-      this.$nextTick(()=>{
-        this.$refs.TreeSelect.clearHandle();
-      })
     },
     // 新增
     createData() {
@@ -241,8 +252,8 @@ export default {
             var judge = showResult(result);
             if (judge) {
               this.getList();
+              this.clearData();
               this.dialogFormVisible = false;
-              // localStorage.setItem("updateStatus", "update");
             }
           });
         }
@@ -300,9 +311,8 @@ export default {
             var judge = showResult(result);
             if (judge) {
               this.getList();
+              this.clearData();
               this.dialogFormVisible = false;
-              this.dataFrom.id = '';
-              // localStorage.setItem("updateStatus", "update");
             }
           });
         }
@@ -320,6 +330,7 @@ export default {
         var judge = showResult(result);
         if (judge) {
           this.getList();
+          this.clearData();
           // localStorage.setItem("updateStatus", "update");
         }
       });
@@ -383,14 +394,21 @@ export default {
     return {
       // 规则验证
       dataRules: {
-        roleName: [
+        name: [
           {required: true, message: "请填写规则名称", trigger: 'blur'},
           {min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur'}
         ],
-        remarks: [
-          {required: true, message: "请填写备注", trigger: 'blur'},
-          {min: 2, max: 18, message: '长度在 2 到 18 个字符', trigger: 'blur'}
-        ]
+        parentId: [
+          {required: true, message: "请选择父级", trigger: 'blur'}
+        ],
+        path: [
+          {required: true, message: "请填写跳转路径", trigger: 'blur'},
+          {min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur'}
+        ],
+        component: [
+          {required: true, message: "请填写菜单组件", trigger: 'blur'},
+          {min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur'}
+        ],
       },
       // 请求url
       path: this.$route.path,
