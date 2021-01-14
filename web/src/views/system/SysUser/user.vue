@@ -80,6 +80,11 @@
           <template slot-scope="scope">
             <el-button
                 size="mini"
+                type="info"
+                @click="handleRole(scope.$index, scope.row)">角色
+            </el-button>
+            <el-button
+                size="mini"
                 @click="handleUpdate(scope.$index, scope.row)">编辑
             </el-button>
             <el-button
@@ -133,13 +138,44 @@
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">确 定</el-button>
       </div>
     </el-dialog>
+
+    <!--  绑定角色弹出页  -->
+    <el-dialog :title="this.titleRole" :visible.sync="dialogFormVisibleRole">
+      <el-form :model="roleDataFrom" ref="roleDataFrom" label-position="left" label-width="70px"
+               style="width: 400px; margin-left:50px;">
+
+        <el-form-item label="权限名称" :label-width="formLabelWidth">
+          <el-select v-model="roleDataFrom.roleId" clearable placeholder="请选择">
+            <el-option
+                v-for="item in options"
+                :key="item.id"
+                :label="item.roleName"
+                :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <!--                <el-form-item label="活动区域" :label-width="formLabelWidth">-->
+        <!--                  <el-select v-model="form.region" placeholder="请选择活动区域">-->
+        <!--                    <el-option label="区域一" value="shanghai"></el-option>-->
+        <!--                    <el-option label="区域二" value="beijing"></el-option>-->
+        <!--                  </el-select>-->
+        <!--                </el-form-item>-->
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisibleRole = false">取 消</el-button>
+        <!--        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>-->
+        <el-button type="primary" @click="userBindRole()">确 定</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
 import {parseTime} from '@/utils'
 import {validEmail, validPhone} from '@/utils/validate';
-import {showResult, showEntity} from '@/utils/show-resutl';
+import {showEntity, showResult} from '@/utils/show-resutl';
 import Pagination from '@/components/Pagination'
 import {Message} from "element-ui"; // secondary package based on el-pagination
 
@@ -338,7 +374,56 @@ export default {
           return v[j]
         }
       }))
-    }
+    },
+    // 角色弹出页
+    handleRole(index, row) {
+      this.$axios({
+        method: "POST",
+        url: this.path + "/selAllRole",
+        data: {
+          id: row.id
+        },
+      }).then(result => {
+        let entity = showEntity(result);
+        // 下拉框
+        this.options = entity.role;
+        // 默认选中
+        this.roleDataFrom.roleId = entity.id;
+        // 用户id
+        this.roleDataFrom.id = row.id;
+        this.titleRole = '绑定角色';
+        this.dialogFormVisibleRole = true;
+      });
+    },
+    //
+    userBindRole() {
+      alert("roleId:" + this.roleDataFrom.roleId);
+      alert("userId:" + this.roleDataFrom.id);
+      // this.$refs['dataFrom'].validate((valid) => {
+      //   if (valid) {
+      //     this.$axios({
+      //       method: "POST",
+      //       url: this.path + "/add",
+      //       data: {
+      //         username: this.dataFrom.username,
+      //         password: this.dataFrom.password,
+      //         name: this.dataFrom.name,
+      //         age: this.dataFrom.age,
+      //         email: this.dataFrom.email,
+      //         phone: this.dataFrom.phone,
+      //         remarks: this.dataFrom.remarks,
+      //       },
+      //     }).then(result => {
+      //       var judge = showResult(result);
+      //       if (judge) {
+      //         this.getList();
+      //         this.clearData();
+      //         this.dialogFormVisible = false;
+      //       }
+      //     });
+      //   }
+      // })
+    },
   },
   data() {
     const checkAge = (rule, value, callback) => {
@@ -460,6 +545,15 @@ export default {
       },
       // 隐藏列用
       show: false,
+
+      titleRole: '',
+      dialogFormVisibleRole: false,
+      roleDataFrom: {
+        id: '选项3',
+        roleId: '',
+        roleName: ''
+      },
+      options: [],
 
       downloadLoading: false,
     }

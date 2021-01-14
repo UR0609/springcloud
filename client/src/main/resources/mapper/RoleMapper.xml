@@ -26,6 +26,13 @@
         ORDER BY a.id
     </select>
 
+    <select id="selectList" resultType="com.ljryh.client.entity.Role">
+        SELECT a.* FROM s_role a
+        where 1=1
+        AND a.del = 0
+        ORDER BY a.id
+    </select>
+
     <update id="deleteById" >
         update s_role set del = 1 where id = ${id};
     </update>

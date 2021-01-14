@@ -17,4 +17,5 @@ public interface UserMapper extends BaseMapper<User> {
 
     User findByUserId(Long id);
 
+    Long getRoleIdByUserId(User user);
 }

@@ -18,4 +18,6 @@ public interface IUserService extends IService<User> {
     IPage<User> page(IPage<User> page, QueryWrapper<User> wrapper);
 
     void test();
+
+    Long getRoleIdByUserId(User user);
 }

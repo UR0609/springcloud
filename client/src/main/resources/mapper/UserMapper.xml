@@ -74,4 +74,13 @@
         update s_user set del = 1 where id = ${id};
     </update>
 
+    <select id="getRoleIdByUserId" resultType="java.lang.Long">
+        select
+        a.role_id
+        from
+        user_role a
+        WHERE
+        1=1
+        AND a.user_id = #{id}
+    </select>
 </mapper>

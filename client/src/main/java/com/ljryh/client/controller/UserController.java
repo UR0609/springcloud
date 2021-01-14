@@ -4,7 +4,9 @@ package com.ljryh.client.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ljryh.client.entity.Role;
 import com.ljryh.client.entity.shiro.User;
+import com.ljryh.client.service.IRoleService;
 import com.ljryh.client.service.IUserService;
 import com.ljryh.common.entity.CallResult;
 import com.ljryh.common.utils.GsonUtil;
@@ -14,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * <p>
@@ -29,6 +34,8 @@ public class UserController {
 
     @Resource
     private IUserService userService;
+    @Resource
+    private IRoleService roleService;
 
     @RequestMapping(value = "/list",method = RequestMethod.POST)
     public Object findAll(@RequestBody User user/*, HttpServletRequest request*/){
@@ -87,6 +94,23 @@ public class UserController {
         User result = userService.getById(user.getId());
         if (result != null) {
             return CallResult.success(result);
+        } else {
+            return CallResult.fail("查询数据失败！");
+        }
+    }
+
+    @RequestMapping(value = "/selAllRole",method = RequestMethod.POST)
+    public Object selAllRole(@RequestBody User user){
+
+        Map<String,Object> map = new ConcurrentHashMap<>();
+
+        List<Role> list = roleService.list();
+        map.put("role",list);
+        if (list.size() != 0) {
+            Long id = userService.getRoleIdByUserId(user);
+            if (id != null)
+                map.put("id",id);
+            return CallResult.success(map);
         } else {
             return CallResult.fail("查询数据失败！");
         }

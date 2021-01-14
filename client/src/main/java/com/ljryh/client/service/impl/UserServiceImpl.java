@@ -91,4 +91,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         log.info("<--------------------------没有走缓存 查询 id : {}------------------------------>", id);
         return result;
     }
+
+    @Override
+    public Long getRoleIdByUserId(User user) {
+        return this.baseMapper.getRoleIdByUserId(user);
+    }
 }
