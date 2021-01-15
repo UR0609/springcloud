@@ -76,7 +76,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="操作" align="center" min-width="160">
+        <el-table-column label="操作" align="center" min-width="200px">
           <template slot-scope="scope">
             <el-button
                 size="mini"
@@ -539,7 +539,7 @@ export default {
       titleRole: '',
       dialogFormVisibleRole: false,
       roleDataFrom: {
-        id: '选项3',
+        id: '',
         roleId: '',
         roleName: ''
       },

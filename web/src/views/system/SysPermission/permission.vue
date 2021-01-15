@@ -126,8 +126,6 @@ export default {
   methods: {
     // 列表加载
     getList() {
-      console.log(this.listQuery.page);
-      console.log(this.listQuery.limit);
       this.listLoading = true
       this.$axios({
         method: "POST",

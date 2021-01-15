@@ -23,4 +23,15 @@
         AND b.role_id = #{id}
     </select>
 
+    <select id="selectList" resultType="com.ljryh.client.entity.Permission">
+        SELECT a.* FROM s_permission a
+        where 1=1
+          AND a.del = 0
+        ORDER BY a.id
+    </select>
+
+    <update id="deleteById" >
+        update s_permission set del = 1 where id = ${id};
+    </update>
+
 </mapper>

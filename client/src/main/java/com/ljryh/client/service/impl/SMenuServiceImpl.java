@@ -103,4 +103,11 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenu> implements
         return result;
     }
 
+
+    @Override
+    public List<SMenu> getPermissionNameByMenuId(SMenu entity) {
+        List<SMenu> list = this.baseMapper.getPermissionNameByMenuId(entity);
+        return list;
+    }
+
 }

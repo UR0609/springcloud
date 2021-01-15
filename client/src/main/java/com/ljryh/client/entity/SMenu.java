@@ -55,6 +55,11 @@ public class SMenu extends PageResponse implements Serializable {
     private String component;
 
     /**
+     * 按钮id
+     */
+    private Long permissionId;
+
+    /**
      * 类型1：菜单，2：按钮
      */
     private Integer type;
@@ -109,4 +114,8 @@ public class SMenu extends PageResponse implements Serializable {
 
     @TableField(exist = false)
     private List<SMenu> children;
+
+    @TableField(exist = false)
+    private List<String> permissionName;
+
 }

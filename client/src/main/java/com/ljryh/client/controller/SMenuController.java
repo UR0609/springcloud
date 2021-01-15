@@ -2,15 +2,20 @@ package com.ljryh.client.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.ljryh.client.entity.Permission;
 import com.ljryh.client.entity.SMenu;
 import com.ljryh.client.entity.shiro.User;
+import com.ljryh.client.service.IPermissionService;
 import com.ljryh.client.service.ISMenuService;
 import com.ljryh.common.entity.CallResult;
+import com.ljryh.common.utils.GsonUtil;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * <p>
@@ -26,9 +31,12 @@ public class SMenuController {
 
     @Resource
     private ISMenuService menuService;
+    @Resource
+    private IPermissionService permissionService;
 
     /**
      * 菜单列表
+     *
      * @param token
      * @return
      * @throws Exception
@@ -94,6 +102,7 @@ public class SMenuController {
 
     /**
      * 下拉树形
+     *
      * @param entity
      * @return
      */
@@ -102,6 +111,35 @@ public class SMenuController {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         List<SMenu> list = menuService.selectTree(user.getId());
         return CallResult.success(list);
+    }
+
+    @RequestMapping(value = "/selAllPermission", method = RequestMethod.POST)
+    public Object selAllPermission(@RequestBody SMenu entity) {
+
+        Map<String, Object> map = new ConcurrentHashMap<>();
+
+        List<Permission> list = permissionService.list();
+        map.put("permission", list);
+        if (list.size() != 0) {
+            List<SMenu> nameList = menuService.getPermissionNameByMenuId(entity);
+            if (nameList.size() != 0)
+                map.put("list", nameList);
+            return CallResult.success(map);
+        } else {
+            return CallResult.fail("查询数据失败！");
+        }
+    }
+
+    @RequestMapping(value = "/bind",method = RequestMethod.POST)
+    public Object bind(@RequestBody SMenu menu) {
+//        boolean judge = userService.bind(userRole);
+        System.out.println(GsonUtil.ModuleTojosn(menu));
+        boolean judge = true;
+        if (judge) {
+            return CallResult.success("绑定成功");
+        } else {
+            return CallResult.fail("绑定失败");
+        }
     }
 
 }

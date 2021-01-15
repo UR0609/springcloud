@@ -1,6 +1,5 @@
 package com.ljryh.client.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ljryh.client.entity.SMenu;
 
@@ -20,4 +19,5 @@ public interface ISMenuService extends IService<SMenu> {
     
     List<SMenu> selectTree(Long id);
 
+    List<SMenu> getPermissionNameByMenuId(SMenu entity);
 }

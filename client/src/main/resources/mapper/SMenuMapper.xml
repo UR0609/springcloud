@@ -13,4 +13,11 @@
         update s_menu set del = 1 where id = ${id};
     </update>
 
+    <select id="getPermissionNameByMenuId" resultType="com.ljryh.client.entity.SMenu">
+        SELECT a.name FROM s_menu a
+        where 1=1
+          AND a.del = 0 AND a.type = 2 AND permission_id = ${id}
+        ORDER BY a.id
+    </select>
+
 </mapper>

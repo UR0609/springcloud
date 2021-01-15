@@ -79,8 +79,13 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="操作" align="center" min-width="150">
+        <el-table-column label="操作" align="center" min-width="200px">
           <template slot-scope="scope">
+            <el-button
+                size="mini"
+                type="info"
+                @click="handleButton(scope.$index, scope.row)">按钮
+            </el-button>
             <el-button
                 size="mini"
                 @click="handleUpdate(scope.$index, scope.row)">编辑
@@ -145,6 +150,27 @@
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">确 定</el-button>
       </div>
     </el-dialog>
+
+    <!--  绑定角色弹出页  -->
+    <el-dialog :title="this.titlePermission" :visible.sync="dialogFormVisiblePermission">
+      <el-form :model="permissionDataFrom" ref="permissionDataFrom" label-position="left" label-width="70px"
+               style="width: 400px; margin-left:50px;">
+
+        <el-form-item label="按钮名称" :label-width="formLabelWidth">
+          <el-checkbox-group v-model="permissionDataFrom.permissionName" size="medium">
+            <el-checkbox-button v-for="permission in permissionData" :label="permission" :key="permission">
+              {{ permission }}
+            </el-checkbox-button>
+          </el-checkbox-group>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisiblePermission = false">取 消</el-button>
+        <!--        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>-->
+        <el-button type="primary" @click="menuBindPermission()">确 定</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -389,6 +415,55 @@ export default {
     getValue(value) {
       this.dataFrom.parentId = value;
     },
+
+    // 按钮弹出页
+    handleButton(index, row) {
+      this.$axios({
+        method: "POST",
+        url: this.path + "/selAllPermission",
+        data: {
+          id: row.id
+        },
+      }).then(result => {
+        let entity = showEntity(result);
+
+        entity.permission.forEach((item) => {
+          this.permissionData.push(item.permissionName);
+        });
+
+        if (entity.list !== undefined) {
+          entity.list.forEach((item) => {
+            this.permissionDataFrom.permissionName.push(item.name);
+          });
+        }
+
+
+        this.permissionDataFrom.id = row.id;
+        this.titlePermission = '绑定按钮';
+        this.dialogFormVisiblePermission = true;
+
+      });
+    },
+    //
+    menuBindPermission() {
+      // alert("roleId:" + this.roleDataFrom.roleId);
+      // alert("userId:" + this.roleDataFrom.id);
+      // this.dialogFormVisibleRole = false;
+      this.$axios({
+        method: "POST",
+        url: this.path + "/bind",
+        data: {
+          permissionName: this.permissionDataFrom.permissionName,
+          id: this.permissionDataFrom.id,
+        },
+      }).then(result => {
+        let judge = showResult(result);
+        if (judge) {
+          this.dialogFormVisibleRole = false;
+        }
+      });
+    },
+
   },
   data() {
     //自定义下拉框校验函数
@@ -488,6 +563,15 @@ export default {
         {id: 9, parentId: 0, name: "一级菜单C",},
         {id: 10, parentId: 0, name: "一级菜单end",}
       ],
+
+      titlePermission: '',
+      dialogFormVisiblePermission: false,
+      permissionDataFrom: {
+        id: '',
+        permissionName: [],
+      },
+      permissionData: [],
+
 
       downloadLoading: false,
     }
