@@ -2,6 +2,7 @@ package com.ljryh.client.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.ljryh.client.entity.UserRole;
 import com.ljryh.client.entity.shiro.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -20,4 +21,6 @@ public interface IUserService extends IService<User> {
     void test();
 
     Long getRoleIdByUserId(User user);
+
+    boolean bind(UserRole userRole);
 }

@@ -65,6 +65,7 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenu> implements
             @CacheEvict(cacheNames = "cache:menuTree", allEntries = true),
     })
     public boolean save(SMenu menu) {
+        menu.setType(1);
         int result = this.baseMapper.insert(menu);
         log.info("<--------------------------插入数据 id : {}------------------------------>", menu.getId());
         return result == 1;

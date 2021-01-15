@@ -81,7 +81,7 @@
             <el-button
                 size="mini"
                 type="info"
-                @click="handleRole(scope.$index, scope.row)">角色
+                @click="handleRole(scope.$index, scope.row)">权限
             </el-button>
             <el-button
                 size="mini"
@@ -397,32 +397,22 @@ export default {
     },
     //
     userBindRole() {
-      alert("roleId:" + this.roleDataFrom.roleId);
-      alert("userId:" + this.roleDataFrom.id);
-      // this.$refs['dataFrom'].validate((valid) => {
-      //   if (valid) {
-      //     this.$axios({
-      //       method: "POST",
-      //       url: this.path + "/add",
-      //       data: {
-      //         username: this.dataFrom.username,
-      //         password: this.dataFrom.password,
-      //         name: this.dataFrom.name,
-      //         age: this.dataFrom.age,
-      //         email: this.dataFrom.email,
-      //         phone: this.dataFrom.phone,
-      //         remarks: this.dataFrom.remarks,
-      //       },
-      //     }).then(result => {
-      //       var judge = showResult(result);
-      //       if (judge) {
-      //         this.getList();
-      //         this.clearData();
-      //         this.dialogFormVisible = false;
-      //       }
-      //     });
-      //   }
-      // })
+      // alert("roleId:" + this.roleDataFrom.roleId);
+      // alert("userId:" + this.roleDataFrom.id);
+      // this.dialogFormVisibleRole = false;
+      this.$axios({
+        method: "POST",
+        url: this.path + "/bind",
+        data: {
+          roleId: this.roleDataFrom.roleId,
+          userId: this.roleDataFrom.id,
+        },
+      }).then(result => {
+        let judge = showResult(result);
+        if (judge) {
+          this.dialogFormVisibleRole = false;
+        }
+      });
     },
   },
   data() {

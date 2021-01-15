@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ljryh.client.entity.Role;
+import com.ljryh.client.entity.UserRole;
 import com.ljryh.client.entity.shiro.User;
 import com.ljryh.client.service.IRoleService;
 import com.ljryh.client.service.IUserService;
@@ -125,6 +126,16 @@ public class UserController {
         System.out.println(GsonUtil.ModuleTojosn(user));
 
         return "wp.ljryh.com";
+    }
+
+    @RequestMapping(value = "/bind",method = RequestMethod.POST)
+    public Object bind(@RequestBody UserRole userRole) {
+        boolean judge = userService.bind(userRole);
+        if (judge) {
+            return CallResult.success("绑定成功");
+        } else {
+            return CallResult.fail("绑定失败");
+        }
     }
 
 }

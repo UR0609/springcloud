@@ -3,7 +3,9 @@ package com.ljryh.client.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ljryh.client.entity.UserRole;
 import com.ljryh.client.entity.shiro.User;
+import com.ljryh.client.mapper.UserRoleMapper;
 import com.ljryh.client.mapper.shiro.UserMapper;
 import com.ljryh.client.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +19,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.io.Serializable;
 
 /**
@@ -32,6 +35,9 @@ import java.io.Serializable;
 @PropertySource("classpath:ljryh.properties")
 @Transactional(rollbackFor = Exception.class)
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
+
+    @Resource
+    private UserRoleMapper userRoleMapper;
 
     @Value("${task.replay.count}")
     private Integer taskReplayCount;
@@ -95,5 +101,25 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public Long getRoleIdByUserId(User user) {
         return this.baseMapper.getRoleIdByUserId(user);
+    }
+
+    @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "cache:shiro:user", allEntries = true)
+    })
+    public boolean bind(UserRole userRole) {
+        UserRole data = new UserRole();
+        data.setUserId(userRole.getUserId());
+        QueryWrapper<UserRole> queryWrapper = new QueryWrapper<>();
+        queryWrapper.setEntity(data);
+        int count = userRoleMapper.selectCount(queryWrapper);
+
+        int result;
+        if(count == 0){
+            result = userRoleMapper.insert(userRole);
+        } else {
+            result = userRoleMapper.update(userRole, queryWrapper);
+        }
+        return result == 1;
     }
 }

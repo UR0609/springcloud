@@ -55,6 +55,11 @@ public class SMenu extends PageResponse implements Serializable {
     private String component;
 
     /**
+     * 类型1：菜单，2：按钮
+     */
+    private Integer type;
+
+    /**
      * 图标
      */
     private String icon;
