@@ -8,7 +8,6 @@ import com.ljryh.client.entity.shiro.User;
 import com.ljryh.client.service.IPermissionService;
 import com.ljryh.client.service.ISMenuService;
 import com.ljryh.common.entity.CallResult;
-import com.ljryh.common.utils.GsonUtil;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -132,9 +131,8 @@ public class SMenuController {
 
     @RequestMapping(value = "/bind",method = RequestMethod.POST)
     public Object bind(@RequestBody SMenu menu) {
-//        boolean judge = userService.bind(userRole);
-        System.out.println(GsonUtil.ModuleTojosn(menu));
-        boolean judge = true;
+        boolean judge = menuService.bind(menu);
+//        judge = true;
         if (judge) {
             return CallResult.success("绑定成功");
         } else {

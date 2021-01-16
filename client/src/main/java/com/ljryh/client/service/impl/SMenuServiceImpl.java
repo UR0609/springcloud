@@ -1,7 +1,9 @@
 package com.ljryh.client.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ljryh.client.entity.Permission;
 import com.ljryh.client.entity.SMenu;
+import com.ljryh.client.mapper.PermissionMapper;
 import com.ljryh.client.mapper.SMenuMapper;
 import com.ljryh.client.service.ISMenuService;
 import com.ljryh.client.utils.TreeUtils;
@@ -12,7 +14,9 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,6 +31,9 @@ import java.util.List;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenu> implements ISMenuService {
+
+    @Resource
+    private PermissionMapper permissionMapper;
 
     /**
      * 列表 与 菜单
@@ -108,6 +115,31 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenu> implements
     public List<SMenu> getPermissionNameByMenuId(SMenu entity) {
         List<SMenu> list = this.baseMapper.getPermissionNameByMenuId(entity);
         return list;
+    }
+
+    @Override
+    public boolean bind(SMenu menu) {
+
+        this.baseMapper.deleteSMenuByParentId(menu);
+
+        if (menu.getPermissionName().size() == 0) {
+            return true;
+        }
+        SMenu data = this.getById(menu.getId());
+        List<Permission> list = permissionMapper.getPermissionByName(menu.getPermissionName());
+
+        List<SMenu> insertList = new ArrayList<>();
+
+        for (Permission permission : list) {
+            SMenu sMenu = new SMenu();
+            sMenu.setParentId(menu.getId());
+            sMenu.setPermissionId(permission.getId());
+            sMenu.setPath(data.getPath() + "/" + permission.getPermission());
+            sMenu.setName(permission.getPermissionName());
+            sMenu.setType(2);
+            insertList.add(sMenu);
+        }
+        return this.saveBatch(insertList);
     }
 
 }

@@ -34,4 +34,16 @@
         update s_permission set del = 1 where id = ${id};
     </update>
 
+    <select id="getPermissionByName" resultType="com.ljryh.client.entity.Permission">
+        SELECT a.* FROM s_permission a
+        where 1=1
+          AND a.del = 0
+        AND
+            a.permission_name in
+        <foreach item="item" collection="list" separator="," open="(" close=")" index="">
+            #{item}
+        </foreach>
+        ORDER BY a.id
+    </select>
+
 </mapper>

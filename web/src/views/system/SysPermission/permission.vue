@@ -192,10 +192,12 @@ export default {
           id: row.id
         },
       }).then(result => {
-        var entity = showEntity(result);
+        let entity = showEntity(result);
         // 隐藏域赋值
         this.dataFrom.id = row.id;
-        this.dataFrom.roleName = entity.roleName;
+        this.dataFrom.permissionName = entity.permissionName;
+        this.dataFrom.permission = entity.permission;
+        this.dataFrom.sort = entity.sort;
         this.dataFrom.remarks = entity.remarks;
         // 页面属性更改
         this.titleType = '修改权限';

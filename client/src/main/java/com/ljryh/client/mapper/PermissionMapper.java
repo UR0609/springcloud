@@ -3,6 +3,7 @@ package com.ljryh.client.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ljryh.client.entity.Permission;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -17,4 +18,5 @@ public interface PermissionMapper extends BaseMapper<Permission> {
 
     Set<Permission> selectPermissionByRoleId(Long roleId);
 
+    List<Permission> getPermissionByName(List<String> list);
 }

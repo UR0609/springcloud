@@ -157,7 +157,7 @@
                style="width: 400px; margin-left:50px;">
 
         <el-form-item label="按钮名称" :label-width="formLabelWidth">
-          <el-checkbox-group v-model="permissionDataFrom.permissionName" size="medium">
+          <el-checkbox-group v-model="permissionDataFrom.permissionName" size="medium" style="width: 500px;">
             <el-checkbox-button v-for="permission in permissionData" :label="permission" :key="permission">
               {{ permission }}
             </el-checkbox-button>
@@ -418,6 +418,8 @@ export default {
 
     // 按钮弹出页
     handleButton(index, row) {
+      this.permissionData = [];
+      this.permissionDataFrom.permissionName = [];
       this.$axios({
         method: "POST",
         url: this.path + "/selAllPermission",
@@ -436,7 +438,6 @@ export default {
             this.permissionDataFrom.permissionName.push(item.name);
           });
         }
-
 
         this.permissionDataFrom.id = row.id;
         this.titlePermission = '绑定按钮';
@@ -459,7 +460,7 @@ export default {
       }).then(result => {
         let judge = showResult(result);
         if (judge) {
-          this.dialogFormVisibleRole = false;
+          this.dialogFormVisiblePermission = false;
         }
       });
     },

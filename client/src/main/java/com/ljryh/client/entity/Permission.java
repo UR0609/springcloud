@@ -35,6 +35,8 @@ public class Permission extends PageResponse implements Serializable {
 
     private String permissionName;
 
+    private Integer sort;
+
     private String remarks;
 
     private Long creater;

@@ -20,4 +20,6 @@ public interface ISMenuService extends IService<SMenu> {
     List<SMenu> selectTree(Long id);
 
     List<SMenu> getPermissionNameByMenuId(SMenu entity);
+
+    boolean bind(SMenu menu);
 }
