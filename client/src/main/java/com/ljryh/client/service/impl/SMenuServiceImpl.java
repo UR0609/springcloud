@@ -69,6 +69,7 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenu> implements
     @Override
     @Caching(evict = {
             @CacheEvict(cacheNames = "cache:menuList", allEntries = true),
+            @CacheEvict(cacheNames = "cache:selAllMenu", allEntries = true),
             @CacheEvict(cacheNames = "cache:menuTree", allEntries = true),
     })
     public boolean save(SMenu menu) {
@@ -82,6 +83,7 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenu> implements
     @Caching(evict = {
             @CacheEvict(cacheNames = "cache:menuList", allEntries = true),
             @CacheEvict(cacheNames = "cache:menuTree", allEntries = true),
+            @CacheEvict(cacheNames = "cache:selAllMenu", allEntries = true),
             @CacheEvict(cacheNames = "cache:menu", allEntries = true)
     })
     public boolean updateById(SMenu menu) {
@@ -94,6 +96,7 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenu> implements
     @Caching(evict = {
             @CacheEvict(cacheNames = "cache:menuList", allEntries = true),
             @CacheEvict(cacheNames = "cache:menuTree", allEntries = true),
+            @CacheEvict(cacheNames = "cache:selAllMenu", allEntries = true),
             @CacheEvict(cacheNames = "cache:menu", key = "'id-' + #id"),
     })
     public boolean removeById(Serializable id) {
@@ -140,6 +143,18 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenu> implements
             insertList.add(sMenu);
         }
         return this.saveBatch(insertList);
+    }
+
+    @Override
+    @Cacheable(value = "cache:selAllMenu")
+    public List<SMenu> selAllMenu() {
+        List<SMenu> list = this.baseMapper.selAllMenu();
+
+        // 封装树形
+        TreeUtils menuTree = new TreeUtils(list);
+        list = menuTree.builTree();
+
+        return list;
     }
 
 }

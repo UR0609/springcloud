@@ -2,10 +2,12 @@ package com.ljryh.client.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.ljryh.client.entity.Role;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ljryh.client.entity.Role;
+import com.ljryh.client.entity.RoleMenu;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.cache.annotation.Cacheable;
+
+import java.util.List;
 
 /**
  * <p>
@@ -18,4 +20,8 @@ import org.springframework.cache.annotation.Cacheable;
 public interface IRoleService extends IService<Role> {
 
     IPage<Role> page(@Param("page") IPage<Role> page, @Param("ew") QueryWrapper<Role> wrapper);
+
+    List<RoleMenu> getMenuIdByRoleId(Role entity);
+
+    boolean bind(Role entity);
 }

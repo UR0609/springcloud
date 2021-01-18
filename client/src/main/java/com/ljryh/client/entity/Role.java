@@ -17,6 +17,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -63,4 +64,7 @@ public class Role extends PageResponse implements Serializable {
     private LocalDateTime updateTime;
 
     private Integer del;
+
+    @TableField(exist = false)
+    private List<String> menuId;
 }

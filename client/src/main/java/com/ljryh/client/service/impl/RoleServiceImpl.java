@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ljryh.client.entity.Role;
+import com.ljryh.client.entity.RoleMenu;
 import com.ljryh.client.mapper.RoleMapper;
+import com.ljryh.client.mapper.RoleMenuMapper;
 import com.ljryh.client.service.IRoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
@@ -14,7 +16,9 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -29,11 +33,41 @@ import java.io.Serializable;
 @Transactional(rollbackFor=Exception.class)
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IRoleService {
 
+    @Resource
+    private RoleMenuMapper roleMenuMapper;
 
     @Override
     @Cacheable(value = "cache:roleList", key = "'role-' + #page.current+'-'+#page.size+'-'+#wrapper.entity.roleName+'-'+#wrapper.entity.remarks")
     public IPage<Role> page(@Param("page") IPage<Role> page, @Param("ew") QueryWrapper<Role> wrapper) {
         return this.baseMapper.selectPage(page, wrapper);
+    }
+
+    @Override
+    @Cacheable(value = "cache:roleMenuList", key = "'id-' + #entity.getId()")
+    public List<RoleMenu> getMenuIdByRoleId(Role entity) {
+        List<RoleMenu> list = roleMenuMapper.getMenuIdByRoleId(entity);
+        return list;
+    }
+
+    @Override
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "cache:roleMenuList", key = "'id-' + #entity.getId()"),
+    })
+    public boolean bind(Role entity) {
+
+        roleMenuMapper.deleteByRoleId(entity);
+
+        for(String menuId : entity.getMenuId()){
+            RoleMenu roleMenu = new RoleMenu();
+            roleMenu.setRoleId(entity.getId());
+            roleMenu.setMenuId(Long.valueOf(menuId));
+            int result = roleMenuMapper.insert(roleMenu);
+            if(result != 1){
+                return false;
+            }
+        }
+
+        return true;
     }
 
     @Override

@@ -18,4 +18,6 @@ public interface SMenuMapper extends BaseMapper<SMenu> {
     List<SMenu> getPermissionNameByMenuId(SMenu entity);
 
     void deleteSMenuByParentId(SMenu menu);
+
+    List<SMenu> selAllMenu();
 }

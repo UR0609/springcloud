@@ -56,6 +56,11 @@
           <template slot-scope="scope">
             <el-button
                 size="mini"
+                type="info"
+                @click="handleMenu(scope.$index, scope.row)">菜单
+            </el-button>
+            <el-button
+                size="mini"
                 @click="handleUpdate(scope.$index, scope.row)">编辑
             </el-button>
             <el-button
@@ -94,6 +99,38 @@
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">确 定</el-button>
       </div>
     </el-dialog>
+
+    <!--  绑定菜单弹出页  -->
+    <el-dialog :title="this.titleMenu" :visible.sync="dialogFormVisibleMenu">
+      <el-form :model="menuDataFrom" ref="menuDataFrom" label-position="left" label-width="70px"
+               style="width: 400px; margin-left:50px;">
+
+        <el-form-item label="菜单名称" :label-width="formLabelWidth">
+          <el-tree
+              ref="tree"
+              :data="options"
+              show-checkbox
+              node-key="id"
+              :default-expanded-keys="[]"
+              :default-checked-keys="[]"
+              :props="defaultProps">
+          </el-tree>
+        </el-form-item>
+
+        <!--                <el-form-item label="活动区域" :label-width="formLabelWidth">-->
+        <!--                  <el-select v-model="form.region" placeholder="请选择活动区域">-->
+        <!--                    <el-option label="区域一" value="shanghai"></el-option>-->
+        <!--                    <el-option label="区域二" value="beijing"></el-option>-->
+        <!--                  </el-select>-->
+        <!--                </el-form-item>-->
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisibleMenu = false">取 消</el-button>
+        <!--        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>-->
+        <el-button type="primary" @click="roleBindMenu()">确 定</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -279,7 +316,52 @@ export default {
           return v[j]
         }
       }))
-    }
+    },
+
+    // 角色弹出页
+    handleMenu(index, row) {
+      console.log(row.id);
+      this.$axios({
+        method: "POST",
+        url: this.path + "/selAllMenu",
+        data: {
+          id: row.id
+        },
+      }).then(result => {
+        let entity = showEntity(result);
+        console.log(entity);
+        // 下拉框
+        this.options = entity.menu;
+        // // 默认选中
+        // this.roleDataFrom.roleId = entity.id;
+        // 用户id
+        this.titleMenu = '绑定菜单';
+        this.dialogFormVisibleMenu = true;
+        this.menuDataFrom.id = row.id;
+      });
+    },
+    //
+    roleBindMenu() {
+      console.log("roleId:" + this.menuDataFrom.id);
+      this.$nextTick(() => {
+        console.log(this.$refs.tree.getCheckedKeys());
+      });
+      this.dialogFormVisibleMenu = false;
+      // this.$axios({
+      //   method: "POST",
+      //   url: this.path + "/bind",
+      //   data: {
+      //     roleId: this.roleDataFrom.roleId,
+      //     userId: this.roleDataFrom.id,
+      //   },
+      // }).then(result => {
+      //   let judge = showResult(result);
+      //   if (judge) {
+      //     this.dialogFormVisibleRole = false;
+      //   }
+      // });
+    },
+
   },
   data() {
     return {
@@ -329,6 +411,20 @@ export default {
       },
       // 隐藏列用
       show: false,
+
+      titleMenu: '',
+      dialogFormVisibleMenu: false,
+      menuDataFrom: {
+        id: '',
+        menuId:[],
+        roleId: '',
+        roleName: ''
+      },
+      options: [],
+      defaultProps: {
+        children: 'children',
+        label: 'name'
+      },
 
       downloadLoading: false,
     }
