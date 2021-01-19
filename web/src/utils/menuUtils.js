@@ -4,9 +4,11 @@ import axios from 'axios';
 export const initMenu = (router, store) => {
 
     let token = localStorage.getItem("token");
+    let refreshMenu = localStorage.getItem("refreshMenu");
+    console.log(refreshMenu);
     // 首先判断 store 中数据是否存在，如果存在，则说明这次跳转是正常的跳转
     // 而不是用户按F5键或者直接在地址栏输入某个地址进入的，这时直接返回，不必执行菜单初始化
-    if (store.state.routes.length > 0) {
+    if (store.state.routes.length > 0 && refreshMenu === true) {
         return;
     }
     axios({
@@ -26,9 +28,11 @@ export const initMenu = (router, store) => {
                 return
             }
             // 将服务器返回的 JSON 格式的数据转成 router 需要的格式
+            console.log(result.data);
             var fmtRoutes = formatRoutes(result.data);
+            localStorage.setItem("refreshMenu", true);
             localStorage.setItem("routeData", JSON.stringify(fmtRoutes));
-            // console.log(fmtRoutes);
+            console.log(fmtRoutes);
             // let home = router.find(r => r.path === '/Home');
             // console.log(home);
             // home.children = fmtRoutes

@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container" style="float:left;margin-top: 20px;">
-      <el-input v-model="listQuery.permissionName" placeholder="规则名称" style="width: 200px;" class="filter-item"
+      <el-input v-model="listQuery.permissionName" placeholder="按钮类型" style="width: 200px;" class="filter-item"
                 @keyup.enter.native="handleFilter" clearable/>
 
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">

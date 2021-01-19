@@ -18,6 +18,9 @@ import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -45,13 +48,31 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenu> implements
     @Cacheable(value = "cache:menuList", key = "#id")
     public List<SMenu> list(Long id) {
 
-        List<SMenu> list = this.baseMapper.selectList(null);
+//        List<SMenu> list = this.baseMapper.selectList(null);
+        List<SMenu> list = this.baseMapper.selectListByUserId(id);
+
+        List<SMenu> type1 = list.stream().filter((SMenu menu) -> menu.getType() == 1).collect(Collectors.toList());
+        List<SMenu> type2 = list.stream().filter((SMenu menu) -> menu.getType() == 2).collect(Collectors.toList());
+
+        for (SMenu menu : type1) {
+            for (SMenu button : type2) {
+                if (menu.getId().equals(button.getParentId())) {
+                    if (menu.getMeta() == null) {
+                        Map<String, Object> map = new ConcurrentHashMap<>();
+                        map.put(button.getComponent(), true);
+                        menu.setMeta(map);
+                    } else {
+                        menu.getMeta().put(button.getComponent(), true);
+                    }
+                }
+            }
+        }
 
         // 封装树形
-        TreeUtils menuTree = new TreeUtils(list);
-        list = menuTree.builTree();
+        TreeUtils menuTree = new TreeUtils(type1);
+        List<SMenu> result = menuTree.builTree();
 
-        return list;
+        return result;
     }
 
     /**
@@ -135,6 +156,7 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenu> implements
 
         for (Permission permission : list) {
             SMenu sMenu = new SMenu();
+            sMenu.setComponent(permission.getPermission());
             sMenu.setParentId(menu.getId());
             sMenu.setPermissionId(permission.getId());
             sMenu.setPath(data.getPath() + "/" + permission.getPermission());

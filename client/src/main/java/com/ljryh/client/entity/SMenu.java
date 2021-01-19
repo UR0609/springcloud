@@ -15,6 +15,7 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -72,7 +73,7 @@ public class SMenu extends PageResponse implements Serializable {
     /**
      * 路由的备注信息
      */
-    private String meta;
+    private Map<String,Object> meta;
 
     /**
      * 排序

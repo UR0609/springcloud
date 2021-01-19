@@ -320,7 +320,7 @@ export default {
 
     // 角色弹出页
     handleMenu(index, row) {
-      console.log(row.id);
+      this.menuDataFrom.menuId = [];
       this.$axios({
         method: "POST",
         url: this.path + "/selAllMenu",
@@ -329,11 +329,19 @@ export default {
         },
       }).then(result => {
         let entity = showEntity(result);
-        console.log(entity);
+        // console.log(entity);
         // 下拉框
         this.options = entity.menu;
         // // 默认选中
-        // this.roleDataFrom.roleId = entity.id;
+        if (entity.list !== undefined) {
+          entity.list.forEach((item) => {
+            this.menuDataFrom.menuId.push(item.menuId);
+          });
+          this.$nextTick(() => {
+            this.$refs.tree.setCheckedKeys(this.menuDataFrom.menuId);
+          });
+        }
+
         // 用户id
         this.titleMenu = '绑定菜单';
         this.dialogFormVisibleMenu = true;
@@ -342,24 +350,23 @@ export default {
     },
     //
     roleBindMenu() {
-      console.log("roleId:" + this.menuDataFrom.id);
-      this.$nextTick(() => {
-        console.log(this.$refs.tree.getCheckedKeys());
-      });
-      this.dialogFormVisibleMenu = false;
-      // this.$axios({
-      //   method: "POST",
-      //   url: this.path + "/bind",
-      //   data: {
-      //     roleId: this.roleDataFrom.roleId,
-      //     userId: this.roleDataFrom.id,
-      //   },
-      // }).then(result => {
-      //   let judge = showResult(result);
-      //   if (judge) {
-      //     this.dialogFormVisibleRole = false;
-      //   }
+      // this.$nextTick(() => {
+      //   this.menuDataFrom.menuId = this.$refs.tree.getCheckedKeys();
       // });
+      // console.log(this.menuDataFrom.menuId);
+      this.$axios({
+        method: "POST",
+        url: this.path + "/bind",
+        data: {
+          menuId: this.$refs.tree.getCheckedKeys(),
+          id: this.menuDataFrom.id,
+        },
+      }).then(result => {
+        let judge = showResult(result);
+        if (judge) {
+          this.dialogFormVisibleMenu = false;
+        }
+      });
     },
 
   },

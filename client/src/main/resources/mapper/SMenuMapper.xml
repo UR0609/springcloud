@@ -33,4 +33,34 @@
         ORDER BY a.id
     </select>
 
+    <select id="selectListByUserId" resultType="com.ljryh.client.entity.SMenu">
+        SELECT
+                *
+        FROM
+                s_menu
+        WHERE
+                id IN (
+                        SELECT menu_id FROM role_menu WHERE role_id = (
+                                SELECT role_id FROM user_role WHERE user_id = #{id}
+                                )
+                        ) UNION
+        SELECT
+                *
+        FROM
+                s_menu
+        WHERE
+                id IN (
+                        SELECT
+                                parent_id
+                        FROM
+                                s_menu
+                        WHERE
+                                id IN (
+                                        SELECT menu_id FROM role_menu WHERE role_id = (
+                                                SELECT role_id FROM user_role WHERE user_id = #{id}
+                                                )
+                                        )
+                        )
+    </select>
+
 </mapper>

@@ -74,6 +74,7 @@ export default {
             this.username = "";
             this.password = "";
             this.setToken(result.token);
+            localStorage.setItem("refreshMenu", false);
             this.$router.push({path: "/Home"});
           } else {
             this.$message({

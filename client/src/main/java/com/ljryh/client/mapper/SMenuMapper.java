@@ -20,4 +20,6 @@ public interface SMenuMapper extends BaseMapper<SMenu> {
     void deleteSMenuByParentId(SMenu menu);
 
     List<SMenu> selAllMenu();
+
+    List<SMenu> selectListByUserId(Long id);
 }

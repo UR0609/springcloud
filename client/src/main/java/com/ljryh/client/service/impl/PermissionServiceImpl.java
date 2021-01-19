@@ -1,11 +1,15 @@
 package com.ljryh.client.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ljryh.client.entity.Permission;
 import com.ljryh.client.mapper.PermissionMapper;
 import com.ljryh.client.service.IPermissionService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +27,12 @@ import java.io.Serializable;
 @Service
 @Transactional(rollbackFor=Exception.class)
 public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permission> implements IPermissionService {
+
+    @Override
+    @Cacheable(value = "cache:permissionList", key = "'permission-' + #page.current+'-'+#page.size+'-'+#wrapper.entity.permissionName")
+    public IPage<Permission>  page(@Param("page") IPage<Permission> page,@Param("ew") QueryWrapper<Permission> wrapper) {
+        return this.baseMapper.selectPage(page, wrapper);
+    }
 
     @Override
     @CacheEvict(cacheNames = "cache:shiro:role", allEntries = true)
