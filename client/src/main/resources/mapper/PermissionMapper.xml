@@ -12,15 +12,28 @@
         ORDER BY a.id
     </select>
 
+<!--    <select id="selectPermissionByRoleId" resultType="com.ljryh.client.entity.Permission">-->
+<!--        select-->
+<!--            a.*-->
+<!--        from-->
+<!--            s_permission a-->
+<!--        left join role_permission b on a.id = b.permission_id-->
+<!--        WHERE-->
+<!--            1=1-->
+<!--        AND b.role_id = #{id}-->
+<!--    </select>-->
+
     <select id="selectPermissionByRoleId" resultType="com.ljryh.client.entity.Permission">
-        select
-            a.*
-        from
-            s_permission a
-        left join role_permission b on a.id = b.permission_id
+
+        SELECT
+        id AS 'id',
+        `name`AS 'permission_name',
+        path AS 'permission'
+        FROM
+        s_menu
         WHERE
-            1=1
-        AND b.role_id = #{id}
+        id in (SELECT menu_id FROM role_menu WHERE role_id = #{id}) AND type = 2
+
     </select>
 
     <select id="selectList" resultType="com.ljryh.client.entity.Permission">

@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Api(tags = "测试")
 @RequestMapping("/test")
 public class TestController {
-    @RequiresPermissions({"save"}) //没有的话 AuthorizationException
+    @RequiresPermissions({"/emp/test/save"}) //没有的话 AuthorizationException
     @PostMapping("/save")
     @OperLog(operModul = "保存功能", operType = "save", operDesc = "保存测试")
     public Map<String, Object> save(@RequestHeader("token") String token,@RequestBody String path) {
@@ -29,7 +29,7 @@ public class TestController {
         return map;
     }//f603cd4348b8f1d41226e3f555d392bd
 
-    @RequiresPermissions({"delete"}) //没有的话 AuthorizationException
+    @RequiresPermissions({"/emp/test/delete"}) //没有的话 AuthorizationException
     @DeleteMapping("/delete")
     public Map<String, Object> delete(@RequestHeader("token") String token) {
         System.out.println("delete");
@@ -39,7 +39,7 @@ public class TestController {
         return map;
     }
 
-    @RequiresPermissions({"update"}) //没有的话 AuthorizationException
+    @RequiresPermissions({"/emp/test/update"}) //没有的话 AuthorizationException
     @PutMapping("update")
     public Map<String, Object> update(@RequestHeader("token") String token) {
         System.out.println("update");
@@ -49,7 +49,7 @@ public class TestController {
         return map;
     }
 
-    @RequiresPermissions({"select"}) //没有的话 AuthorizationException
+    @RequiresPermissions({"/emp/test/select"}) //没有的话 AuthorizationException
     @GetMapping("select")
     public Map<String, Object> select(@RequestHeader("token") String token) {
         System.out.println("select");
