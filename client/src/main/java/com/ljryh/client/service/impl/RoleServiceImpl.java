@@ -51,6 +51,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
 
     @Override
     @Caching(evict = {
+            @CacheEvict(cacheNames = "cache:menuList", allEntries = true),
+            @CacheEvict(cacheNames = "cache:menuTree", allEntries = true),
+            @CacheEvict(cacheNames = "cache:selAllMenu", allEntries = true),
             @CacheEvict(cacheNames = "cache:roleMenuList", key = "'id-' + #entity.getId()"),
     })
     public boolean bind(Role entity) {

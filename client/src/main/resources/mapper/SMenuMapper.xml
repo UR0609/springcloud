@@ -39,7 +39,7 @@
         FROM
                 s_menu
         WHERE
-                id IN (
+                del = 0 and id IN (
                         SELECT menu_id FROM role_menu WHERE role_id = (
                                 SELECT role_id FROM user_role WHERE user_id = #{id}
                                 )
@@ -49,7 +49,7 @@
         FROM
                 s_menu
         WHERE
-                id IN (
+                del = 0 and id IN (
                         SELECT
                                 parent_id
                         FROM
