@@ -11,7 +11,7 @@ import java.io.IOException;
  * xss非法标签过滤工具类
  * 过滤html中的xss字符
  *
- * @author xbz
+ * @author ljryh
  */
 public class JsoupUtils {
 

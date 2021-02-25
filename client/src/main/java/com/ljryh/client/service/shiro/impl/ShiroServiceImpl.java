@@ -84,7 +84,7 @@ public class ShiroServiceImpl implements ShiroService {
         sysToken.setExpireTime(expireTime);
 
         try {
-            redisUtils.set("shiro:token:" + token, JacksonUtil.obj2json(sysToken), 3600 * EXPIRE);
+            redisUtils.set("shiro:token:" + token, JacksonUtil.objToJson(sysToken), 3600 * EXPIRE);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -132,7 +132,7 @@ public class ShiroServiceImpl implements ShiroService {
 //        //使前端获取到的token失效
 //        sysTokenRepository.insert(byToken);
         try {
-            SysToken sysToken = JacksonUtil.json2pojo(redisUtils.get("shiro:token:" + token).toString(), SysToken.class);
+            SysToken sysToken = JacksonUtil.jsonToPojo(redisUtils.get("shiro:token:" + token).toString(), SysToken.class);
             redisUtils.del("shiro:token:" + token);
             redisUtils.del("shiro:user:" + sysToken.getUserId());
         } catch (Exception e) {
@@ -146,7 +146,7 @@ public class ShiroServiceImpl implements ShiroService {
 
         if (redisUtils.get("shiro:token:" + accessToken) != null) {
             try {
-                SysToken sysToken = JacksonUtil.json2pojo(redisUtils.get("shiro:token:" + accessToken).toString(), SysToken.class);
+                SysToken sysToken = JacksonUtil.jsonToPojo(redisUtils.get("shiro:token:" + accessToken).toString(), SysToken.class);
                 return sysToken;
             } catch (Exception e) {
                 e.printStackTrace();
