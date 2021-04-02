@@ -2,4 +2,52 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ljryh.client.mapper.ChildrenMapper">
 
+    <update id="updateEntityByMap" parameterType="java.util.Map">
+        UPDATE children
+        SET
+        <foreach item="value" index="key" collection="params" separator=",">
+            <if test="key != 'id'">
+                ${key} = #{value}
+            </if>
+        </foreach>
+        WHERE
+        <foreach item="value" index="key" collection="params" separator=",">
+            <if test="key == 'id'">
+                ID = #{value}
+            </if>
+        </foreach>
+
+    </update>
+
+    <update id="updateTest" parameterType="java.util.Map">
+        UPDATE ( SELECT * FROM test1 UNION ALL SELECT * FROM test2 UNION ALL SELECT * FROM test3 )
+        SET
+        age=10
+        WHERE
+        name = #{name}
+        <selectKey keyProperty='id' resultType='long' order='BEFORE'>
+            SELECT
+            ( SELECT
+            id
+            FROM
+            ( SELECT * FROM test1 UNION ALL SELECT * FROM test2 UNION ALL SELECT * FROM test3 ) a
+            WHERE name = #{name} order by id desc limit 1) as id
+        </selectKey>
+    </update>
+
+    <update id="updateTest2" parameterType="java.util.Map">
+        UPDATE test1
+        SET
+        age=10
+        WHERE
+        name = #{name}
+        <selectKey keyProperty='id' resultType='long' order='BEFORE'>
+            SELECT
+            ( SELECT
+            id
+            FROM
+            test1
+            WHERE name = #{name} order by id desc limit 1) as id
+        </selectKey>
+    </update>
 </mapper>

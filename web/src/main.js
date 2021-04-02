@@ -8,6 +8,7 @@ import {initMenu} from './utils/menuUtils';
 import service from './utils/request.js'
 
 const axios = require('axios');
+axios.defaults.withCredentials = true;
 axios.defaults.baseURL = 'http://localhost:8661/'
 
 Vue.prototype.$axios = service

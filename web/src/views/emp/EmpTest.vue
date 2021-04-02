@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import {showResult} from "@/utils/show-resutl";
 
 export default {
   name: "EmpTest",
