@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-04-02
  */
 @RestController
-@RequestMapping("/s-model")
+@RequestMapping("/sys/model")
 public class SModelController {
 
 }
