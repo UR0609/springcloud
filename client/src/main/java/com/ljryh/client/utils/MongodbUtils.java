@@ -241,6 +241,10 @@ public class MongodbUtils {
         return resultObj;
     }
 
+    public static <T> void removeById(Map<String, Object> map, String collectionName,Class<T> entityClass) {
+        mongodbUtils.mongoTemplate.remove(new Query(Criteria.where("id").is(map.get("id"))),entityClass,collectionName);
+    }
+
     /**
      * 指定集合 根据条件查询出符合的第一条数据
      *
