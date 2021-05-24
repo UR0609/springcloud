@@ -8,6 +8,10 @@ public class CallResult<T> implements Serializable {
     private String msg;
     private T data;
 
+    public CallResult(){
+
+    }
+
     private CallResult(boolean isSuccess, int status) {
         this.isSuccess = isSuccess;
         this.status = status;

@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ *
+ */
 public class JacksonUtil {
     private final static ObjectMapper objectMapper = new ObjectMapper();
 
