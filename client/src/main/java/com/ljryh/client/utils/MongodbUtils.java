@@ -2,16 +2,17 @@ package com.ljryh.client.utils;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * 用于Mongodb处理的工具类
@@ -209,8 +210,11 @@ public class MongodbUtils {
             }
         }
 
+        List<String> list = new CopyOnWriteArrayList<>();
+        list.add(sort);
+
         Query query = Query.query(criteria);
-        query.with(new Sort(Sort.Direction.DESC, sort));
+//        query.with(new Sort(Sort.Direction.DESC, list));
         List<T> resultList = mongodbUtils.mongoTemplate.find(query, entityClass, collectionName);
 
         return resultList;
@@ -294,6 +298,33 @@ public class MongodbUtils {
 
         List<T> resultList = mongodbUtils.mongoTemplate.findAll(entityClass, collectionName);
         return resultList;
+    }
+
+    /**
+     * 数据更新
+     * @param entityClass
+     * @param map
+     * @param key
+     * @param value
+     * @param collectionName
+     * @param <T>
+     */
+    public static <T> void update(Class<T> entityClass, Map<String, Object> map, String key, Object value, String collectionName) {
+
+        Criteria criteria = null;
+        int count = 0;
+        if (map != null) {
+            for (Map.Entry<String, Object> entry : map.entrySet()) {
+                if (count == 0)
+                    criteria = Criteria.where(entry.getKey()).is(entry.getValue());
+                else
+                    criteria.and(entry.getKey()).is(entry.getValue());
+                count++;
+            }
+        }
+        Query query = Query.query(criteria);
+        Update update = Update.update(key, value);
+        mongodbUtils.mongoTemplate.updateMulti(query, update, entityClass, collectionName);
     }
 
 }
