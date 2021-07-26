@@ -1,28 +1,41 @@
 package com.ljryh.common.utils;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import com.ljryh.common.entity.CallResult;
+
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class ListUtil {
 
+    /**
+     * list去重方法
+     * @param keyExtractor
+     * @param <T>
+     * @return
+     */
+    private static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+        Set<Object> seen = ConcurrentHashMap.newKeySet();
+        return t -> seen.add(keyExtractor.apply(t));
+    }
 
     public static void main(String[] args) {
 
-
 //
 
-        try {
-            List<String> list1 = JacksonUtil.jsonToList("[\"44\",\"46\",\"54\",\"55\",\"179\",\"180\",\"181\",\"165\",\"169\",\"170\",\"174\",\"177\"]",String.class);
-
-            List<String> list2 = JacksonUtil.jsonToList("[\"44\",\"177\"]",String.class);
-
-            List<String> newList = list1.stream().filter(s -> !list2.contains(s)).collect(Collectors.toList());
-
-            System.out.println(JacksonUtil.objToJson(newList));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            List<String> list1 = JacksonUtil.jsonToList("[\"44\",\"46\",\"54\",\"55\",\"179\",\"180\",\"181\",\"165\",\"169\",\"170\",\"174\",\"177\"]",String.class);
+//
+//            List<String> list2 = JacksonUtil.jsonToList("[\"44\",\"177\"]",String.class);
+//
+//            List<String> newList = list1.stream().filter(s -> !list2.contains(s)).collect(Collectors.toList());
+//
+//            System.out.println(JacksonUtil.objToJson(newList));
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
 //        Map<String,String> map = new ConcurrentHashMap<>();
 //
