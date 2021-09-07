@@ -70,7 +70,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }/*,put = {
             @CachePut(cacheNames = "cache:user", key = "'id-' + #user.id"),
             @CachePut(cacheNames = "cache:shiro:user", key = "'id-' + #user.id"),
-    }*/)
+    }*/) 
     @CachePut(cacheNames = "cache:user", key = "'id-' + #user.id")
     public boolean updateById(User user) {
         int result = this.baseMapper.updateById(user);
