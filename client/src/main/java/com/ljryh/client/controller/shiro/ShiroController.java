@@ -30,6 +30,7 @@ public class ShiroController {
      * 登录
      */
     @ApiOperation(value = "登陆", notes = "参数:用户名 密码")
+//    @ApiOperationSupport(ignoreParameters = {"loginDTO.password"})
     @PostMapping("/sys/login")
     public Map<String, Object> login(@RequestBody @Validated LoginDTO loginDTO, BindingResult bindingResult) {
         Map<String, Object> result = new ConcurrentHashMap<>();

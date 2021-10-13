@@ -1,11 +1,11 @@
 package com.ljryh.common.utils;
 
-import com.ljryh.common.entity.CallResult;
-
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ListUtil {
 
@@ -19,8 +19,36 @@ public class ListUtil {
         Set<Object> seen = ConcurrentHashMap.newKeySet();
         return t -> seen.add(keyExtractor.apply(t));
     }
-
+    public static int count(String text,String sub){
+        int count =0, start =0;
+        while((start=text.indexOf(sub,start))>=0){
+            start += sub.length();
+            count ++;
+        }
+        return count;
+    }
     public static void main(String[] args) {
+        String subject = "select a.id,b.id bid from ta a,tb b where a.id = b.di\n" +
+                "select a.id bid from tb a where 1=1 and  a.id = 1\n" +
+                "select a.id bid from tb a join ta b on a.id=b.id where 1=1 and  a.id = 1\n" +
+                "select a.id bid from tb a left join ta b on a.id=b.id where 1=1 and  a.id = 1\n" +
+                "select id bid from tb where 1=1 and  id = 1";
+        Pattern p = Pattern.compile("(?i)from\\s*([a-z]+)");
+
+        Matcher matcher = p.matcher(subject);
+        while (matcher.find()) {
+            System.out.println(matcher.group(1));
+        }
+//        String text ="    ";
+//        String sub =" ";
+//        System.out.println(count(text,sub));
+//        String str = " ";
+//
+//        if(str.isEmpty()){
+//            System.out.println(111);
+//        } else {
+//            System.out.println(222);
+//        }
 
 //
 
