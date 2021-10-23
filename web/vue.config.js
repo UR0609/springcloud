@@ -1,7 +1,7 @@
 module.exports = {
     devServer: {
         open: true,
-        host: 'localhost',
+        host: '0.0.0.0',
         port: 9090,
         https: false,
         //以上的ip和端口是我们本机的;下面为需要跨域的
