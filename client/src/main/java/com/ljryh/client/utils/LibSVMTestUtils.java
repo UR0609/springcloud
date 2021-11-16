@@ -8,7 +8,6 @@ import org.ansj.splitWord.analysis.ToAnalysis;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * @author ljryh
@@ -26,44 +25,46 @@ public class LibSVMTestUtils {
 
         System.out.println(GsonUtil.ModuleTojosn(name));
     }
-
+    private static String packAge = LibSVMTestUtils.class.getPackage().getName();
     public static void main(String[] args) {
+
+
 //        test();
-        /** 1、构造样本 **/
-        final int sampleNum = 100;//样本数量
-        double[][] features = new double[sampleNum][];//特征向量数组 本例中即xy坐标构成的向量
-        double[] targetValues = new double[sampleNum];//分类值数组 本例中即点属于哪个象限
-        Random random = new Random(233);
-        for (int i = 0; i < sampleNum; i++) {
-            //每次循环随机生成一条样本数据
-            //随机在[-100,100)直接生成x、y坐标
-            double x = random.nextInt(200) - 100;
-            double y = random.nextInt(200) - 100;
-            int quadrant = getQuadrant(x, y);//样本分类，实际应用中分类一般需要手工录入，本例中获取象限有公式我们就自己生成了
-            //坐标值归一化，特征向量的值需要在[0,1]间，所以需要归一化
-            double normalizationX = (x + 100) / 200;
-            double normalizationY = (y + 100) / 200;
-            //把特征向量和分类值丢到数组里
-            features[i] = new double[]{normalizationX, normalizationY};
-            targetValues[i] = quadrant;
-        }
-
-        /** 2、训练模型 **/
-        svm_model model = train(features, targetValues);
-
-        /** 3、识别分类 **/
-        //待识别向量
-        svm_node[] test = new svm_node[]{new svm_node(), new svm_node()};
-        test[0].index = 1;
-        test[0].value = -45.5;
-        test[1].index = 2;
-        test[1].value = -20.2;
-        //归一化
-        test[0].value = (test[0].value + 100) / 200;
-        test[1].value = (test[1].value + 100) / 200;
-
-        double result = svm.svm_predict(model, test);    // 不带概率的分类测试
-        System.out.println("所在象限 " + result);//所在象限 3.0
+//        /** 1、构造样本 **/
+//        final int sampleNum = 100;//样本数量
+//        double[][] features = new double[sampleNum][];//特征向量数组 本例中即xy坐标构成的向量
+//        double[] targetValues = new double[sampleNum];//分类值数组 本例中即点属于哪个象限
+//        Random random = new Random(233);
+//        for (int i = 0; i < sampleNum; i++) {
+//            //每次循环随机生成一条样本数据
+//            //随机在[-100,100)直接生成x、y坐标
+//            double x = random.nextInt(200) - 100;
+//            double y = random.nextInt(200) - 100;
+//            int quadrant = getQuadrant(x, y);//样本分类，实际应用中分类一般需要手工录入，本例中获取象限有公式我们就自己生成了
+//            //坐标值归一化，特征向量的值需要在[0,1]间，所以需要归一化
+//            double normalizationX = (x + 100) / 200;
+//            double normalizationY = (y + 100) / 200;
+//            //把特征向量和分类值丢到数组里
+//            features[i] = new double[]{normalizationX, normalizationY};
+//            targetValues[i] = quadrant;
+//        }
+//
+//        /** 2、训练模型 **/
+//        svm_model model = train(features, targetValues);
+//
+//        /** 3、识别分类 **/
+//        //待识别向量
+//        svm_node[] test = new svm_node[]{new svm_node(), new svm_node()};
+//        test[0].index = 1;
+//        test[0].value = -45.5;
+//        test[1].index = 2;
+//        test[1].value = -20.2;
+//        //归一化
+//        test[0].value = (test[0].value + 100) / 200;
+//        test[1].value = (test[1].value + 100) / 200;
+//
+//        double result = svm.svm_predict(model, test);    // 不带概率的分类测试
+//        System.out.println("所在象限 " + result);//所在象限 3.0
 
 //        double[] l = new double[4];
 //        double result_prob = svm.svm_predict_probability(model, test, l);        //带预测概率的分类测试

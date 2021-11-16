@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div style="width: 100%;height: 100%">
     <el-container class="home-container">
       <el-header class="home-header">
-        <span class="home_title">动态菜单 DEMO</span>
+        <span class="home_title">易柏忆后台 demo</span>
       </el-header>
       <el-container>
         <el-aside width="180px" class="home-aside">

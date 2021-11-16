@@ -1,8 +1,53 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.ljryh.client.mapper.CodeGenerationMapper">
+<mapper namespace="com.ljryh.client.mapper.generate.CodeGenerationMapper">
+    <parameterMap id="tableData" type="com.ljryh.client.entity.generate.TableData"/>
 
+    <resultMap id="tableDataResult" type="com.ljryh.client.entity.generate.TableData">
+        <result property="tableName" column="tableName"/>
+        <result property="tableRows" column="tableRows"/>
+        <result property="indexLength" column="indexLength"/>
+        <result property="autoIncrement" column="autoIncrement"/>
+        <result property="tableComment" column="tableComment"/>
+        <result property="tableCollation" column="tableCollation"/>
+        <result property="createTime" column="createTime"/>
+    </resultMap>
 
+    <parameterMap id="columnData" type="com.ljryh.client.entity.generate.ColumnData"/>
 
+    <resultMap id="columnDataResult" type="com.ljryh.client.entity.generate.ColumnData">
+        <result property="columnName" column="columnName"/>
+        <result property="columnType" column="columnType"/>
+        <result property="columnComment" column="columnComment"/>
+        <result property="dataShow" column="isShow"/>
+        <result property="dataQuery" column="isQuery"/>
+    </resultMap>
+
+    <select id="getTablesData" parameterMap="tableData" resultMap="tableDataResult">
+        select Table_name AS "tableName",<!--表名称-->
+        Table_rows AS "tableRows",<!--表里所存多少行数据-->
+        Index_length AS "indexLength",<!--#索引长度-->
+        Auto_increment AS "autoIncrement",<!--#做自增主键的自动增量当前值-->
+        Table_comment AS "tableComment",<!--#表的注释、备注-->
+        Table_collation AS "tableCollation",<!--#表的字符校验编码集-->
+        Create_time AS "createTime"<!--#表的创建时间-->
+        from information_schema.tables
+                where table_schema = 'demo'
+                  and table_type = 'BASE TABLE'
+        <if test="tableName != null and tableName != ''">
+            and Table_name like concat('%', #{tableName}, '%')
+        </if>;
+    </select>
+
+    <select id="getColumnData" parameterMap="columnData" resultMap="columnDataResult">
+        select column_name AS "columnName",
+        DATA_TYPE AS "columnType",
+        COLUMN_COMMENT AS "columnComment",
+        true AS "isShow",
+        false AS "isQuery"
+        from information_schema.columns
+        where table_schema = 'demo'
+          and table_name = #{tableName};
+    </select>
 </mapper>

@@ -434,7 +434,7 @@ export default {
         callback()
       }
     };
-    // 年龄验证方法
+    // 电话验证方法
     const checkPhone = (rule, value, callback) => {
       // // if (!value) {
       // //   return callback(new Error('电话号码不能为空'))

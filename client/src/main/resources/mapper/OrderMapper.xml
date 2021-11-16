@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljryh.client.mapper.OrderMapper">
+    <parameterMap id="order" type="com.ljryh.client.entity.Order"/>
+
+    <resultMap id="orderResult" type="com.ljryh.client.entity.Order">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <result property="createTime" column="createTime"/>
+    </resultMap>
+
+    <select id="selectPage" parameterMap="order" resultMap="orderResult">
+        SELECT id          as "id",
+               name        as "name",
+               phone       as "phone",
+               email       as "email",
+               create_time as "createTime"
+        FROM a_order
+                where 1 = 1
+        <if test="ew.entity.name != null and ew.entity.name != ''">
+            and name like concat('%', #{ew.entity.name}, '%')
+        </if>
+        ORDER BY id asc
+    </select>
+
+    <insert id="insert" parameterMap="order">
+        insert into a_order
+        <trim prefix="(" prefixOverrides="," suffix=")">
+            <if test="name != null and name != ''">,name</if>
+            <if test="phone != null and phone != ''">,phone</if>
+            <if test="email != null and email != ''">,email</if>
+            ,create_time
+        </trim>
+        values
+        <trim prefix="(" prefixOverrides="," suffix=")">
+            <if test="name != null and name != ''">,#{name}</if>
+            <if test="phone != null and phone != ''">,#{phone}</if>
+            <if test="email != null and email != ''">,#{email}</if>
+            ,now()
+        </trim>
+        <selectKey keyProperty="generatedKey" resultType="Long">
+            select LAST_INSERT_ID() as generatedKey
+        </selectKey>
+    </insert>
+
+    <update id="updateById" parameterMap="order">
+        update a_order
+        <set>
+            <trim prefixOverrides=",">
+                <if test="name != null and name != ''">,name = #{name}</if>
+                <if test="phone != null and phone != ''">,phone = #{phone}</if>
+                <if test="email != null and email != ''">,email = #{email}</if>
+            </trim>
+        </set>
+        <where>
+            1=1 and ID = ${id}
+        </where>
+    </update>
+
+    <delete id="deleteById" parameterMap="order">
+        delete from a_order where ID = ${id}
+    </delete>
+
+    <select id="selectById" parameterMap="order" resultMap="orderResult">
+        SELECT id          as "id",
+               name        as "name",
+               phone       as "phone",
+               email       as "email",
+               create_time as "createTime"
+        FROM a_order
+        where 1 = 1
+          and id = #{id}
+    </select>
+</mapper>

@@ -1,5 +1,7 @@
 package com.ljryh.common.tools.JWT;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.google.gson.Gson;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -12,7 +14,6 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -23,14 +24,10 @@ public class JWT {
      * @return
      */
     public SecretKey generalKey(String jwtSecret) {
-//        String stringKey = Constant.JWT_SECRET;
-
         // 本地的密码解码
         byte[] encodedKey = Base64.decodeBase64(jwtSecret);
-
         // 根据给定的字节数组使用AES加密算法构造一个密钥
         SecretKey key = new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
-
         return key;
     }
 
@@ -87,10 +84,10 @@ public class JWT {
      * @return
      * @throws Exception
      */
-    public Map<String, Object> parseJWT(String jwt) throws Exception {
+    public Map<String, Object> parseJWT(String jwt,String privateKey) throws Exception {
         Map<String, Object> map = new ConcurrentHashMap<>();
         try {
-            SecretKey key = generalKey(jwt);  //签名秘钥，和生成的签名的秘钥一模一样
+            SecretKey key = generalKey(privateKey);  //签名秘钥，和生成的签名的秘钥一模一样
             Claims claims = Jwts.parser()  //得到DefaultJwtParser
                     .setSigningKey(key)                 //设置签名的秘钥
                     .parseClaimsJws(jwt).getBody();     //设置需要解析的jwt
@@ -106,21 +103,21 @@ public class JWT {
     public static void main(String[] args) throws UnsupportedEncodingException {
 
 
-        Map<String,Object> map = new ConcurrentHashMap<>();
-
-        map.put("q","在微信智言与微信智聆两大技术的支持下，微信AI团队推出了“微信对话开放平台”和“腾讯小微”智能硬件两大核心产品。微信支付团队最新发布的“微信青蛙Pro”在现场设置了体验区，让大家感受AI认脸的本事。");
-
-        String s = Jwts.builder()
-                .claim("userid", UUID.randomUUID().toString())
-                .signWith(SignatureAlgorithm.HS256, "FG1vMoYBCjtc3s5osSN2SBDUy2iTrECCBKs3ln6N6wy".getBytes("UTF-8"))
-                .compact();
-
-        System.out.println(s);
-
-        Claims claims = Jwts.parser()
-                .setSigningKey("FG1vMoYBCjtc3s5osSN2SBDUy2iTrECCBKs3ln6N6wy".getBytes("UTF-8"))
-                .parseClaimsJws(s).getBody();
-        System.out.println(claims);
+//        Map<String,Object> map = new ConcurrentHashMap<>();
+//
+//        map.put("q","在微信智言与微信智聆两大技术的支持下，微信AI团队推出了“微信对话开放平台”和“腾讯小微”智能硬件两大核心产品。微信支付团队最新发布的“微信青蛙Pro”在现场设置了体验区，让大家感受AI认脸的本事。");
+//
+//        String s = Jwts.builder()
+//                .claim("userid", UUID.randomUUID().toString())
+//                .signWith(SignatureAlgorithm.HS256, "FG1vMoYBCjtc3s5osSN2SBDUy2iTrECCBKs3ln6N6wy".getBytes("UTF-8"))
+//                .compact();
+//
+//        System.out.println(s);
+//
+//        Claims claims = Jwts.parser()
+//                .setSigningKey("FG1vMoYBCjtc3s5osSN2SBDUy2iTrECCBKs3ln6N6wy".getBytes("UTF-8"))
+//                .parseClaimsJws(s).getBody();
+//        System.out.println(claims);
 
 //        Map<String,Object> map = new ConcurrentHashMap<>();
 //
@@ -155,43 +152,47 @@ public class JWT {
 //        System.out.println(s);
 
 
-//        Map<String,String> map = new ConcurrentHashMap<>();
-//        map.put("name","knight");
-//        map.put("id","001");
-//        String subject = new Gson().toJson(map);
-//
-//        try {
-//            JWT util = new JWT();
-//            String jwt = util.createJWT(Constant.JWT_ID, "Anson", subject, Constant.JWT_TTL,"Anson");
-//            System.out.println("JWT：" + jwt);
-//
-//            System.out.println("\n解密\n");
-////            String jwt= "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzaW5vd2VsIiwiZXhwIjoxNTcyOTQyMjk2LCJpYXQiOjE1NzI5Mzg2OTYsImp0aSI6IjViYTQ3MjE3LTQxMDMtNDQ3MS1iNmMwLWU3ODhlMTRhYzIxYyIsInVzZXJuYW1lIjoic2lub3dlbCJ9.qxIJw8s7whGqQW2soyRfmELeISOOiGFQa9uMxPDCHKA";
-//
-//            JWTUtils JWTUtils = new JWTUtils();
-//
-//            JWTUtils.parseJWT(jwt,false);
-//
-//            DecodedJWT DecodedJWT = com.auth0.jwt.JWT.decode(jwt);
-//            String str = DecodedJWT.getClaim("username").asString();
-//            String publicKey = DecodedJWT.getIssuer();
-//            System.out.println(str);
-//
-//            System.out.println(publicKey);
-//
-//            Map<String, Object> result = util.parseJWT(jwt);
-//            if(Boolean.valueOf(result.get("result").toString())){
-//                Claims c = (Claims) result.get("data");
-//                System.out.println(c.getId());
-//                System.out.println(c.getIssuedAt());
-//                System.out.println(c.getSubject());
-//                System.out.println(c.getIssuer());
-//                System.out.println(c.get("username", String.class));
-//                System.out.println(c.get("password", String.class));
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        Map<String,String> map = new ConcurrentHashMap<>();
+        map.put("name","knight");
+        map.put("id","001");
+        String subject = new Gson().toJson(map);
+
+        String jwtId = Constant.JWT_ID;
+
+        try {
+            JWT util = new JWT();
+            String jwt = util.createJWT(jwtId, "Anson", subject, Constant.JWT_TTL,"Anson");
+            System.out.println("JWT：" + jwt);
+
+            System.out.println("\n解密\n");
+//            String jwt= "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzaW5vd2VsIiwiZXhwIjoxNTcyOTQyMjk2LCJpYXQiOjE1NzI5Mzg2OTYsImp0aSI6IjViYTQ3MjE3LTQxMDMtNDQ3MS1iNmMwLWU3ODhlMTRhYzIxYyIsInVzZXJuYW1lIjoic2lub3dlbCJ9.qxIJw8s7whGqQW2soyRfmELeISOOiGFQa9uMxPDCHKA";
+
+            JWT JWT = new JWT();
+
+//            Map<String, Object> jwtMap = JWT.parseJWT(jwt);
+
+
+
+            DecodedJWT DecodedJWT = com.auth0.jwt.JWT.decode(jwt);
+            String str = DecodedJWT.getClaim("username").asString();
+            String publicKey = DecodedJWT.getIssuer();
+            System.out.println(str);
+
+            System.out.println(publicKey);
+
+            Map<String, Object> result = util.parseJWT(jwt,"Anson");
+            if(Boolean.valueOf(result.get("result").toString())){
+                Claims c = (Claims) result.get("data");
+                System.out.println(c.getId());
+                System.out.println(c.getIssuedAt());
+                System.out.println(c.getSubject());
+                System.out.println(c.getIssuer());
+                System.out.println(c.get("username", String.class));
+                System.out.println(c.get("password", String.class));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 }

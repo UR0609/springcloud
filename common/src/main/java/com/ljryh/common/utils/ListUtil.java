@@ -1,16 +1,23 @@
 package com.ljryh.common.utils;
 
+import lombok.SneakyThrows;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ListUtil {
 
     /**
      * list去重方法
+     *
      * @param keyExtractor
      * @param <T>
      * @return
@@ -19,26 +26,136 @@ public class ListUtil {
         Set<Object> seen = ConcurrentHashMap.newKeySet();
         return t -> seen.add(keyExtractor.apply(t));
     }
-    public static int count(String text,String sub){
-        int count =0, start =0;
-        while((start=text.indexOf(sub,start))>=0){
+
+    public static int count(String text, String sub) {
+        int count = 0, start = 0;
+        while ((start = text.indexOf(sub, start)) >= 0) {
             start += sub.length();
-            count ++;
+            count++;
         }
         return count;
     }
-    public static void main(String[] args) {
-        String subject = "select a.id,b.id bid from ta a,tb b where a.id = b.di\n" +
-                "select a.id bid from tb a where 1=1 and  a.id = 1\n" +
-                "select a.id bid from tb a join ta b on a.id=b.id where 1=1 and  a.id = 1\n" +
-                "select a.id bid from tb a left join ta b on a.id=b.id where 1=1 and  a.id = 1\n" +
-                "select id bid from tb where 1=1 and  id = 1";
-        Pattern p = Pattern.compile("(?i)from\\s*([a-z]+)");
 
-        Matcher matcher = p.matcher(subject);
-        while (matcher.find()) {
-            System.out.println(matcher.group(1));
+    /**
+     * 读取文件最后几行 <br>
+     * 相当于Linux系统中的tail命令 读取大小限制是2GB
+     *
+     * @param filename 文件名
+     * @param charset  文件编码格式,传null默认使用defaultCharset
+     * @param rows     读取行数
+     * @throws IOException IOException
+     */
+    public static String readLastRows(String filename, Charset charset, int rows) throws IOException {
+        charset = charset == null ? Charset.defaultCharset() : charset;
+        byte[] lineSeparator = System.getProperty("line.separator").getBytes();
+        try (RandomAccessFile rf = new RandomAccessFile(filename, "r")) {
+            // 每次读取的字节数要和系统换行符大小一致
+            byte[] c = new byte[lineSeparator.length];
+            // 在获取到指定行数和读完文档之前,从文档末尾向前移动指针,遍历文档每一个字节
+            for (long pointer = rf.length(), lineSeparatorNum = 0; pointer >= 0 && lineSeparatorNum < rows; ) {
+                // 移动指针
+                rf.seek(pointer--);
+                // 读取数据
+                int readLength = rf.read(c);
+                if (readLength != -1 && Arrays.equals(lineSeparator, c)) {
+                    lineSeparatorNum++;
+                }
+                //扫描完依然没有找到足够的行数,将指针归0
+                if (pointer == -1 && lineSeparatorNum < rows) {
+                    rf.seek(0);
+                }
+            }
+            byte[] tempbytes = new byte[(int) (rf.length() - rf.getFilePointer())];
+            rf.readFully(tempbytes);
+            return new String(tempbytes, charset);
         }
+    }
+
+    public static String readLastRows(String filePath, int rows) throws IOException {
+        Charset charset = Charset.defaultCharset();
+        try (RandomAccessFile rf = new RandomAccessFile(filePath, "r")) {
+            // 每次读取的字节数要和系统换行符大小一致
+            byte[] c = new byte[1];
+            // 在获取到指定行数和读完文档之前,从文档末尾向前移动指针,遍历文档每一个字节
+            for (long pointer = rf.length(), lineSeparatorNum = 0; pointer >= 0 && lineSeparatorNum < rows; ) {
+                // 移动指针
+                rf.seek(pointer--);
+                // 读取数据
+                int readLength = rf.read(c);
+                if (readLength != -1 && c[0] == 10) {
+                    lineSeparatorNum++;
+                }
+                // 扫描完依然没有找到足够的行数,将指针归0
+                if (pointer == -1 && lineSeparatorNum < rows) {
+                    rf.seek(0);
+                }
+            }
+            byte[] tempbytes = new byte[(int) (rf.length() - rf.getFilePointer())];
+            rf.readFully(tempbytes);
+            return new String(tempbytes, charset);
+        }
+    }
+
+    public static ArrayList<String> getFiles(String path) {
+        ArrayList<String> files = new ArrayList<String>();
+        File file = new File(path);
+        File[] tempList = file.listFiles();
+
+        for (int i = 0; i < tempList.length; i++) {
+            if (tempList[i].isFile()) {
+                String str = tempList[i].toString();
+                str = str.substring(str.lastIndexOf(File.separator) + 1);
+                System.out.println("文     件：" + str);
+                files.add(str);
+            }
+            if (tempList[i].isDirectory()) {
+                String str = tempList[i].toString();
+                str = str.substring(str.lastIndexOf(File.separator) + 1);
+                System.out.println(str);
+                System.out.println("文件夹：" + tempList[i]);
+            }
+        }
+        return files;
+    }
+
+
+    @SneakyThrows
+    public static void main(String[] args) {
+
+//        String str = "http://aaa/cccc/cccc/aaaa/xiao.jpg";
+//
+//        // 第一种
+//        int idx = str.lastIndexOf("/");
+//
+//        //str = str.substring(idx + 1, str.length());
+//        System.out.println(str);
+//
+//        // 第二种
+//        System.out.println(str.split("/")[str.split("/").length - 1]);
+//
+//        // 第三种
+//        System.out.println(str.substring(str.lastIndexOf("/") + 1));
+//
+//        // 截取最后一个“/”前面的内容
+//        System.out.println(str.substring(0, str.lastIndexOf("/")));
+
+        getFiles("D:\\微信\\WeChat Files\\wxid_cwst9qcjekih21\\FileStorage\\File\\2021-11\\");
+//        Charset charset = Charset.forName("utf8");
+//        System.out.println(readLastRows("D:\\微信\\WeChat Files\\wxid_cwst9qcjekih21\\FileStorage\\File\\2021-11\\sys-error.2021-07-30.log",charset,100));
+//        System.out.println(readLastRows("D:\\微信\\WeChat Files\\wxid_cwst9qcjekih21\\FileStorage\\File\\2021-11\\sys-error.2021-07-30.log",105));
+
+
+//        String subject = "select a.id,b.id bid from ta a,tb b where a.id = b.di\n" +
+//                "select a.id bid from tb a where 1=1 and  a.id = 1\n" +
+//                "select a.id bid from tb a join ta b on a.id=b.id where 1=1 and  a.id = 1\n" +
+//                "select a.id bid from tb a left join ta b on a.id=b.id where 1=1 and  a.id = 1\n" +
+//                "select id bid from tb where 1=1 and  id = 1";
+//        Pattern p = Pattern.compile("(?i)from\\s*([a-z]+)");
+//
+//        Matcher matcher = p.matcher(subject);
+//        while (matcher.find()) {
+//            System.out.println(matcher.group(1));
+//        }
 //        String text ="    ";
 //        String sub =" ";
 //        System.out.println(count(text,sub));

@@ -14,5 +14,6 @@ public class PageResponse implements Serializable {
     private Integer pageNo;
     @TableField(exist = false)
     private Integer pageSize;
-
+    @TableField(exist = false)
+    private Long generatedKey;
 }

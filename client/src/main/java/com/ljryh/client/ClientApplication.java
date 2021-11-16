@@ -12,7 +12,10 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+// netstat -aon|findstr "8661"
 // 自动化接口生成
 @EnableHasor()
 @EnableHasorWeb()
@@ -44,10 +47,13 @@ public class ClientApplication {
     private String port;
 
     @RequestMapping("/getRibbon")
-    public String getRibbon(@RequestParam String data) {
+    public String getRibbon(@RequestParam String data, HttpServletRequest request, HttpServletResponse response) {
 
         redisUtils.set("test","test");
         System.out.println(redisUtils.get("test"));
+
+        String headValue = request.getHeader("X-Request-Id");//获取单个请求头name对应的value值
+        System.out.println(headValue);
 
         return "data: " + data + ",i am from port:" + port;
     }
