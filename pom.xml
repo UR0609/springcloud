@@ -15,6 +15,7 @@
         <module>client</module>
         <module>common</module>
         <module>ribbon</module>
+        <module>svm</module>
     </modules>
 
     <properties>

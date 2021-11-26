@@ -1,0 +1,88 @@
+spring:
+  # 文件上传大小
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+      enabled: true
+  application:
+    name: svm
+  # 数据源配置
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      auto-commit: true
+      minimum-idle: 5
+      idle-timeout: 60000
+      connection-timeout: 30000
+      max-lifetime: 1800000
+      pool-name: DatebookHikariCP
+      maximum-pool-size: 30
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/demo?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+      username: root
+      password: abc123###
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    #Redis数据库IP地址
+    host: 127.0.0.1
+    #Redis数据库的端口号
+    port: 6379
+    #使用的数据库
+    database: 0
+    #密码
+    password:
+    # 连接超时时间（毫秒）
+    timeout: 3000
+    lettuce:
+      shutdown-timeout: 3000
+      pool:
+        # 连接池最大空闲连接
+        max-idle: 20
+        # 连接池最小空闲连接
+        min-idle: 20
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1
+        # 连接池最大连接数（使用负值表示没有限制）
+        max-active: 50
+
+eureka:
+  instance:
+    hostname: localhost
+    port: 8761
+  client:
+    service-url:
+      defaultZone: http://eureka.ljryh.com/eureka/
+#      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/eureka/
+
+server:
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 1000
+    min-spare-threads: 30
+  port: 8662
+  connection-timeout: 5000ms
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  typeAliasesPackage: com.ljryh.client.entity
+  configuration:
+    mapUnderscoreToCamelCase: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+knife4j:
+  enable: true
+
+stop:
+  word:
+    path: E:\springcloud\file\stopWords\hit_stopwords.txt
+
+svm:
+  list:
+    - name: jianhang
+      type: 1
+      path: E:\springcloud\file\intention\20210412075958.xlsx
+      sheet: 1
+      intention: 0
+      example: 1
+    - name: shuidi
+      type: 2
