@@ -15,6 +15,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+// git config --global http.sslVerify "false"
 // netstat -aon|findstr "8661"
 // 自动化接口生成
 @EnableHasor()
