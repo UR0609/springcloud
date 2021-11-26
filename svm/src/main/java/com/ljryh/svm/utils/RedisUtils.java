@@ -634,7 +634,7 @@ public class RedisUtils {
     }
 
     /**
-     * 将文本转化为TF-IDF
+     * 将文本转化为 TF-IDF
      * @param example
      * @param typeName
      * @return
