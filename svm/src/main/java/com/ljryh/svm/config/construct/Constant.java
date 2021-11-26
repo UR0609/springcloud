@@ -25,7 +25,6 @@ public class Constant {
     /**
      * https://www.csie.ntu.edu.tw/~cjlin/libsvm/
      * https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html
-     * https://blog.csdn.net/zaishijizhidian/article/details/89365733
      */
 
     /**
