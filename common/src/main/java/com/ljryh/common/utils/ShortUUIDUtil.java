@@ -12,6 +12,12 @@ public class ShortUUIDUtil {
             };
 
 
+    public static String getUuid() {
+        StringBuffer stringBuffer = new StringBuffer();
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+        return uuid;
+    }
+
     public static String getShortUuid() {
 
         StringBuffer stringBuffer = new StringBuffer();
@@ -37,7 +43,7 @@ public class ShortUUIDUtil {
      * 测试
      */
     public static void main(String[] args) {
-        System.out.println(getShortUuid());
+        System.out.println(getUuid());
     }
 
 }
