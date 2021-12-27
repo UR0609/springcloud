@@ -23,6 +23,9 @@
         <spring-cloud-alibaba.version>2.1.1.RELEASE</spring-cloud-alibaba.version>
         <spring-cloud.version>Hoxton.SR12</spring-cloud.version>
         <log4j2.version>2.17.0</log4j2.version>
+        <!--该漏洞影响1.2.9以下的版本，攻击者可以通过编辑logback配置文件制作一个恶意的配置，允许执行从LDAP服务器加载的任意代码！-->
+        <!--前提：攻击者得有写logback配置文件的权限才行！-->
+        <logback.version>1.2.9</logback.version>
     </properties>
 
     <parent>

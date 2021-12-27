@@ -17,6 +17,8 @@ public class XmlUtils {
 
     private final static String XML_DECLARATION = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
 
+    public final static String data2 ="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+            "<root><RESPONSE_CODE>200</RESPONSE_CODE><RESPONSE_MSG>查询成功，记录不存在</RESPONSE_MSG></root>";
     public final static String data =
             "<root>\n" +
             "  <RESPONSE_CODE>200</RESPONSE_CODE>\n" +
@@ -331,7 +333,7 @@ public class XmlUtils {
 
     public static void main(String[] args) {
 
-        ImagesDto imagesDto = fromXML(data,ImagesDto.class);
+        ImagesDto imagesDto = fromXML(data2,ImagesDto.class);
 
         List<String> list = new CopyOnWriteArrayList<>();
 
