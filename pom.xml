@@ -16,6 +16,7 @@
         <module>common</module>
         <module>ribbon</module>
         <module>svm</module>
+        <module>api</module>
     </modules>
 
     <properties>

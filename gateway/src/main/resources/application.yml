@@ -14,6 +14,12 @@ spring:
         locator:
           enabled: true
       routes:
+        - id: CLIENT
+          uri: lb://CLIENT
+          predicates:
+            - Path=/client/**
+          filters:
+            - StripPrefix=1
         - id: spring-cloud-client-demo3
           uri: lb://spring-cloud-client-demo
           predicates:

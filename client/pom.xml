@@ -22,6 +22,11 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
         <!-- aop 自定义 封装log注解 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
