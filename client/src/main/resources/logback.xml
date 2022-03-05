@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="10 seconds">
 
-    <property name="log.path" value="/opt/logs"/>
+    <property name="log.path" value="/Users/yibaiyi/IdeaProjects/logs"/>
 
     <!-- 彩色日志依赖的渲染类 -->
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
