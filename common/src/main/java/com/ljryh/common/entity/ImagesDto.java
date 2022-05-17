@@ -119,7 +119,7 @@ public class ImagesDto {
                 private String CREATEDATE;
                 @JsonProperty("MODIFY_USER")
                 @XStreamAlias("MODIFY_USER")
-                private long MODIFYUSER;
+                private String MODIFYUSER;
                 @JsonProperty("MODIFY_DATE")
                 @XStreamAlias("MODIFY_DATE")
                 private String MODIFYDATE;
@@ -174,6 +174,7 @@ public class ImagesDto {
                 public static class PAGEDTO {
                     @JsonProperty("PAGEID")
                     @XStreamAlias("PAGEID")
+                    @XStreamAsAttribute
                     private String PAGEID;
                     @JsonProperty("CREATE_USER")
                     @XStreamAlias("CREATE_USER")
@@ -243,8 +244,10 @@ public class ImagesDto {
                 @XStreamAlias("APP_NAME")
                 private String APPNAME;
                 @JsonProperty("NODE")
-                @XStreamAlias("NODE")
-                private NODEDTO NODE;
+                @XStreamImplicit(itemFieldName = "NODE")
+                private List<NODEDTO> NODE;
+
+
 
                 @Data
                 @XStreamAlias("NODE")

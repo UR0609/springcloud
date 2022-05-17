@@ -1,6 +1,6 @@
 package com.ljryh.common.utils;
 
-import com.ljryh.common.entity.ImagesDto;
+import com.alibaba.fastjson.JSONObject;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.XmlFriendlyReplacer;
 import com.thoughtworks.xstream.io.xml.XppDriver;
@@ -9,270 +9,213 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class XmlUtils {
 
     private final static String XML_DECLARATION = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
 
-    public final static String data2 ="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-            "<root><RESPONSE_CODE>200</RESPONSE_CODE><RESPONSE_MSG>查询成功，记录不存在</RESPONSE_MSG></root>";
-    public final static String data =
+    public final static String data2 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
             "<root>\n" +
-            "  <RESPONSE_CODE>200</RESPONSE_CODE>\n" +
-            "  <RESPONSE_MSG>请求SYD成功</RESPONSE_MSG>\n" +
-            "  <PAGES>\n" +
-            "    <PAGE PAGEID=\"05074bd877b74bdc90e0b9fd1634c266\" PAGE_URL=\"http://10.0.105.245:7003/SunTRM/servlet/GetImage?UhFOUNO1mCHEmNHE_1UgpPEfcuzaVP67JufGSPDfX17CP5_QJsHrmB5RmCZRmCHRmBHR_seR_BSs8PF48NmtmCDfmsUgSNff_CmEmu5wUBf48PHt8NAxmdLOUhSzSu6zSdta_s0zJN2umP6GSN6E8dtg_NF4UBUaUhFgSgSqXhziIgU-VhAxUPzBXifrDCOrIiMRpuAqKNI4SBMkAAHOAAIySuaTXN2zAP_y8PaTMuZOmBIBXeD1\" THUM_URL=\"http://10.0.105.245:7003/SunTRM/servlet/GetImage?UhFOUNO1mCHEmNHE_1UgpPEfcuzaVP67JufGSPDfX17CP5_QJsHrmB5RmCZRmCHRmBHR_seR_BSs8PF48NmtmCDfmsUgSNff_CmEmu5wUBf48PHt8NAxmdLOUhSzSu6zSdta_s0zJN2umP6GSN6E8dtg_NF4UBUaUhFgSgSqXhziJg-rU1UgpPEfcuAqSvIzXT27mQUOVuGfVBtESvHzStHO6eZO6ByySsI12AIAdhGHSgGkX6Zz8PaBX2==\" FILE_NO=\"05074bd877b74bdc90e0b9fd1634c266\" PAGE_VER=\"3\"/>\n" +
-            "    <PAGE PAGEID=\"17f893684b214e9bba4526c64decb7d2\" PAGE_URL=\"http://10.0.105.245:7003/SunTRM/servlet/GetImage?UhFOUNO1mCHEmNHE_1UgpPEfcuzaVP67JufGSPDfX17CP5_QJsHrmB5RmCZRmCHRmBHR_seR_BSs8PF48NmtmCDfmsUgSNff_CmEmu5wUBf48PHt8NAxmdLvSNAa_NUfS4tgUgHOJNMgmsXGSBmwm1teSsaa8hmtmPFgUNSqpiyfU1UgpPEfcuAqSvIzXT27mQUOVuGfVBtOSeaOdT5126DHdhmrDTIOpvHzMvMk8AITXNfdmCfBD0==\" THUM_URL=\"http://10.0.105.245:7003/SunTRM/servlet/GetImage?UhFOUNO1mCHEmNHE_1UgpPEfcuzaVP67JufGSPDfX17CP5_QJsHrmB5RmCZRmCHRmBHR_seR_BSs8PF48NmtmCDfmsUgSNff_CmEmu5wUBf48PHt8NAxmdLvSNAa_NUfS4tgUgHOJNMgmsXGSBmwm1teSsaa8hmtmPFgUNSqpiyfU1z9XhXgUgfnUA7fVg_1YcyOKN0gDh7lUPw786FBMsMkXNME6iIBdFAOMOFOXBfOMuIOpO51XNfBSs2=\" FILE_NO=\"17f893684b214e9bba4526c64decb7d2\" PAGE_VER=\"3\"/>\n" +
-            "    <PAGE PAGEID=\"1b9da404e91840b49a3b52a9deed091c\" PAGE_URL=\"http://10.0.105.245:7003/SunTRM/servlet/GetImage?UhFOUNO1mCHEmNHE_1UgpPEfcuzaVP67JufGSPDfX17CP5_QJsHrmB5RmCZRmCHRmBHR_seR_BSs8PF48NmtmCDfmsUgSNff_CmEmu5wUBf48PHt8NAxmdLr8Nm1UC0r_QOzSs5EJN2u_s5GSN2umdOtSgFf_u5E8CesUg5qXhziIgU-VhAxUPzBXifrDCOrIiMRpuAqK6DOXP_46g_dXiMEXBIT8cMTdCeOpOaHd55r_5DdXNI4\" THUM_URL=\"http://10.0.105.245:7003/SunTRM/servlet/GetImage?UhFOUNO1mCHEmNHE_1UgpPEfcuzaVP67JufGSPDfX17CP5_QJsHrmB5RmCZRmCHRmBHR_seR_BSs8PF48NmtmCDfmsUgSNff_CmEmu5wUBf48PHt8NAxmdLr8Nm1UC0r_QOzSs5EJN2u_s5GSN2umdOtSgFf_u5E8CesUg5qXhziJg-rU1UgpPEfcuAqSvIzXT27mQUOVuGfVBO1d5XOmhGAXcFAmFAy_hZOMvF1Sg_TANyBpuGH_Cy1d0==\" FILE_NO=\"1b9da404e91840b49a3b52a9deed091c\" PAGE_VER=\"3\"/>\n" +
-            "    <PAGE PAGEID=\"3ee763bbff01489689b706c529c8cb7e\" PAGE_URL=\"http://10.0.105.245:7003/SunTRM/servlet/GetImage?UhFOUNO1mCHEmNHE_1UgpPEfcuzaVP67JufGSPDfX17CP5_QJsHrmB5RmCZRmCHRmBHR_seR_BSs8PF48NmtmCDfmsUgSNff_CmEmu5wUBf48PHt8NAxmdLrmBIgmP_gmdOzUNAgJN2u_hmGSB0rSdt4mPMe_sXtUCeOmsZqpiyfU1UgpPEfcuAqSvIzXT27mQUOVuGfVBOr2NyEdT2zSu_BmBfOmTMOANylA6aypvH18AIkAPG1Sr==\" THUM_URL=\"http://10.0.105.245:7003/SunTRM/servlet/GetImage?UhFOUNO1mCHEmNHE_1UgpPEfcuzaVP67JufGSPDfX17CP5_QJsHrmB5RmCZRmCHRmBHR_seR_BSs8PF48NmtmCDfmsUgSNff_CmEmu5wUBf48PHt8NAxmdLrmBIgmP_gmdOzUNAgJN2u_hmGSB0rSdt4mPMe_sXtUCeOmsZqpiyfU1z9XhXgUgfnUA7fVg_1YcyOKN0gDh7lUPw7mTIdXBIOpCy1Si2186ak2PI1mCHzX6aE2PadSsMO8AH=\" FILE_NO=\"3ee763bbff01489689b706c529c8cb7e\" PAGE_VER=\"3\"/>\n" +
-            "    <PAGE PAGEID=\"a88a04de4da2434da9996dd8c9861a77\" PAGE_URL=\"http://10.0.105.245:7003/SunTRM/servlet/GetImage?UhFOUNO1mCHEmNHE_1UgpPEfcuzaVP67JufGSPDfX17CP5_QJsHrmB5RmCZRmCHRmBHR_seR_BSs8PF48NmtmCDfmsUgSNff_CmEmu5wUBf48PHt8NAxmdLs8CSsSBX1UQOu_sSEJNMBmhHGSP6ES4OE_sFg8PHu8N_4SsmqXhziIgU-VhAxUPzBXifrDCOrIiMRpuAqKPa1SgIl2c5OMsy4pv5OXeDA_hGl_C2OSsI486DTDFIl\" THUM_URL=\"http://10.0.105.245:7003/SunTRM/servlet/GetImage?UhFOUNO1mCHEmNHE_1UgpPEfcuzaVP67JufGSPDfX17CP5_QJsHrmB5RmCZRmCHRmBHR_seR_BSs8PF48NmtmCDfmsUgSNff_CmEmu5wUBf48PHt8NAxmdLs8CSsSBX1UQOu_sSEJNMBmhHGSP6ES4OE_sFg8PHu8N_4SsmqXhziJg-rU1UgpPEfcuAqSvIzXT27mQUOVuGfVBtTdFIHXiFEMsMT26D4_CfBMuIkSvMEX6aT2NyOXPGA6Z==\" FILE_NO=\"a88a04de4da2434da9996dd8c9861a77\" PAGE_VER=\"3\"/>\n" +
-            "    <PAGE PAGEID=\"0654f0b9682f4afe953cdecc5b998a72\" PAGE_URL=\"http://10.0.105.245:7003/SunTRM/servlet/GetImage?UhFOUNO1mCHEmNHE_1UgpPEfcuzaVP67JufGSPDfX17CP5_QJsHrmB5RmCZRmCHRmBHR_seR_BSs8PF48NmtmCDfmsUgSNff_CmEmu5wUBf48PHt8NAxmd7gUN0O_PUe_dtemB_aJN2w8C2G8CStmdt4mBDfmC5smB6EmB6qpiyiIgU-VhAxUPzBXifrDCOrIiMRpuAqKPG48Pnr_5DTd5Z1SuaySg_ASeaymeaHmf6z8cFlSuZr\" THUM_URL=\"http://10.0.105.245:7003/SunTRM/servlet/GetImage?UhFOUNO1mCHEmNHE_1UgpPEfcuzaVP67JufGSPDfX17CP5_QJsHrmB5RmCZRmCHRmBHR_seR_BSs8PF48NmtmCDfmsUgSNff_CmEmu5wUBf48PHt8NAxmd7gUN0O_PUe_dtemB_aJN2w8C2G8CStmdt4mBDfmC5smB6EmB6qpiyiJg-rU1UgpPEfcuAqSvIzXT27mQUOVuGfVBt1XNI1Suay8PGOSBfBmhH1MsMODTFASvIydha1d5adm0==\" FILE_NO=\"0654f0b9682f4afe953cdecc5b998a72\" PAGE_VER=\"2\"/>\n" +
-            "    <PAGE PAGEID=\"36e6765261364582b91a33c71620e93a\" PAGE_URL=\"http://10.0.105.245:7003/SunTRM/servlet/GetImage?UhFOUNO1mCHEmNHE_1UgpPEfcuzaVP67JufGSPDfX17CP5_QJsHrmB5RmCZRmCHRmBHR_seR_BSs8PF48NmtmCDfmsUgSNff_CmEmu5wUBf48PHt8NAxmdL18hmz8Cetm1tf_BevJNMf8CHG8NXsUdtf8NFg_N5tUC0t8C0qpiyiIgU-VhAxUPzBXifrDCOrIiMRpuAqKcFyXPnzdTHz_hGBpunr6fA46gmO2NermeXO_CfOmCyB\" THUM_URL=\"http://10.0.105.245:7003/SunTRM/servlet/GetImage?UhFOUNO1mCHEmNHE_1UgpPEfcuzaVP67JufGSPDfX17CP5_QJsHrmB5RmCZRmCHRmBHR_seR_BSs8PF48NmtmCDfmsUgSNff_CmEmu5wUBf48PHt8NAxmdL18hmz8Cetm1tf_BevJNMf8CHG8NXsUdtf8NFg_N5tUC0t8C0qpiyiJg-rU1UgpPEfcuAqSvIzXT27mQUOVuGfVBtlSgHOMvFBMuGA2NIk8PIEphI4pCfOSOZrAcFlSsfHpr==\" FILE_NO=\"36e6765261364582b91a33c71620e93a\" PAGE_VER=\"2\"/>\n" +
-            "    <PAGE PAGEID=\"94ce143c2fde4cabb7c677c2bb15ddb0\" PAGE_URL=\"http://10.0.105.245:7003/SunTRM/servlet/GetImage?UhFOUNO1mCHEmNHE_1UgpPEfcuzaVP67JufGSPDfX17CP5_QJsHrmB5RmCZRmCHRmBHR_seR_BSs8PF48NmtmCDfmsUgSNff_CmEmu5wUBf48PHt8NAxmd7BSNSO_P21m4OO8NI4JN21_s6GSN0t_4tgUN0v_g6wmuIgmseqpiyiIgU-VhAxUPzBXifrDCOrIiMRpuAqKAAkmCezXgmzDFIAphGymBMTDFHzDCfyMsfHp5aEmFI1\" THUM_URL=\"http://10.0.105.245:7003/SunTRM/servlet/GetImage?UhFOUNO1mCHEmNHE_1UgpPEfcuzaVP67JufGSPDfX17CP5_QJsHrmB5RmCZRmCHRmBHR_seR_BSs8PF48NmtmCDfmsUgSNff_CmEmu5wUBf48PHt8NAxmd7BSNSO_P21m4OO8NI4JN21_s6GSN0t_4tgUN0v_g6wmuIgmseqpiyiJg-rU1UgpPEfcuAqSvIzXT27mQUOVuGfVBO1XB01m5ZOm5alMOXz6iFBd5ZOpsIlmg_HXgGyXBMTSZ==\" FILE_NO=\"94ce143c2fde4cabb7c677c2bb15ddb0\" PAGE_VER=\"2\"/>\n" +
-            "    <PAGE PAGEID=\"9e2b70493fd1449a80cf063aba1134dc\" PAGE_URL=\"http://10.0.105.245:7003/SunTRM/servlet/GetImage?UhFOUNO1mCHEmNHE_1UgpPEfcuzaVP67JufGSPDfX17CP5_QJsHrmB5RmCZRmCHRmBHR_seR_BSs8PF48NmtmCDfmsUgSNff_CmEmu5wUBf48PHt8NAxmdLwSBagmPmt_1OvUNFeJNMf_PSG8hIgSdte8PmvUNHzSNfe_C5qpiyiIgU-VhAxUPzBXifrDCOrIiMRpuAqKcIkSea4_FHrmfAO_hGOpvHrANI16gGd_hHODFAT8Ner\" THUM_URL=\"http://10.0.105.245:7003/SunTRM/servlet/GetImage?UhFOUNO1mCHEmNHE_1UgpPEfcuzaVP67JufGSPDfX17CP5_QJsHrmB5RmCZRmCHRmBHR_seR_BSs8PF48NmtmCDfmsUgSNff_CmEmu5wUBf48PHt8NAxmdLwSBagmPmt_1OvUNFeJNMf_PSG8hIgSdte8PmvUNHzSNfe_C5qpiyiJg-rU1UgpPEfcuAqSvIzXT27mQUOVuGfVBtdSeaHXBIdXBer_TMkMsHr8AAAmi5zDC2rpvHO8Nyl22==\" FILE_NO=\"9e2b70493fd1449a80cf063aba1134dc\" PAGE_VER=\"2\"/>\n" +
-            "    <PAGE PAGEID=\"f19fd7aecaf84ab4b6ac6ce6c84a8b34\" PAGE_URL=\"http://10.0.105.245:7003/SunTRM/servlet/GetImage?UhFOUNO1mCHEmNHE_1UgpPEfcuzaVP67JufGSPDfX17CP5_QJsHrmB5RmCZRmCHRmBHR_seR_BSs8PF48NmtmCDfmsUgSNff_CmEmu5wUBf48PHt8NAxmdLvmhSzmNFem1O1mu2wJNMamPmG8h5wm1O1_P_BUg5uUBF4_PHqXhMgIgU-VhAxUPzBXifrDCOrIiMRpuAqKPaT8AIlXBfTd5a4pTM4Xgn1psMyMt6O_5DymBIA_FAd\" THUM_URL=\"http://10.0.105.245:7003/SunTRM/servlet/GetImage?UhFOUNO1mCHEmNHE_1UgpPEfcuzaVP67JufGSPDfX17CP5_QJsHrmB5RmCZRmCHRmBHR_seR_BSs8PF48NmtmCDfmsUgSNff_CmEmu5wUBf48PHt8NAxmdLgUgfnUA7fVg_1YcyOKN0gDh7lUPw7miFHpvH1Ssyl6iMTDTFHpvFTXiFAD5F1pTMBSBe1Xe5=\" FILE_NO=\"f19fd7aecaf84ab4b6ac6ce6c84a8b34\" PAGE_VER=\"1\"/>\n" +
-            "  </PAGES>\n" +
-            "  <SYD>\n" +
-            "    <doc version=\"1.2\">\n" +
-            "      <DocInfo>\n" +
-            "        <BATCH_ID>6639ab93507e36fa9e4313a8f9b9b595</BATCH_ID>\n" +
-            "        <BUSI_NUM>23010500TDDA2021A00394</BUSI_NUM>\n" +
-            "        <BIZ_ORG>23010500</BIZ_ORG>\n" +
-            "        <APP_CODE>CXCB</APP_CODE>\n" +
-            "        <APP_NAME>车险承保</APP_NAME>\n" +
-            "        <BATCH_VER>3</BATCH_VER>\n" +
-            "        <INTER_VER>3</INTER_VER>\n" +
-            "        <STATUS/>\n" +
-            "        <CREATE_USER>2301350012</CREATE_USER>\n" +
-            "        <CREATE_DATE>2021-08-02 11:29:57.190</CREATE_DATE>\n" +
-            "        <MODIFY_USER>2301350012</MODIFY_USER>\n" +
-            "        <MODIFY_DATE>2021-12-16 17:02:44</MODIFY_DATE>\n" +
-            "        <DOC_EXT>\n" +
-            "          <EXT_ATTR ID=\"BUSI_NO\" NAME=\"投保单号\" IS_SHOW=\"1\" IS_KEY=\"1\" IS_NULL=\"0\" INPUT_TYPE=\"1\">23010500TDDA2021A00394</EXT_ATTR>\n" +
-            "        </DOC_EXT>\n" +
-            "      </DocInfo>\n" +
-            "      <PageInfo>\n" +
-            "        <PAGE PAGEID=\"05074bd877b74bdc90e0b9fd1634c266\">\n" +
-            "          <CREATE_USER>2301350012</CREATE_USER>\n" +
-            "          <CREATE_USERNAME>2301350012</CREATE_USERNAME>\n" +
-            "          <CREATE_TIME>2021-12-16 17:09:32</CREATE_TIME>\n" +
-            "          <MODIFY_USER>2301350012</MODIFY_USER>\n" +
-            "          <MODIFY_TIME>2021-12-16 17:09:32</MODIFY_TIME>\n" +
-            "          <PAGE_URL>4df9ce9a-a709-461e-a519-f51bf6adafbf.png</PAGE_URL>\n" +
-            "          <THUM_URL>4df9ce9a-a709-461e-a519-f51bf6adafbf.png.jpg</THUM_URL>\n" +
-            "          <IS_LOCAL>1</IS_LOCAL>\n" +
-            "          <PAGE_VER>3</PAGE_VER>\n" +
-            "          <PAGE_DESC/>\n" +
-            "          <UPLOAD_ORG>阳光农业相互保险公司哈尔滨分公司</UPLOAD_ORG>\n" +
-            "          <PAGE_CRC>41b7c5f84c8aedeec4493d12d63e6c08</PAGE_CRC>\n" +
-            "          <PAGE_SIZE>236370</PAGE_SIZE>\n" +
-            "          <PAGE_FORMAT>image/png</PAGE_FORMAT>\n" +
-            "          <PAGE_ENCRYPT>0</PAGE_ENCRYPT>\n" +
-            "          <ORIGINAL_NAME>44.png</ORIGINAL_NAME>\n" +
-            "          <PAGE_EXT/>\n" +
-            "          <PAGE_DESCS/>\n" +
-            "        </PAGE>\n" +
-            "        <PAGE PAGEID=\"0654f0b9682f4afe953cdecc5b998a72\">\n" +
-            "          <CREATE_USER>2301350012</CREATE_USER>\n" +
-            "          <CREATE_USERNAME>2301350012</CREATE_USERNAME>\n" +
-            "          <CREATE_TIME>2021-08-09 09:38:25</CREATE_TIME>\n" +
-            "          <MODIFY_USER>2301350012</MODIFY_USER>\n" +
-            "          <MODIFY_TIME>2021-08-09 09:38:25</MODIFY_TIME>\n" +
-            "          <PAGE_URL>fe045fd5-d23a-4884-8651-b27e01325125.jpg</PAGE_URL>\n" +
-            "          <THUM_URL>fe045fd5-d23a-4884-8651-b27e01325125.jpg.jpg</THUM_URL>\n" +
-            "          <IS_LOCAL>1</IS_LOCAL>\n" +
-            "          <PAGE_VER>2</PAGE_VER>\n" +
-            "          <PAGE_DESC/>\n" +
-            "          <UPLOAD_ORG>阳光农业相互保险公司哈尔滨分公司</UPLOAD_ORG>\n" +
-            "          <PAGE_CRC>a3648c2e57828c7246d9f3d139e82460</PAGE_CRC>\n" +
-            "          <PAGE_SIZE>68255</PAGE_SIZE>\n" +
-            "          <PAGE_FORMAT>image/jpeg</PAGE_FORMAT>\n" +
-            "          <PAGE_ENCRYPT>0</PAGE_ENCRYPT>\n" +
-            "          <ORIGINAL_NAME>2Screenshot_20210806_092803.jpg</ORIGINAL_NAME>\n" +
-            "          <PAGE_EXT/>\n" +
-            "          <PAGE_DESCS/>\n" +
-            "        </PAGE>\n" +
-            "        <PAGE PAGEID=\"17f893684b214e9bba4526c64decb7d2\">\n" +
-            "          <CREATE_USER>2301350012</CREATE_USER>\n" +
-            "          <CREATE_USERNAME>2301350012</CREATE_USERNAME>\n" +
-            "          <CREATE_TIME>2021-12-16 17:09:32</CREATE_TIME>\n" +
-            "          <MODIFY_USER>2301350012</MODIFY_USER>\n" +
-            "          <MODIFY_TIME>2021-12-16 17:09:32</MODIFY_TIME>\n" +
-            "          <PAGE_URL>7a5a56eb-ffb4-4f37-b383-dc8a8c51afe6.jpeg</PAGE_URL>\n" +
-            "          <THUM_URL>7a5a56eb-ffb4-4f37-b383-dc8a8c51afe6.jpeg.jpg</THUM_URL>\n" +
-            "          <IS_LOCAL>1</IS_LOCAL>\n" +
-            "          <PAGE_VER>3</PAGE_VER>\n" +
-            "          <PAGE_DESC/>\n" +
-            "          <UPLOAD_ORG>阳光农业相互保险公司哈尔滨分公司</UPLOAD_ORG>\n" +
-            "          <PAGE_CRC>c10600a3125edaefd5b1e1efee2613a7</PAGE_CRC>\n" +
-            "          <PAGE_SIZE>70862</PAGE_SIZE>\n" +
-            "          <PAGE_FORMAT>image/jpeg</PAGE_FORMAT>\n" +
-            "          <PAGE_ENCRYPT>0</PAGE_ENCRYPT>\n" +
-            "          <ORIGINAL_NAME>33.jpeg</ORIGINAL_NAME>\n" +
-            "          <PAGE_EXT/>\n" +
-            "          <PAGE_DESCS/>\n" +
-            "        </PAGE>\n" +
-            "        <PAGE PAGEID=\"1b9da404e91840b49a3b52a9deed091c\">\n" +
-            "          <CREATE_USER>2301350012</CREATE_USER>\n" +
-            "          <CREATE_USERNAME>2301350012</CREATE_USERNAME>\n" +
-            "          <CREATE_TIME>2021-12-16 17:09:32</CREATE_TIME>\n" +
-            "          <MODIFY_USER>2301350012</MODIFY_USER>\n" +
-            "          <MODIFY_TIME>2021-12-16 17:09:32</MODIFY_TIME>\n" +
-            "          <PAGE_URL>0932d004-9c11-4671-a461-5bae7a1893fa.png</PAGE_URL>\n" +
-            "          <THUM_URL>0932d004-9c11-4671-a461-5bae7a1893fa.png.jpg</THUM_URL>\n" +
-            "          <IS_LOCAL>1</IS_LOCAL>\n" +
-            "          <PAGE_VER>3</PAGE_VER>\n" +
-            "          <PAGE_DESC/>\n" +
-            "          <UPLOAD_ORG>阳光农业相互保险公司哈尔滨分公司</UPLOAD_ORG>\n" +
-            "          <PAGE_CRC>e2f7ba3704737aa2f532f09b2ba973ef</PAGE_CRC>\n" +
-            "          <PAGE_SIZE>24434</PAGE_SIZE>\n" +
-            "          <PAGE_FORMAT>image/png</PAGE_FORMAT>\n" +
-            "          <PAGE_ENCRYPT>0</PAGE_ENCRYPT>\n" +
-            "          <ORIGINAL_NAME>5sign.png</ORIGINAL_NAME>\n" +
-            "          <PAGE_EXT/>\n" +
-            "          <PAGE_DESCS/>\n" +
-            "        </PAGE>\n" +
-            "        <PAGE PAGEID=\"36e6765261364582b91a33c71620e93a\">\n" +
-            "          <CREATE_USER>2301350012</CREATE_USER>\n" +
-            "          <CREATE_USERNAME>2301350012</CREATE_USERNAME>\n" +
-            "          <CREATE_TIME>2021-08-09 09:38:25</CREATE_TIME>\n" +
-            "          <MODIFY_USER>2301350012</MODIFY_USER>\n" +
-            "          <MODIFY_TIME>2021-08-09 09:38:25</MODIFY_TIME>\n" +
-            "          <PAGE_URL>28c98953-e697-4e82-973e-e91f515d0580.jpg</PAGE_URL>\n" +
-            "          <THUM_URL>28c98953-e697-4e82-973e-e91f515d0580.jpg.jpg</THUM_URL>\n" +
-            "          <IS_LOCAL>1</IS_LOCAL>\n" +
-            "          <PAGE_VER>2</PAGE_VER>\n" +
-            "          <PAGE_DESC/>\n" +
-            "          <UPLOAD_ORG>阳光农业相互保险公司哈尔滨分公司</UPLOAD_ORG>\n" +
-            "          <PAGE_CRC>25b9e06885901653155cd0e4f99c2b26</PAGE_CRC>\n" +
-            "          <PAGE_SIZE>95400</PAGE_SIZE>\n" +
-            "          <PAGE_FORMAT>image/jpeg</PAGE_FORMAT>\n" +
-            "          <PAGE_ENCRYPT>0</PAGE_ENCRYPT>\n" +
-            "          <ORIGINAL_NAME>4Screenshot_20210806_092703.jpg</ORIGINAL_NAME>\n" +
-            "          <PAGE_EXT/>\n" +
-            "          <PAGE_DESCS/>\n" +
-            "        </PAGE>\n" +
-            "        <PAGE PAGEID=\"3ee763bbff01489689b706c529c8cb7e\">\n" +
-            "          <CREATE_USER>2301350012</CREATE_USER>\n" +
-            "          <CREATE_USERNAME>2301350012</CREATE_USERNAME>\n" +
-            "          <CREATE_TIME>2021-12-16 17:09:32</CREATE_TIME>\n" +
-            "          <MODIFY_USER>2301350012</MODIFY_USER>\n" +
-            "          <MODIFY_TIME>2021-12-16 17:09:32</MODIFY_TIME>\n" +
-            "          <PAGE_URL>022f1cf1-9e5f-464c-b00a-b1dd775d9438.jpeg</PAGE_URL>\n" +
-            "          <THUM_URL>022f1cf1-9e5f-464c-b00a-b1dd775d9438.jpeg.jpg</THUM_URL>\n" +
-            "          <IS_LOCAL>1</IS_LOCAL>\n" +
-            "          <PAGE_VER>3</PAGE_VER>\n" +
-            "          <PAGE_DESC/>\n" +
-            "          <UPLOAD_ORG>阳光农业相互保险公司哈尔滨分公司</UPLOAD_ORG>\n" +
-            "          <PAGE_CRC>6b24159441d32a8e48be6f166779605b</PAGE_CRC>\n" +
-            "          <PAGE_SIZE>35996</PAGE_SIZE>\n" +
-            "          <PAGE_FORMAT>image/jpeg</PAGE_FORMAT>\n" +
-            "          <PAGE_ENCRYPT>0</PAGE_ENCRYPT>\n" +
-            "          <ORIGINAL_NAME>22.jpeg</ORIGINAL_NAME>\n" +
-            "          <PAGE_EXT/>\n" +
-            "          <PAGE_DESCS/>\n" +
-            "        </PAGE>\n" +
-            "        <PAGE PAGEID=\"94ce143c2fde4cabb7c677c2bb15ddb0\">\n" +
-            "          <CREATE_USER>2301350012</CREATE_USER>\n" +
-            "          <CREATE_USERNAME>2301350012</CREATE_USERNAME>\n" +
-            "          <CREATE_TIME>2021-08-09 09:38:25</CREATE_TIME>\n" +
-            "          <MODIFY_USER>2301350012</MODIFY_USER>\n" +
-            "          <MODIFY_TIME>2021-08-09 09:38:25</MODIFY_TIME>\n" +
-            "          <PAGE_URL>ca645d22-492b-4275-a056-fe076e83bf39.jpg</PAGE_URL>\n" +
-            "          <THUM_URL>ca645d22-492b-4275-a056-fe076e83bf39.jpg.jpg</THUM_URL>\n" +
-            "          <IS_LOCAL>1</IS_LOCAL>\n" +
-            "          <PAGE_VER>2</PAGE_VER>\n" +
-            "          <PAGE_DESC/>\n" +
-            "          <UPLOAD_ORG>阳光农业相互保险公司哈尔滨分公司</UPLOAD_ORG>\n" +
-            "          <PAGE_CRC>25b9e06885901653155cd0e4f99c2b26</PAGE_CRC>\n" +
-            "          <PAGE_SIZE>95400</PAGE_SIZE>\n" +
-            "          <PAGE_FORMAT>image/jpeg</PAGE_FORMAT>\n" +
-            "          <PAGE_ENCRYPT>0</PAGE_ENCRYPT>\n" +
-            "          <ORIGINAL_NAME>3Screenshot_20210806_092703.jpg</ORIGINAL_NAME>\n" +
-            "          <PAGE_EXT/>\n" +
-            "          <PAGE_DESCS/>\n" +
-            "        </PAGE>\n" +
-            "        <PAGE PAGEID=\"9e2b70493fd1449a80cf063aba1134dc\">\n" +
-            "          <CREATE_USER>2301350012</CREATE_USER>\n" +
-            "          <CREATE_USERNAME>2301350012</CREATE_USERNAME>\n" +
-            "          <CREATE_TIME>2021-08-09 09:38:25</CREATE_TIME>\n" +
-            "          <MODIFY_USER>2301350012</MODIFY_USER>\n" +
-            "          <MODIFY_TIME>2021-08-09 09:38:25</MODIFY_TIME>\n" +
-            "          <PAGE_URL>8b8f1c57-7e1d-4e5f-8bfa-d9c7e29a9d41.jpg</PAGE_URL>\n" +
-            "          <THUM_URL>8b8f1c57-7e1d-4e5f-8bfa-d9c7e29a9d41.jpg.jpg</THUM_URL>\n" +
-            "          <IS_LOCAL>1</IS_LOCAL>\n" +
-            "          <PAGE_VER>2</PAGE_VER>\n" +
-            "          <PAGE_DESC/>\n" +
-            "          <UPLOAD_ORG>阳光农业相互保险公司哈尔滨分公司</UPLOAD_ORG>\n" +
-            "          <PAGE_CRC>25b9e06885901653155cd0e4f99c2b26</PAGE_CRC>\n" +
-            "          <PAGE_SIZE>95400</PAGE_SIZE>\n" +
-            "          <PAGE_FORMAT>image/jpeg</PAGE_FORMAT>\n" +
-            "          <PAGE_ENCRYPT>0</PAGE_ENCRYPT>\n" +
-            "          <ORIGINAL_NAME>1Screenshot_20210806_092703.jpg</ORIGINAL_NAME>\n" +
-            "          <PAGE_EXT/>\n" +
-            "          <PAGE_DESCS/>\n" +
-            "        </PAGE>\n" +
-            "        <PAGE PAGEID=\"a88a04de4da2434da9996dd8c9861a77\">\n" +
-            "          <CREATE_USER>2301350012</CREATE_USER>\n" +
-            "          <CREATE_USERNAME>2301350012</CREATE_USERNAME>\n" +
-            "          <CREATE_TIME>2021-12-16 17:09:32</CREATE_TIME>\n" +
-            "          <MODIFY_USER>2301350012</MODIFY_USER>\n" +
-            "          <MODIFY_TIME>2021-12-16 17:09:32</MODIFY_TIME>\n" +
-            "          <PAGE_URL>3863b72d-6761-4c0b-ae1b-171f9b693bc3.png</PAGE_URL>\n" +
-            "          <THUM_URL>3863b72d-6761-4c0b-ae1b-171f9b693bc3.png.jpg</THUM_URL>\n" +
-            "          <IS_LOCAL>1</IS_LOCAL>\n" +
-            "          <PAGE_VER>3</PAGE_VER>\n" +
-            "          <PAGE_DESC/>\n" +
-            "          <UPLOAD_ORG>阳光农业相互保险公司哈尔滨分公司</UPLOAD_ORG>\n" +
-            "          <PAGE_CRC>adc4ebf18e3ffa96860995bfcfb50fa6</PAGE_CRC>\n" +
-            "          <PAGE_SIZE>876611</PAGE_SIZE>\n" +
-            "          <PAGE_FORMAT>image/png</PAGE_FORMAT>\n" +
-            "          <PAGE_ENCRYPT>0</PAGE_ENCRYPT>\n" +
-            "          <ORIGINAL_NAME>11.png</ORIGINAL_NAME>\n" +
-            "          <PAGE_EXT/>\n" +
-            "          <PAGE_DESCS/>\n" +
-            "        </PAGE>\n" +
-            "        <PAGE PAGEID=\"f19fd7aecaf84ab4b6ac6ce6c84a8b34\">\n" +
-            "          <CREATE_USER>2301350012</CREATE_USER>\n" +
-            "          <CREATE_USERNAME>高杰</CREATE_USERNAME>\n" +
-            "          <CREATE_TIME>2021-08-02 11:32:49</CREATE_TIME>\n" +
-            "          <MODIFY_USER>2301350012</MODIFY_USER>\n" +
-            "          <MODIFY_TIME>2021-08-02 11:32:49</MODIFY_TIME>\n" +
-            "          <PAGE_URL>70f911d3-23d8-4a1c-8a83-25ccfa6f1b5b.pdf</PAGE_URL>\n" +
-            "          <THUM_URL/>\n" +
-            "          <IS_LOCAL>1</IS_LOCAL>\n" +
-            "          <PAGE_VER>1</PAGE_VER>\n" +
-            "          <PAGE_DESC/>\n" +
-            "          <UPLOAD_ORG>阳光农业相互保险公司哈尔滨分公司农垦业务部</UPLOAD_ORG>\n" +
-            "          <PAGE_CRC>9702056b0794c1792dfc61c864c3eee7</PAGE_CRC>\n" +
-            "          <PAGE_SIZE>437702</PAGE_SIZE>\n" +
-            "          <PAGE_FORMAT>application/pdf</PAGE_FORMAT>\n" +
-            "          <PAGE_ENCRYPT>0</PAGE_ENCRYPT>\n" +
-            "          <ORIGINAL_NAME>23010500TDDA2021A00394202108021132480001.pdf</ORIGINAL_NAME>\n" +
-            "          <PAGE_EXT/>\n" +
-            "          <PAGE_DESCS/>\n" +
-            "        </PAGE>\n" +
-            "      </PageInfo>\n" +
-            "      <VTREE APP_CODE=\"CXCB\" APP_NAME=\"车险承保\">\n" +
-            "        <NODE ID=\"CCXCB001\" NAME=\"投保单\">\n" +
-            "          <LEAF>f19fd7aecaf84ab4b6ac6ce6c84a8b34</LEAF>\n" +
-            "          <LEAF>9e2b70493fd1449a80cf063aba1134dc</LEAF>\n" +
-            "          <LEAF>0654f0b9682f4afe953cdecc5b998a72</LEAF>\n" +
-            "          <LEAF>94ce143c2fde4cabb7c677c2bb15ddb0</LEAF>\n" +
-            "          <LEAF>36e6765261364582b91a33c71620e93a</LEAF>\n" +
-            "          <LEAF>a88a04de4da2434da9996dd8c9861a77</LEAF>\n" +
-            "          <LEAF>3ee763bbff01489689b706c529c8cb7e</LEAF>\n" +
-            "          <LEAF>17f893684b214e9bba4526c64decb7d2</LEAF>\n" +
-            "          <LEAF>05074bd877b74bdc90e0b9fd1634c266</LEAF>\n" +
-            "          <LEAF>1b9da404e91840b49a3b52a9deed091c</LEAF>\n" +
-            "        </NODE>\n" +
-            "      </VTREE>\n" +
-            "    </doc>\n" +
-            "  </SYD>\n" +
-            "</root>\n";
+            "    <RESPONSE_CODE>200</RESPONSE_CODE>\n" +
+            "    <RESPONSE_MSG>请求SYD成功</RESPONSE_MSG>\n" +
+            "    <PAGES>\n" +
+            "        <PAGE PAGEID=\"22fb705e27cf47d2999fdc25511b950c\" PAGE_URL=\"http://172.28.23.4:7003/SunTransAgent/servlet/GetImage?UhFOUNO1mCH1mCm1m4UgpPEfcuzaVP67JufGSPDfX17EDPA1YdL1mCH1mCm1m47CP5_QJu2R_17e_u5wSsUB_s2vmBms_C5w8P51SsZs8P_f_N01UN0umQLRSPFBmNHt8CeG_CetSdOO8NesJPIf_u6GUBe1mCAg8h2r_N6tJg-rU1UgpPEfcuAqSvIzXT27mQUOVuGfVBtO2cITpO5rptAE2PakSgaOSiMdDF618PIddFIOMsyAA2==\" THUM_URL=\"http://172.28.23.4:7003/SunTransAgent/servlet/GetImage?UhFOUNO1mCH1mCm1m4UgpPEfcuzaVP67JufGSPDfX17EDPA1YdL1mCH1mCm1m47CP5_QJu2R_17e_u5wSsUB_s2vmBms_C5w8P51SsZs8P_f_N01UN0umQLRSPFBmNHt8CeG_CetSdOO8NesJPIf_u6GUBe1mCAg8h2r_N6tJg-rU1z9XhXgUgfnUA7fVg_1YcyOKN0gDh7lUPw7pvHOmeZ12N0z6fIOdF6zmhaymi2rStAAXc21MsIEmFH=\" FILE_NO=\"22fb705e27cf47d2999fdc25511b950c\" PAGE_VER=\"3\"/>\n" +
+            "        <PAGE PAGEID=\"48bb6b72bbf64f9fb65884ec632d3189\" PAGE_URL=\"http://172.28.23.4:7003/SunTransAgent/servlet/GetImage?UhFOUNO1mCH1mCm1m4UgpPEfcuzaVP67JufGSPDfX17EDPA1YdL1mCH1mCm1m47CP5_QJu2R_17e_u5wSsUB_s2vmBms_C5w8P51SsZs8P_f_N01UN0umQLRSsXE_sFf_C5G_NU48dOOUC_eJNeEUhHG_PUgmg6rUg2zSu6sJg-rU1UgpPEfcuAqSvIzXT27mQUOVuGfVBtAmiFAXiFBSvFH2Ner2NMBXga1pCfAmhHzdhIdmBfH6Z==\" THUM_URL=\"http://172.28.23.4:7003/SunTransAgent/servlet/GetImage?UhFOUNO1mCH1mCm1m4UgpPEfcuzaVP67JufGSPDfX17EDPA1YdL1mCH1mCm1m47CP5_QJu2R_17e_u5wSsUB_s2vmBms_C5w8P51SsZs8P_f_N01UN0umQLRSsXE_sFf_C5G_NU48dOOUC_eJNeEUhHG_PUgmg6rUg2zSu6sJg-rU1z9XhXgUgfnUA7fVg_1YcyOKN0gDh7lUPw7mF6Om5DEmhIBXByEDCMy6fAO8AIAmBykAAHOpFI1DC2=\" FILE_NO=\"48bb6b72bbf64f9fb65884ec632d3189\" PAGE_VER=\"2\"/>\n" +
+            "        <PAGE PAGEID=\"6bccf314-4887-439b-a4fb-a938b23c43a6\" PAGE_URL=\"http://172.28.23.4:7003/SunTransAgent/servlet/GetImage?UhFOUNO1mCH1mCm1m4UgpPEfcuzaVP67JufGSPDfX17EDPA1YdL1mCH1mCm1m47CP5_QJu2R_17e_u5wSsUB_s2vmBms_C5w8P51SsZs8P_f_N01UN0umQLR_gIBSuSsmN2G_CZw_1OOmsf4JP5OUgHGSNes8hH1mumOmu5uJg-rU1UgpPEfcuAqSvIzXT27mQUOVuGfVBtddTIy_hG1Xe5OSsMlX6ZrpF6r_5FyX6aOMtIyXgI4p0==\" THUM_URL=\"http://172.28.23.4:7003/SunTransAgent/servlet/GetImage?UhFOUNO1mCH1mCm1m4UgpPEfcuzaVP67JufGSPDfX17EDPA1YdL1mCH1mCm1m47CP5_QJu2R_17e_u5wSsUB_s2vmBms_C5w8P51SsZs8P_f_N01UN0umQLR_gIBSuSsmN2G_CZw_1OOmsf4JP5OUgHGSNes8hH1mumOmu5uJg-rU1z9XhXgUgfnUA7fVg_1YcyOKN0gDh7lUPw7mhIySgZrp5516eDBmhITmeZODhaTDh_O8NydmeDEAcH=\" FILE_NO=\"6bccf314-4887-439b-a4fb-a938b23c43a6\" PAGE_VER=\"1\"/>\n" +
+            "        <PAGE PAGEID=\"9452e08c-5365-45bf-9dbd-03294d11fec1\" PAGE_URL=\"http://172.28.23.4:7003/SunTransAgent/servlet/GetImage?UhFOUNO1mCH1mCm1m4UgpPEfcuzaVP67JufGSPDfX17EDPA1YdL1mCH1mCm1m47CP5_QJu2R_17e_u5wSsUB_s2vmBms_C5w8P51SsZs8P_f_N01UN0umQLR8N2tmg6r8hmG_Nmu_dOO_PIgJNfeSg2GmCm18NMemNFgUPmEJg-rU1UgpPEfcuAqSvIzXT27mQUOVuGfVBtAps0rDhadm5aApTMBA6ZrANIEXNeOpsHOpCIkpu_422==\" THUM_URL=\"http://172.28.23.4:7003/SunTransAgent/servlet/GetImage?UhFOUNO1mCH1mCm1m4UgpPEfcuzaVP67JufGSPDfX17EDPA1YdL1mCH1mCm1m47CP5_QJu2R_17e_u5wSsUB_s2vmBms_C5w8P51SsZs8P_f_N01UN0umQLR8N2tmg6r8hmG_Nmu_dOO_PIgJNfeSg2GmCm18NMemNFgUPmEJg-rU1z9XhXgUgfnUA7fVg_1YcyOKN0gDh7lUPw7dh_ymfI1DCyHDFIAMu_TSOaBdTMdmgITmiMA8Pa4StH=\" FILE_NO=\"9452e08c-5365-45bf-9dbd-03294d11fec1\" PAGE_VER=\"1\"/>\n" +
+            "        <PAGE PAGEID=\"b187be11-abe2-47e0-a8a5-9cd6d3ee9e4d\" PAGE_URL=\"http://172.28.23.4:7003/SunTransAgent/servlet/GetImage?UhFOUNO1mCH1mCm1m4UgpPEfcuzaVP67JufGSPDfX17EDPA1YdL1mCH1mCm1m47CP5_QJu2R_17e_u5wSsUB_s2vmBms_C5w8P51SsZs8P_f_N01UN0umQLRSB5w_uIfmN5GSPIfm4OO_u6rJP5wSN6G8P_e_g2sUP6zUNMeJg-rU1UgpPEfcuAqSvIzXT27mQUOVuGfVBOz2cFOSBe1SeaOmh_Bd5aBpsyA2c2r2cITmCMEmfAkSr==\" THUM_URL=\"http://172.28.23.4:7003/SunTransAgent/servlet/GetImage?UhFOUNO1mCH1mCm1m4UgpPEfcuzaVP67JufGSPDfX17EDPA1YdL1mCH1mCm1m47CP5_QJu2R_17e_u5wSsUB_s2vmBms_C5w8P51SsZs8P_f_N01UN0umQLRSB5w_uIfmN5GSPIfm4OO_u6rJP5wSN6G8P_e_g2sUP6zUNMeJg-rU1z9XhXgUgfnUA7fVg_1YcyOKN0gDh7lUPw7dFAOXByySiFTX6DkXi2r6eDlA6DySsyEmBIkpunr265=\" FILE_NO=\"b187be11-abe2-47e0-a8a5-9cd6d3ee9e4d\" PAGE_VER=\"1\"/>\n" +
+            "        <PAGE PAGEID=\"f3b9a193-4489-40de-8aec-f73868c991f5\" PAGE_URL=\"http://172.28.23.4:7003/SunTransAgent/servlet/GetImage?UhFOUNO1mCH1mCm1m4UgpPEfcuzaVP67JufGSPDfX17EDPA1YdL1mCH1mCm1m47CP5_QJu2R_17e_u5wSsUB_s2vmBms_C5w8P51SsZs8P_f_N01UN0umQLRUB_48P5E8NmG_C2w8dOOmhMfJNaaUPmGUBXs8CSwSsezmPStJg-rU1UgpPEfcuAqSvIzXT27mQUOVuGfVBOO_hI4DCfOSOaE_hGApvFBpualSBy4XNIlp5akD5Dy22==\" THUM_URL=\"http://172.28.23.4:7003/SunTransAgent/servlet/GetImage?UhFOUNO1mCH1mCm1m4UgpPEfcuzaVP67JufGSPDfX17EDPA1YdL1mCH1mCm1m47CP5_QJu2R_17e_u5wSsUB_s2vmBms_C5w8P51SsZs8P_f_N01UN0umQLRUB_48P5E8NmG_C2w8dOOmhMfJNaaUPmGUBXs8CSwSsezmPStJg-rU1z9XhXgUgfnUA7fVg_1YcyOKN0gDh7lUPw7mBH1Dh_ydFAk_TMdXNMHpsIApuaBD5DT_CH1pC2z6BH=\" FILE_NO=\"f3b9a193-4489-40de-8aec-f73868c991f5\" PAGE_VER=\"1\"/>\n" +
+            "        <PAGE PAGEID=\"fd092cd9-1ebf-47a4-8852-ae508b51c478\" PAGE_URL=\"http://172.28.23.4:7003/SunTransAgent/servlet/GetImage?UhFOUNO1mCH1mCm1m4UgpPEfcuzaVP67JufGSPDfX17EDPA1YdL1mCH1mCm1m47CP5_QJu2R_17e_u5wSsUB_s2vmBms_C5w8P51SsZs8P_f_N01UN0umQLRUg2r8NIBUCeGmPA4U4OO_u5OJNZw_NHGSP6tmCa4_NFB_CXwJg-rU1UgpPEfcuAqSvIzXT27mQUOVuGfVBtkdTM1Mv2rX6FH_CM1XNMEMODEpCHOAPnz86DEStIESr==\" THUM_URL=\"http://172.28.23.4:7003/SunTransAgent/servlet/GetImage?UhFOUNO1mCH1mCm1m4UgpPEfcuzaVP67JufGSPDfX17EDPA1YdL1mCH1mCm1m47CP5_QJu2R_17e_u5wSsUB_s2vmBms_C5w8P51SsZs8P_f_N01UN0umQLRUg2r8NIBUCeGmPA4U4OO_u5OJNZw_NHGSP6tmCa4_NFB_CXwJg-rU1z9XhXgUgfnUA7fVg_1YcyOKN0gDh7lUPw7Sg_EdTFkphIdSe5OMsMB8PZzDF6OpTMlSBHOXNMHdTH=\" FILE_NO=\"fd092cd9-1ebf-47a4-8852-ae508b51c478\" PAGE_VER=\"1\"/>\n" +
+            "    </PAGES>\n" +
+            "    <SYD>\n" +
+            "        <doc version=\"1.2\">\n" +
+            "            <DocInfo>\n" +
+            "                <BATCH_ID>d7a8c6c7472334189a2c839ce502e060</BATCH_ID>\n" +
+            "                <BUSI_NUM>23024100TDDG2022000014</BUSI_NUM>\n" +
+            "                <BIZ_ORG>23010300</BIZ_ORG>\n" +
+            "                <APP_CODE>CXCB</APP_CODE>\n" +
+            "                <APP_NAME>车险承保</APP_NAME>\n" +
+            "                <BATCH_VER>3</BATCH_VER>\n" +
+            "                <INTER_VER>3</INTER_VER>\n" +
+            "                <STATUS>1</STATUS>\n" +
+            "                <CREATE_USER>2302410006</CREATE_USER>\n" +
+            "                <CREATE_DATE>2022-03-22 09:39:04.433</CREATE_DATE>\n" +
+            "                <MODIFY_USER>lms</MODIFY_USER>\n" +
+            "                <MODIFY_DATE>2022-03-22 09:32:22</MODIFY_DATE>\n" +
+            "                <DOC_EXT>\n" +
+            "                    <EXT_ATTR ID=\"BUSI_NO\" NAME=\"投保单号\" IS_SHOW=\"1\" IS_KEY=\"1\" IS_NULL=\"0\" INPUT_TYPE=\"1\">23024100TDDG2022000014</EXT_ATTR>\n" +
+            "                </DOC_EXT>\n" +
+            "            </DocInfo>\n" +
+            "            <PageInfo>\n" +
+            "                <PAGE PAGEID=\"22fb705e27cf47d2999fdc25511b950c\">\n" +
+            "                    <CREATE_USER>lms</CREATE_USER>\n" +
+            "                    <CREATE_USERNAME>lms</CREATE_USERNAME>\n" +
+            "                    <CREATE_TIME>2022-03-22 09:37:25</CREATE_TIME>\n" +
+            "                    <MODIFY_USER>lms</MODIFY_USER>\n" +
+            "                    <MODIFY_TIME>2022-03-22 09:37:25</MODIFY_TIME>\n" +
+            "                    <PAGE_URL>aac12589-495a-4993-be7e-f9205f8d0555.jpg</PAGE_URL>\n" +
+            "                    <THUM_URL>aac12589-495a-4993-be7e-f9205f8d0555.jpg.jpg</THUM_URL>\n" +
+            "                    <IS_LOCAL>1</IS_LOCAL>\n" +
+            "                    <PAGE_VER>3</PAGE_VER>\n" +
+            "                    <PAGE_DESC></PAGE_DESC>\n" +
+            "                    <UPLOAD_ORG>阳光农业相互保险公司哈尔滨分公司财险业务部</UPLOAD_ORG>\n" +
+            "                    <PAGE_CRC>7ae3b75d64d710827e2a0f3705051fc8</PAGE_CRC>\n" +
+            "                    <PAGE_SIZE>95629</PAGE_SIZE>\n" +
+            "                    <PAGE_FORMAT>image/jpeg</PAGE_FORMAT>\n" +
+            "                    <PAGE_ENCRYPT>0</PAGE_ENCRYPT>\n" +
+            "                    <ORIGINAL_NAME>CCXCB004_ddb_autograph_202203220943077480_2.jpg</ORIGINAL_NAME>\n" +
+            "                    <PAGE_EXT/>\n" +
+            "                    <PAGE_DESCS/>\n" +
+            "                </PAGE>\n" +
+            "                <PAGE PAGEID=\"48bb6b72bbf64f9fb65884ec632d3189\">\n" +
+            "                    <CREATE_USER>lms</CREATE_USER>\n" +
+            "                    <CREATE_USERNAME>lms</CREATE_USERNAME>\n" +
+            "                    <CREATE_TIME>2022-03-22 09:37:22</CREATE_TIME>\n" +
+            "                    <MODIFY_USER>lms</MODIFY_USER>\n" +
+            "                    <MODIFY_TIME>2022-03-22 09:37:22</MODIFY_TIME>\n" +
+            "                    <PAGE_URL>c7171e41-56b9-4d3d-91db-5ff2e0fd9ce3.jpg</PAGE_URL>\n" +
+            "                    <THUM_URL>c7171e41-56b9-4d3d-91db-5ff2e0fd9ce3.jpg.jpg</THUM_URL>\n" +
+            "                    <IS_LOCAL>1</IS_LOCAL>\n" +
+            "                    <PAGE_VER>2</PAGE_VER>\n" +
+            "                    <PAGE_DESC></PAGE_DESC>\n" +
+            "                    <UPLOAD_ORG>阳光农业相互保险公司哈尔滨分公司财险业务部</UPLOAD_ORG>\n" +
+            "                    <PAGE_CRC>0f5ffc1b0c34fdd4e023b3a5a7f04728</PAGE_CRC>\n" +
+            "                    <PAGE_SIZE>1264470</PAGE_SIZE>\n" +
+            "                    <PAGE_FORMAT>image/jpeg</PAGE_FORMAT>\n" +
+            "                    <PAGE_ENCRYPT>0</PAGE_ENCRYPT>\n" +
+            "                    <ORIGINAL_NAME>CCXCB004_ddb_autograph_202203220943077470_1.jpg</ORIGINAL_NAME>\n" +
+            "                    <PAGE_EXT/>\n" +
+            "                    <PAGE_DESCS/>\n" +
+            "                </PAGE>\n" +
+            "                <PAGE PAGEID=\"6bccf314-4887-439b-a4fb-a938b23c43a6\">\n" +
+            "                    <CREATE_USER>2302410006</CREATE_USER>\n" +
+            "                    <CREATE_USERNAME>叶建楠</CREATE_USERNAME>\n" +
+            "                    <CREATE_TIME>2022-03-22 09:39:04</CREATE_TIME>\n" +
+            "                    <MODIFY_USER>2302410006</MODIFY_USER>\n" +
+            "                    <MODIFY_TIME>2022-03-22 09:39:04</MODIFY_TIME>\n" +
+            "                    <PAGE_URL>6bccf314-4887-439b-a4fb-a938b23c43a6.jpg</PAGE_URL>\n" +
+            "                    <THUM_URL>6bccf314-4887-439b-a4fb-a938b23c43a6.jpg.jpg</THUM_URL>\n" +
+            "                    <IS_LOCAL>1</IS_LOCAL>\n" +
+            "                    <PAGE_VER>1</PAGE_VER>\n" +
+            "                    <PAGE_DESC>QQ截图20220322092457</PAGE_DESC>\n" +
+            "                    <UPLOAD_ORG>阳光农业相互保险公司齐齐哈尔中心支公司依安保险社</UPLOAD_ORG>\n" +
+            "                    <PAGE_CRC>b084cca8b64e2db569fca1581e1588ca</PAGE_CRC>\n" +
+            "                    <PAGE_SIZE>111323</PAGE_SIZE>\n" +
+            "                    <PAGE_FORMAT>image/jpeg</PAGE_FORMAT>\n" +
+            "                    <PAGE_ENCRYPT>0</PAGE_ENCRYPT>\n" +
+            "                    <ORIGINAL_NAME>QQ截图20220322092457.jpg</ORIGINAL_NAME>\n" +
+            "                    <PAGE_EXT/>\n" +
+            "                    <PAGE_DESCS/>\n" +
+            "                </PAGE>\n" +
+            "                <PAGE PAGEID=\"9452e08c-5365-45bf-9dbd-03294d11fec1\">\n" +
+            "                    <CREATE_USER>2302410006</CREATE_USER>\n" +
+            "                    <CREATE_USERNAME>叶建楠</CREATE_USERNAME>\n" +
+            "                    <CREATE_TIME>2022-03-22 09:39:04</CREATE_TIME>\n" +
+            "                    <MODIFY_USER>2302410006</MODIFY_USER>\n" +
+            "                    <MODIFY_TIME>2022-03-22 09:39:04</MODIFY_TIME>\n" +
+            "                    <PAGE_URL>9452e08c-5365-45bf-9dbd-03294d11fec1.jpg</PAGE_URL>\n" +
+            "                    <THUM_URL>9452e08c-5365-45bf-9dbd-03294d11fec1.jpg.jpg</THUM_URL>\n" +
+            "                    <IS_LOCAL>1</IS_LOCAL>\n" +
+            "                    <PAGE_VER>1</PAGE_VER>\n" +
+            "                    <PAGE_DESC>a38e01637429f8f71c1d671839007d2</PAGE_DESC>\n" +
+            "                    <UPLOAD_ORG>阳光农业相互保险公司齐齐哈尔中心支公司依安保险社</UPLOAD_ORG>\n" +
+            "                    <PAGE_CRC>e16217cbf24619b8651ede06216c4b53</PAGE_CRC>\n" +
+            "                    <PAGE_SIZE>124947</PAGE_SIZE>\n" +
+            "                    <PAGE_FORMAT>image/jpeg</PAGE_FORMAT>\n" +
+            "                    <PAGE_ENCRYPT>0</PAGE_ENCRYPT>\n" +
+            "                    <ORIGINAL_NAME>a38e01637429f8f71c1d671839007d2.jpg</ORIGINAL_NAME>\n" +
+            "                    <PAGE_EXT/>\n" +
+            "                    <PAGE_DESCS/>\n" +
+            "                </PAGE>\n" +
+            "                <PAGE PAGEID=\"b187be11-abe2-47e0-a8a5-9cd6d3ee9e4d\">\n" +
+            "                    <CREATE_USER>2302410006</CREATE_USER>\n" +
+            "                    <CREATE_USERNAME>叶建楠</CREATE_USERNAME>\n" +
+            "                    <CREATE_TIME>2022-03-22 09:39:04</CREATE_TIME>\n" +
+            "                    <MODIFY_USER>2302410006</MODIFY_USER>\n" +
+            "                    <MODIFY_TIME>2022-03-22 09:39:04</MODIFY_TIME>\n" +
+            "                    <PAGE_URL>b187be11-abe2-47e0-a8a5-9cd6d3ee9e4d.jpg</PAGE_URL>\n" +
+            "                    <THUM_URL>b187be11-abe2-47e0-a8a5-9cd6d3ee9e4d.jpg.jpg</THUM_URL>\n" +
+            "                    <IS_LOCAL>1</IS_LOCAL>\n" +
+            "                    <PAGE_VER>1</PAGE_VER>\n" +
+            "                    <PAGE_DESC>f7ae470d545a4cda3b696258c4ff9eb</PAGE_DESC>\n" +
+            "                    <UPLOAD_ORG>阳光农业相互保险公司齐齐哈尔中心支公司依安保险社</UPLOAD_ORG>\n" +
+            "                    <PAGE_CRC>9f2dd76f9a8ca867769ef1b0635e4f28</PAGE_CRC>\n" +
+            "                    <PAGE_SIZE>109499</PAGE_SIZE>\n" +
+            "                    <PAGE_FORMAT>image/jpeg</PAGE_FORMAT>\n" +
+            "                    <PAGE_ENCRYPT>0</PAGE_ENCRYPT>\n" +
+            "                    <ORIGINAL_NAME>f7ae470d545a4cda3b696258c4ff9eb.jpg</ORIGINAL_NAME>\n" +
+            "                    <PAGE_EXT/>\n" +
+            "                    <PAGE_DESCS/>\n" +
+            "                </PAGE>\n" +
+            "                <PAGE PAGEID=\"f3b9a193-4489-40de-8aec-f73868c991f5\">\n" +
+            "                    <CREATE_USER>2302410006</CREATE_USER>\n" +
+            "                    <CREATE_USERNAME>叶建楠</CREATE_USERNAME>\n" +
+            "                    <CREATE_TIME>2022-03-22 09:39:04</CREATE_TIME>\n" +
+            "                    <MODIFY_USER>2302410006</MODIFY_USER>\n" +
+            "                    <MODIFY_TIME>2022-03-22 09:39:04</MODIFY_TIME>\n" +
+            "                    <PAGE_URL>f3b9a193-4489-40de-8aec-f73868c991f5.jpg</PAGE_URL>\n" +
+            "                    <THUM_URL>f3b9a193-4489-40de-8aec-f73868c991f5.jpg.jpg</THUM_URL>\n" +
+            "                    <IS_LOCAL>1</IS_LOCAL>\n" +
+            "                    <PAGE_VER>1</PAGE_VER>\n" +
+            "                    <PAGE_DESC>b4c5973df7b67280b9f651c318a980c</PAGE_DESC>\n" +
+            "                    <UPLOAD_ORG>阳光农业相互保险公司齐齐哈尔中心支公司依安保险社</UPLOAD_ORG>\n" +
+            "                    <PAGE_CRC>77c05e5748f5dc08c7e5f1f55801f5b8</PAGE_CRC>\n" +
+            "                    <PAGE_SIZE>327759</PAGE_SIZE>\n" +
+            "                    <PAGE_FORMAT>image/jpeg</PAGE_FORMAT>\n" +
+            "                    <PAGE_ENCRYPT>0</PAGE_ENCRYPT>\n" +
+            "                    <ORIGINAL_NAME>b4c5973df7b67280b9f651c318a980c.jpg</ORIGINAL_NAME>\n" +
+            "                    <PAGE_EXT/>\n" +
+            "                    <PAGE_DESCS/>\n" +
+            "                </PAGE>\n" +
+            "                <PAGE PAGEID=\"fd092cd9-1ebf-47a4-8852-ae508b51c478\">\n" +
+            "                    <CREATE_USER>2302410006</CREATE_USER>\n" +
+            "                    <CREATE_USERNAME>叶建楠</CREATE_USERNAME>\n" +
+            "                    <CREATE_TIME>2022-03-22 09:39:04</CREATE_TIME>\n" +
+            "                    <MODIFY_USER>2302410006</MODIFY_USER>\n" +
+            "                    <MODIFY_TIME>2022-03-22 09:39:04</MODIFY_TIME>\n" +
+            "                    <PAGE_URL>fd092cd9-1ebf-47a4-8852-ae508b51c478.jpg</PAGE_URL>\n" +
+            "                    <THUM_URL>fd092cd9-1ebf-47a4-8852-ae508b51c478.jpg.jpg</THUM_URL>\n" +
+            "                    <IS_LOCAL>1</IS_LOCAL>\n" +
+            "                    <PAGE_VER>1</PAGE_VER>\n" +
+            "                    <PAGE_DESC>63bc03218f9802931c4c3ead3c257d6</PAGE_DESC>\n" +
+            "                    <UPLOAD_ORG>阳光农业相互保险公司齐齐哈尔中心支公司依安保险社</UPLOAD_ORG>\n" +
+            "                    <PAGE_CRC>dbd3382813bf00cd48cf4d235de36664</PAGE_CRC>\n" +
+            "                    <PAGE_SIZE>291899</PAGE_SIZE>\n" +
+            "                    <PAGE_FORMAT>image/jpeg</PAGE_FORMAT>\n" +
+            "                    <PAGE_ENCRYPT>0</PAGE_ENCRYPT>\n" +
+            "                    <ORIGINAL_NAME>63bc03218f9802931c4c3ead3c257d6.jpg</ORIGINAL_NAME>\n" +
+            "                    <PAGE_EXT/>\n" +
+            "                    <PAGE_DESCS/>\n" +
+            "                </PAGE>\n" +
+            "            </PageInfo>\n" +
+            "            <VTREE APP_CODE=\"CXCB\" APP_NAME=\"车险承保\">\n" +
+            "                <NODE ID=\"CCXCB006\" NAME=\"身份证\">\n" +
+            "                    <LEAF>9452e08c-5365-45bf-9dbd-03294d11fec1</LEAF>\n" +
+            "                    <LEAF>b187be11-abe2-47e0-a8a5-9cd6d3ee9e4d</LEAF>\n" +
+            "                </NODE>\n" +
+            "                <NODE ID=\"CCXCB018\" NAME=\"行驶证\">\n" +
+            "                    <LEAF>fd092cd9-1ebf-47a4-8852-ae508b51c478</LEAF>\n" +
+            "                    <LEAF>f3b9a193-4489-40de-8aec-f73868c991f5</LEAF>\n" +
+            "                </NODE>\n" +
+            "                <NODE ID=\"CCXCB004\" NAME=\"其他单证\">\n" +
+            "                    <LEAF>6bccf314-4887-439b-a4fb-a938b23c43a6</LEAF>\n" +
+            "                    <LEAF>48bb6b72bbf64f9fb65884ec632d3189</LEAF>\n" +
+            "                    <LEAF>22fb705e27cf47d2999fdc25511b950c</LEAF>\n" +
+            "                </NODE>\n" +
+            "            </VTREE>\n" +
+            "        </doc>\n" +
+            "    </SYD>\n" +
+            "</root>";
+    public final static String data = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+            "<root><RESPONSE_CODE>200</RESPONSE_CODE><RESPONSE_MSG>查询成功，记录不存在</RESPONSE_MSG></root>";
+    public String dataddd;
+
+
 
     /**
      * 序列化XML
@@ -327,24 +270,200 @@ public class XmlUtils {
      * @return
      */
     public static XStream getXStream() {
-        return new XStream(new XppDriver(new
-                XmlFriendlyReplacer("_-", "_")));
+        return new XStream(new XppDriver(new XmlFriendlyReplacer("_-", "_")));
     }
+
+    public static Date parse(String strDate) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.parse(strDate);
+    }
+
+    public static int getAge(Date birthDay) throws Exception {
+        Calendar cal = Calendar.getInstance();
+        if (cal.before(birthDay)) { //出生日期晚于当前时间，无法计算
+            throw new IllegalArgumentException(
+                    "The birthDay is before Now.It's unbelievable!");
+        }
+        int yearNow = cal.get(Calendar.YEAR);  //当前年份
+        int monthNow = cal.get(Calendar.MONTH);  //当前月份
+        int dayOfMonthNow = cal.get(Calendar.DAY_OF_MONTH); //当前日期
+        cal.setTime(birthDay);
+        int yearBirth = cal.get(Calendar.YEAR);
+        int monthBirth = cal.get(Calendar.MONTH);
+        int dayOfMonthBirth = cal.get(Calendar.DAY_OF_MONTH);
+        int age = yearNow - yearBirth;   //计算整岁数
+        if (monthNow <= monthBirth) {
+            if (monthNow == monthBirth) {
+                if (dayOfMonthNow < dayOfMonthBirth) age--;//当前日期在生日之前，年龄减一
+            } else {
+                age--;//当前月份在生日之前，年龄减一
+            }
+        }
+        return age;
+    }
+
+    public static Map<String, Object> getWxSignature(String url) {
+
+        Map<String, Object> map = new HashMap<>();
+        String timestamp = String.format("%010d", System.currentTimeMillis() / 1000);
+        String nocestr = UUID.randomUUID().toString().replace("-", "");
+        String ticket = "54_lykUQOsEkocW9kbPKwkIyfZXHEIr3Hpc1E7fkybhGdSLIPC7I4w8aPygZHOxlwpLksV7fuWX__-ErfPrvHQ262y0etL9XZ8zdIrRCPscdW9NRHdR1cXAaE7yOgPCF9GEm1JHqNmrRdmlBKOCJZPeABAPFV";
+        String string1 = "jsapi ticket=" + ticket + "&noncestr=" + nocestr + "&timestamp=" + timestamp + "&url=" + url;
+        String signature = SHA1(string1);
+        if (signature != null) {
+            map.put("appid", "wxfb8668b88c06d733");
+            map.put("timestamp", timestamp);
+            map.put("noncestr", nocestr);
+            map.put("signature", signature);
+        }
+        return map;
+    }
+
+    public static String SHA1(String decript) {
+
+
+
+//        try {
+//            MessageDigest digest = java.security.MessageDigest.getInstance("SHA-1");
+//            digest.update(decript.getBytes());
+//            byte messageDigest[] = digest.digest();
+//            StringBuilder hexString = new StringBuilder();
+//            for (int i = 0; i < messageDigest.length; i++) {
+//                String shaHex = Integer.toHexString(messageDigest[i] & 0xFF);
+//                if (shaHex.length() < 2) {
+//                    hexString.append(0);
+//                }
+//                hexString.append(shaHex);
+//            }
+//            return hexString.toString();
+//        } catch (NoSuchAlgorithmException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+
+        try {
+            MessageDigest digest = java.security.MessageDigest.getInstance("SHA-1");
+            digest.update(decript.getBytes());
+            byte messageDigest[] = digest.digest();
+            // Create Hex String
+            StringBuffer hexString = new StringBuffer();
+            // 字节数组转换为 十六进制 数
+            for (int i = 0; i < messageDigest.length; i++) {
+                String shaHex = Integer.toHexString(messageDigest[i] & 0xFF);
+                if (shaHex.length() < 2) {
+                    hexString.append(0);
+                }
+                hexString.append(shaHex);
+            }
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+
 
     public static void main(String[] args) {
 
-        ImagesDto imagesDto = fromXML(data2,ImagesDto.class);
+        String s = "{\"updatedBy\":\"00000000\",\"createdBy\":\"00000000\",\"undwrtRequestDto\":{\"certiType\":\"T\",\"iModelNo\":1,\"startNodeNo\":1,\"prpTinsuredDtoList\":[{\"insuredflag\":\"2\",\"prpinsuredinsuredname\":\"安柏禄\",\"phonenumber\":\"18346309777\",\"postcode\":\"\",\"identifynumber\":\"231084200404170012\",\"insuredlanguagecode\":\"C\",\"linkername\":\"\",\"prpinsuredinsuredcode\":\"9999999999999999\",\"insuredtypename\":\"个人\",\"insurednature\":\"3\",\"postaddress\":\"\",\"bank\":\"\",\"insuredaddress\":\"黑龙江农业经济职业学院\",\"insuredlanguage\":\"中文\",\"insure_flag\":\"\",\"account\":\"\",\"insuredtype\":\"1\"},{\"insuredflag\":\"1\",\"prpinsuredinsuredname\":\"安柏禄\",\"phonenumber\":\"18346309777\",\"postcode\":\"\",\"identifynumber\":\"231084200404170012\",\"insuredlanguagecode\":\"C\",\"linkername\":\"\",\"prpinsuredinsuredcode\":\"9999999999999999\",\"insuredtypename\":\"个人\",\"insurednature\":\"3\",\"postaddress\":\"\",\"bank\":\"\",\"insuredaddress\":\"黑龙江农业经济职业学院\",\"insuredlanguage\":\"中文\",\"insure_flag\":\"\",\"account\":\"\",\"insuredtype\":\"1\"},{\"insuredflag\":\"9\",\"prpinsuredinsuredname\":\"安柏禄\",\"phonenumber\":\"18346309777\",\"postcode\":\"\",\"identifynumber\":\"231084200404170012\",\"insuredlanguagecode\":\"C\",\"linkername\":\"\",\"prpinsuredinsuredcode\":\"9999999999999999\",\"insuredtypename\":\"个人\",\"insurednature\":\"3\",\"postaddress\":\"\",\"bank\":\"\",\"insuredaddress\":\"黑龙江农业经济职业学院\",\"insuredlanguage\":\"中文\",\"insure_flag\":\"\",\"account\":\"\",\"insuredtype\":\"1\"}],\"prpTitemKindDtoList\":[{\"deductiblerate\":\"0.00\",\"exchangeratemain\":\"1.0\",\"calculateflag\":\"Y\",\"flag\":\" 1\",\"modecode\":\"\",\"familyname\":\"安柏禄\",\"notaxpremium\":\"67.73\",\"discount\":\"0.0\",\"familyno\":\"2\",\"shortrateflagname\":\"月比例\",\"thirdpersonamount\":\"0.00\",\"premium\":\"71.79\",\"shortrateflag\":\"1\",\"addressno\":\"0\",\"rate\":\"1.00\",\"currency\":\"CNY\",\"model\":\"120102\",\"value\":\"0.00\",\"basepremium\":\"0.00\",\"itemcodename\":\"赔偿责任\",\"amount\":\"70000.00\",\"taxrate\":\"6.00\",\"quantity\":\"0\",\"currencyname\":\"人民币\",\"kindname\":\"学生幼儿意外伤害保险（A款）\",\"itemno\":\"0\",\"mainsub\":\"1\",\"shortrate\":\"100.0000\",\"kindcode\":\"001\",\"unit\":\"\",\"adjustrate\":\"1.03\",\"modename\":\"\",\"itemcode\":\"0001\",\"deductible\":\"0.00\",\"guestamount\":\"0.00\",\"itemkindno\":\"1\",\"rationtype\":\"\",\"taxfee\":\"4.06\",\"itemdetailname\":\"赔偿责任\",\"unitamount\":\"0.00\",\"driveramount\":\"0.00\"},{\"deductiblerate\":\"0.00\",\"exchangeratemain\":\"1.0\",\"calculateflag\":\"Y\",\"flag\":\" 1\",\"modecode\":\"\",\"familyname\":\"安柏禄\",\"notaxpremium\":\"25.75\",\"discount\":\"0.0\",\"familyno\":\"2\",\"shortrateflagname\":\"月比例\",\"thirdpersonamount\":\"0.00\",\"premium\":\"27.30\",\"shortrateflag\":\"1\",\"addressno\":\"0\",\"rate\":\"0.30\",\"currency\":\"CNY\",\"model\":\"120102\",\"value\":\"0.00\",\"basepremium\":\"13.00\",\"itemcodename\":\"赔偿责任\",\"amount\":\"40000.00\",\"taxrate\":\"6.00\",\"quantity\":\"1\",\"currencyname\":\"人民币\",\"kindname\":\"附加疾病住院医疗保险（A款）\",\"itemno\":\"0\",\"mainsub\":\"2\",\"shortrate\":\"100.0000\",\"kindcode\":\"002\",\"unit\":\"\",\"adjustrate\":\"1.09\",\"modename\":\"\",\"itemcode\":\"0001\",\"deductible\":\"100.00\",\"guestamount\":\"0.00\",\"itemkindno\":\"2\",\"rationtype\":\"\",\"taxfee\":\"1.55\",\"itemdetailname\":\"赔偿责任\",\"unitamount\":\"0.00\",\"driveramount\":\"0.00\"},{\"deductiblerate\":\"0.00\",\"exchangeratemain\":\"1.0\",\"calculateflag\":\"Y\",\"flag\":\" 1\",\"modecode\":\"\",\"familyname\":\"安柏禄\",\"notaxpremium\":\"24.73\",\"discount\":\"0.0\",\"familyno\":\"2\",\"shortrateflagname\":\"月比例\",\"thirdpersonamount\":\"0.00\",\"premium\":\"26.21\",\"shortrateflag\":\"1\",\"addressno\":\"0\",\"rate\":\"1.60\",\"currency\":\"CNY\",\"model\":\"120102\",\"value\":\"0.00\",\"basepremium\":\"0.00\",\"itemcodename\":\"赔偿责任\",\"amount\":\"15000.00\",\"taxrate\":\"6.00\",\"quantity\":\"0\",\"currencyname\":\"人民币\",\"kindname\":\"附加意外伤害医疗保险（A款）\",\"itemno\":\"0\",\"mainsub\":\"2\",\"shortrate\":\"100.0000\",\"kindcode\":\"003\",\"unit\":\"\",\"adjustrate\":\"1.09\",\"modename\":\"\",\"itemcode\":\"0001\",\"deductible\":\"100.00\",\"guestamount\":\"0.00\",\"itemkindno\":\"3\",\"rationtype\":\"\",\"taxfee\":\"1.48\",\"itemdetailname\":\"赔偿责任\",\"unitamount\":\"0.00\",\"driveramount\":\"0.00\"},{\"deductiblerate\":\"0.00\",\"exchangeratemain\":\"1.0\",\"calculateflag\":\"Y\",\"flag\":\" 1\",\"modecode\":\"\",\"familyname\":\"安柏禄\",\"notaxpremium\":\"23.11\",\"discount\":\"0.0\",\"familyno\":\"2\",\"shortrateflagname\":\"月比例\",\"thirdpersonamount\":\"0.00\",\"premium\":\"24.50\",\"shortrateflag\":\"1\",\"addressno\":\"0\",\"rate\":\"0.50\",\"currency\":\"CNY\",\"model\":\"120102\",\"value\":\"0.00\",\"basepremium\":\"0.00\",\"itemcodename\":\"赔偿责任\",\"amount\":\"70000.00\",\"taxrate\":\"6.00\",\"quantity\":\"0\",\"currencyname\":\"人民币\",\"kindname\":\"附加疾病身故保险\",\"itemno\":\"0\",\"mainsub\":\"2\",\"shortrate\":\"100.0000\",\"kindcode\":\"005\",\"unit\":\"\",\"adjustrate\":\"0.70\",\"modename\":\"\",\"itemcode\":\"0001\",\"deductible\":\"0.00\",\"guestamount\":\"0.00\",\"itemkindno\":\"5\",\"rationtype\":\"\",\"taxfee\":\"1.39\",\"itemdetailname\":\"赔偿责任\",\"unitamount\":\"0.00\",\"driveramount\":\"0.00\"}],\"prpTlimitDtoList\":[],\"prpTmainDto\":{\"businesstypename\":\"非农\",\"endhour\":\"24\",\"prpmaininsuredaddress\":\"黑龙江农业经济职业学院\",\"sumamount\":\"195000.00\",\"startdate\":\"2022-05-07\",\"insurancenumber\":\"1\",\"sumquantity\":\"0.0\",\"businesstype\":\"00\",\"claimtimes\":\"0\",\"printno\":\"\",\"classcode\":\"E\",\"coinsuranceflagname\":\"独家承保\",\"notaxfree\":\"0.00\",\"season\":\"\",\"statunitcode\":\"\",\"itemKindSubNum\":\"0\",\"agricultinsured\":\"\",\"endorsetimes\":\"0\",\"applicode\":\"9999999999999999\",\"sumtaxfee\":\"8.48\",\"comname\":\"阳光农业相互保险公司哈尔滨分公司财险业务部\",\"agricultclass\":\"\",\"inputDate\":\"2022-05-06\",\"proportionflag2\":\"\",\"enddate\":\"2023-05-06\",\"taxfree\":\"0.00\",\"operatorcodename\":\"孙媛媛\",\"policysortname\":\"普通\",\"proportionflag1\":\"\",\"riskcode\":\"ECK\",\"agricultitemkindname\":\"\",\"operatetype\":\"\",\"allinsflagname\":\"法定\",\"tcoinsOutList\":[],\"handlercode\":\"2301030004\",\"reinsflag\":\"0\",\"businesstype1name\":\"商业性\",\"comcode\":\"23010300\",\"operatedate\":\"2022-05-06\",\"paytimes\":\"1\",\"agreementno\":\"\",\"starthour\":\"0\",\"approvercodename\":\"孙媛媛\",\"sumnotaxpremium\":\"141.32\",\"contractno\":\"\",\"policytype\":\"04\",\"coinslinkflag\":\"0\",\"showtype\":\"SHOW\",\"handler1name\":\"孙媛媛\",\"agricultinsuredname\":\"\",\"arbitboardname\":\"哈尔滨仲裁委员会\",\"makecom\":\"23010300\",\"statquantity\":\"0.00\",\"prpmaininsuredcode\":\"9999999999999999\",\"prptinsuredList\":[{\"insuredflag\":\"2\",\"prpinsuredinsuredname\":\"安柏禄\",\"phonenumber\":\"18346309777\",\"postcode\":\"\",\"identifynumber\":\"231084200404170012\",\"insuredlanguagecode\":\"C\",\"linkername\":\"\",\"prpinsuredinsuredcode\":\"9999999999999999\",\"insuredtypename\":\"个人\",\"insurednature\":\"3\",\"postaddress\":\"\",\"bank\":\"\",\"insuredaddress\":\"黑龙江农业经济职业学院\",\"insuredlanguage\":\"中文\",\"insure_flag\":\"\",\"account\":\"\",\"insuredtype\":\"1\"},{\"insuredflag\":\"1\",\"prpinsuredinsuredname\":\"安柏禄\",\"phonenumber\":\"18346309777\",\"postcode\":\"\",\"identifynumber\":\"231084200404170012\",\"insuredlanguagecode\":\"C\",\"linkername\":\"\",\"prpinsuredinsuredcode\":\"9999999999999999\",\"insuredtypename\":\"个人\",\"insurednature\":\"3\",\"postaddress\":\"\",\"bank\":\"\",\"insuredaddress\":\"黑龙江农业经济职业学院\",\"insuredlanguage\":\"中文\",\"insure_flag\":\"\",\"account\":\"\",\"insuredtype\":\"1\"},{\"insuredflag\":\"9\",\"prpinsuredinsuredname\":\"安柏禄\",\"phonenumber\":\"18346309777\",\"postcode\":\"\",\"identifynumber\":\"231084200404170012\",\"insuredlanguagecode\":\"C\",\"linkername\":\"\",\"prpinsuredinsuredcode\":\"9999999999999999\",\"insuredtypename\":\"个人\",\"insurednature\":\"3\",\"postaddress\":\"\",\"bank\":\"\",\"insuredaddress\":\"黑龙江农业经济职业学院\",\"insuredlanguage\":\"中文\",\"insure_flag\":\"\",\"account\":\"\",\"insuredtype\":\"1\"}],\"agricultitemkind\":\"\",\"assistfeeflag\":\"\",\"insuranceflag\":\"\",\"statisticsym\":\"2022-05-06\",\"prptitemkindList\":[{\"deductiblerate\":\"0.00\",\"exchangeratemain\":\"1.0\",\"calculateflag\":\"Y\",\"flag\":\" 1\",\"modecode\":\"\",\"familyname\":\"安柏禄\",\"notaxpremium\":\"67.73\",\"discount\":\"0.0\",\"familyno\":\"2\",\"shortrateflagname\":\"月比例\",\"thirdpersonamount\":\"0.00\",\"premium\":\"71.79\",\"shortrateflag\":\"1\",\"addressno\":\"0\",\"rate\":\"1.00\",\"currency\":\"CNY\",\"model\":\"120102\",\"value\":\"0.00\",\"basepremium\":\"0.00\",\"itemcodename\":\"赔偿责任\",\"amount\":\"70000.00\",\"taxrate\":\"6.00\",\"quantity\":\"0\",\"currencyname\":\"人民币\",\"kindname\":\"学生幼儿意外伤害保险（A款）\",\"itemno\":\"0\",\"mainsub\":\"1\",\"shortrate\":\"100.0000\",\"kindcode\":\"001\",\"unit\":\"\",\"adjustrate\":\"1.03\",\"modename\":\"\",\"itemcode\":\"0001\",\"deductible\":\"0.00\",\"guestamount\":\"0.00\",\"itemkindno\":\"1\",\"rationtype\":\"\",\"taxfee\":\"4.06\",\"itemdetailname\":\"赔偿责任\",\"unitamount\":\"0.00\",\"driveramount\":\"0.00\"},{\"deductiblerate\":\"0.00\",\"exchangeratemain\":\"1.0\",\"calculateflag\":\"Y\",\"flag\":\" 1\",\"modecode\":\"\",\"familyname\":\"安柏禄\",\"notaxpremium\":\"25.75\",\"discount\":\"0.0\",\"familyno\":\"2\",\"shortrateflagname\":\"月比例\",\"thirdpersonamount\":\"0.00\",\"premium\":\"27.30\",\"shortrateflag\":\"1\",\"addressno\":\"0\",\"rate\":\"0.30\",\"currency\":\"CNY\",\"model\":\"120102\",\"value\":\"0.00\",\"basepremium\":\"13.00\",\"itemcodename\":\"赔偿责任\",\"amount\":\"40000.00\",\"taxrate\":\"6.00\",\"quantity\":\"1\",\"currencyname\":\"人民币\",\"kindname\":\"附加疾病住院医疗保险（A款）\",\"itemno\":\"0\",\"mainsub\":\"2\",\"shortrate\":\"100.0000\",\"kindcode\":\"002\",\"unit\":\"\",\"adjustrate\":\"1.09\",\"modename\":\"\",\"itemcode\":\"0001\",\"deductible\":\"100.00\",\"guestamount\":\"0.00\",\"itemkindno\":\"2\",\"rationtype\":\"\",\"taxfee\":\"1.55\",\"itemdetailname\":\"赔偿责任\",\"unitamount\":\"0.00\",\"driveramount\":\"0.00\"},{\"deductiblerate\":\"0.00\",\"exchangeratemain\":\"1.0\",\"calculateflag\":\"Y\",\"flag\":\" 1\",\"modecode\":\"\",\"familyname\":\"安柏禄\",\"notaxpremium\":\"24.73\",\"discount\":\"0.0\",\"familyno\":\"2\",\"shortrateflagname\":\"月比例\",\"thirdpersonamount\":\"0.00\",\"premium\":\"26.21\",\"shortrateflag\":\"1\",\"addressno\":\"0\",\"rate\":\"1.60\",\"currency\":\"CNY\",\"model\":\"120102\",\"value\":\"0.00\",\"basepremium\":\"0.00\",\"itemcodename\":\"赔偿责任\",\"amount\":\"15000.00\",\"taxrate\":\"6.00\",\"quantity\":\"0\",\"currencyname\":\"人民币\",\"kindname\":\"附加意外伤害医疗保险（A款）\",\"itemno\":\"0\",\"mainsub\":\"2\",\"shortrate\":\"100.0000\",\"kindcode\":\"003\",\"unit\":\"\",\"adjustrate\":\"1.09\",\"modename\":\"\",\"itemcode\":\"0001\",\"deductible\":\"100.00\",\"guestamount\":\"0.00\",\"itemkindno\":\"3\",\"rationtype\":\"\",\"taxfee\":\"1.48\",\"itemdetailname\":\"赔偿责任\",\"unitamount\":\"0.00\",\"driveramount\":\"0.00\"},{\"deductiblerate\":\"0.00\",\"exchangeratemain\":\"1.0\",\"calculateflag\":\"Y\",\"flag\":\" 1\",\"modecode\":\"\",\"familyname\":\"安柏禄\",\"notaxpremium\":\"23.11\",\"discount\":\"0.0\",\"familyno\":\"2\",\"shortrateflagname\":\"月比例\",\"thirdpersonamount\":\"0.00\",\"premium\":\"24.50\",\"shortrateflag\":\"1\",\"addressno\":\"0\",\"rate\":\"0.50\",\"currency\":\"CNY\",\"model\":\"120102\",\"value\":\"0.00\",\"basepremium\":\"0.00\",\"itemcodename\":\"赔偿责任\",\"amount\":\"70000.00\",\"taxrate\":\"6.00\",\"quantity\":\"0\",\"currencyname\":\"人民币\",\"kindname\":\"附加疾病身故保险\",\"itemno\":\"0\",\"mainsub\":\"2\",\"shortrate\":\"100.0000\",\"kindcode\":\"005\",\"unit\":\"\",\"adjustrate\":\"0.70\",\"modename\":\"\",\"itemcode\":\"0001\",\"deductible\":\"0.00\",\"guestamount\":\"0.00\",\"itemkindno\":\"5\",\"rationtype\":\"\",\"taxfee\":\"1.39\",\"itemdetailname\":\"赔偿责任\",\"unitamount\":\"0.00\",\"driveramount\":\"0.00\"}],\"sumpremium\":\"149.80\",\"appliaddress\":\"黑龙江农业经济职业学院\",\"language\":\"C\",\"seasoncname\":\"\",\"makecomname\":\"阳光农业相互保险公司哈尔滨分公司财险业务部\",\"coinsuranceflag\":\"0\",\"operatorcode\":\"2301030004\",\"appliname\":\"安柏禄\",\"arguesolution\":\"2\",\"taxrate\":\"0.0000\",\"autotransrenewflag\":\"1\",\"judicalscope\":\"中华人民共和国管辖(港澳台除外)\",\"prptitemship\":{},\"tcoinsDetailOutList\":[],\"businessnature\":\"0\",\"transfertaxexp\":\"0.00\",\"reinsurancepointsinformationoutList\":[],\"prpitemcarList\":[],\"agentname\":\"\",\"autotransrenewflagname\":\"现金\",\"approvercode\":\"2301030004\",\"exchangecu\":\"1.0\",\"region\":\"01\",\"addressmessageList\":[],\"statunitname\":\"\",\"languagename\":\"中文\",\"allinsflag\":\"2\",\"prptengageList\":[{\"serialnname\":\"T\",\"engageserialno\":\"1\",\"clauses\":\"非车险业务见费出单提示\",\"clausescontext\":\"投保人应当领取或签署投保单后在投保单记录的保险起保日期前向保险公司\\n全额缴付保费，否则投保无效\\n\",\"clausecode\":\"T0060\"},{\"serialnname\":\"T\",\"engageserialno\":\"2\",\"clauses\":\"哈尔滨仲裁委员会合同争议解决办法\",\"clausescontext\":\"凡本合同引起的或与本合同有关的任何争议，\\n任何一方均有权将争议提交哈尔滨仲裁委员会进行仲裁。\\n\",\"clausecode\":\"T0093\"}],\"coinsSuranceAgreement\":\"\",\"prpmaininsuredname\":\"安柏禄\",\"disrate\":\"0.0\",\"coinslinkflagname\":\"无联保\",\"handler1code\":\"2301030004\",\"businesstype1\":\"00\",\"agentcode\":\"\",\"proposalno\":\"23010300TECK2022000030\",\"riskname\":\"学生、幼儿意外伤害保险（A款）\",\"prptlimitlist\":[],\"itemKindMainNum\":\"0\",\"policysort\":\"2\",\"handlername\":\"孙媛媛\",\"agricultclassname\":\"\",\"businessnaturename\":\"柜台销售\",\"oldpolicyno\":\"\",\"policytypename\":\"协议有分户\",\"arguesolutionname\":\"仲裁\",\"suminsured\":\"0\",\"biztype\":\"PROPOSAL\",\"dutyratioexp\":\"0.0000\",\"disratesxf\":\"0.0000\",\"premiumdisrate\":\"0.00\",\"inusercode\":\"2301030004\",\"addressnum\":\"0\",\"prptplanList\":[{\"plandate\":\"2022-05-07\",\"payno\":\"1\",\"planfee\":\"149.80\",\"payreason\":\"R10\",\"prpplancurrency\":\"CNY\",\"currency\":\"人民币\",\"delinquentfee\":\"149.80\"}]},\"prpTmainLiabDtoList\":[]}}";
 
-        List<String> list = new CopyOnWriteArrayList<>();
+        JSONObject jsonObject = JSONObject.parseObject(s);
+        String makeCom = jsonObject.getJSONObject("undwrtRequestDto").getJSONObject("prpTmainDto").get("makecom").toString();
+        System.out.println(makeCom);
+//
+//        String orderNo = "D220120ECK000005";
+//
+//        System.out.println(orderNo.substring(7,10));
 
-        imagesDto.getPAGES().getPAGE().forEach(
-                item -> {
-                    String s = item.getPAGEURL().replace("http://10.0.105.245:7003/SunTRM", "https://wechat.samic.com.cn/SunTRM");
-                    list.add(s);
-                }
-        );
+//        String url = "https://wechat.samic.com.cn/nocar/insure-writeinfo";
+//
+////curl "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxfb8668b88c06d733&secret=0915f9bb825332810dbabc2a9dc04c54"
+//        //1、获取AccessToken
+////        String accessToken = WxUtils.getAccessToken();
+//        String accessToken = "54_nA0E2okJfKVvwIJfv5FiObKSVSxBUwiOXeo5h-aCe2x-bk5j6FY2MnNwVM6IvFLI3MQfZ3lBktirAyQq0fB7hIY05jMRk4OUdaUfZE9mHVhI0Dbv1nV3abONDdWp3vNC7Ttt6lqRPW0eX9SiUHLiAEADQU";
+//
+//        //2、获取Ticket
+////        String jsapi_ticket = "sM4AOVdWfPE4DxkXGEs8VGiNW-0sTfb6MQJ1UtVTcuEQIGGGYkA57zVTjj7rvoPhXiJO-soED07pU0uhrFHQSw";
+//        String jsapi_ticket = WxUtils.getTicket(accessToken);
+//
+//        //3、时间戳和随机字符串
+//        String noncestr = UUID.randomUUID().toString().replace("-", "").substring(0, 16);//随机字符串
+//        String timestamp = String.valueOf(System.currentTimeMillis() / 1000);//时间戳
+//
+//        //5、将参数排序并拼接字符串
+//        String str = "jsapi_ticket="+jsapi_ticket+"&noncestr="+noncestr+"&timestamp="+timestamp+"&url="+url;
+//
+//        //6、将字符串进行sha1加密
+//        String signature =WxUtils.SHA1(str);
+//
+//        Map<String, Object> map = new HashMap<String, Object>();
+//        try {
+//            // 获取微信signature
+//            map.put("appId", "wxfb8668b88c06d733");
+//            map.put("jsapi_ticket", jsapi_ticket);
+//            map.put("timestamp", timestamp);
+//            map.put("nonceStr", noncestr);
+//            map.put("signature", signature);
+//            map.put("url", url);
+//        } catch (Exception e) {
+//            //this.logger.error(e.getMessage());
+//        }
+//
+//        System.out.println(GsonUtil.ModuleTojosn(map));
+//      https://wechat.samic.com.cn/nocar/homepage%3FproductCode%3DEAK01%26code%3D091k34Ga1A0tHC0kyDJa1PVWRMOk34GN%26state%3DSTATE
+//        return map;
+//        232623195108114523
+//        try {
+//            int  age = getAge(parse("1952-08-02"));           //由出生日期获得年龄***
+//            System.out.println("age:"+age);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        int age = 71;
+//        if(age > 80 || age < 71){
+//            System.out.println("ddddd");
+//        } else {
+//            System.out.println("aaaaa");
+//        }
 
-        System.out.println(123);
+//        if ("2330101196004060070".contains("230101")) {
+//            System.out.println("包含");
+//        } else{
+//            System.out.println("不包含");
+//        }
+
+//        ImagesDto imagesDto = fromXML(data,ImagesDto.class);
+//
+//        List<String> list = new CopyOnWriteArrayList<>();
+//
+//        imagesDto.getPAGES().getPAGE().forEach(
+//                item -> {
+//                    String s = item.getPAGEURL().replace("http://10.0.105.245:7003/SunTRM", "https://wechat.samic.com.cn/SunTRM");
+//                    list.add(s);
+//                }
+//        );
+//
+//        List<Map<String, Object>> mapList = new CopyOnWriteArrayList<>();
+//
+//        imagesDto.getPAGES().getPAGE().forEach(
+//                item -> {
+//                    Map<String, Object> map = new HashMap<>();
+//                    String url = item.getPAGEURL().replace("http://10.0.105.245:7003/SunTRM", "https://wechat.samic.com.cn/SunTRM");
+//                    map.put("url",url);
+//                    String pageId = item.getPAGEID();
+//                    for(ImagesDto.SYDDTO.DocDTO.PageInfoDTO.PAGEDTO pagedto : imagesDto.getSYD().getDoc().getPageInfo().getPAGE()){
+//                        if(pagedto.getPAGEID().equals(pageId)){
+//                            String[] type = pagedto.getPAGEURL().split("\\.");
+//                            map.put("type",type[type.length-1]);
+//                        }
+//                    }
+//                    mapList.add(map);
+//                }
+//        );
+//
+//        System.out.println(123);
 
     }
 
