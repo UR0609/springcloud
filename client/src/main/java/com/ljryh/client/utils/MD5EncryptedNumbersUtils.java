@@ -2,9 +2,8 @@ package com.ljryh.client.utils;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.io.UnsupportedEncodingException;
+import java.util.Base64;
 
 /**
  * @author ljryh
@@ -98,18 +97,27 @@ public class MD5EncryptedNumbersUtils {
 
         return sb.toString();
     }
-
     public static void main(String[] args) {
-        for (int i = 0; i < 365; i++) {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-            Date date = new Date();
-            Calendar c = Calendar.getInstance();
-            c.setTime(date);
-            c.add(Calendar.DAY_OF_MONTH, i);
-            date = c.getTime();
-            String dateNow = sdf.format(date);
-            System.out.println("日期："+dateNow+"，六位验车码："+encryptedNumbers(dateNow));
+        Base64.Decoder decoder = Base64.getDecoder();
+        try {
+            System.out.println(new String(decoder.decode("PHA+5aSn6JCo6L6+5pKS5aSn6JCo6L6+6Zi/6JCo5b636Zi/6JCo5b636Zi/6JCo5b636Zi/6JCo5b63PGltZyBjbGFzcz0id3NjbnBoIiBzcmM9Imh0dHBzOi8vd2VjaGF0LnNhbWljLmNvbS5jbi96dXVsLXBsYXRmb3JtL2ZpbGUvZG93bmxvYWQvMmRlNjgwZWM0M2E2ZjQ4Y2M2ODc2MmE5MGM1YmY2NzIiIC8+6K+36Zeu6K+36Zeu576k57+BPC9wPg=="), "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
         }
+
+        String str1 = new String(Base64.getDecoder().decode("PHA+5aSn6JCo6L6+5pKS5aSn6JCo6L6+6Zi/6JCo5b636Zi/6JCo5b636Zi/6JCo5b636Zi/6JCo5b63PGltZyBjbGFzcz0id3NjbnBoIiBzcmM9Imh0dHBzOi8vd2VjaGF0LnNhbWljLmNvbS5jbi96dXVsLXBsYXRmb3JtL2ZpbGUvZG93bmxvYWQvMmRlNjgwZWM0M2E2ZjQ4Y2M2ODc2MmE5MGM1YmY2NzIiIC8+6K+36Zeu6K+36Zeu576k57+BPC9wPg=="));
+        System.out.println(str1);
+//        for (int i = 0; i < 20; i++) {
+//            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+//            Date date = new Date();
+//            Calendar c = Calendar.getInstance();
+//            c.setTime(date);
+//            c.add(Calendar.YEAR, 1);
+//            c.add(Calendar.DAY_OF_MONTH, -i);
+//            date = c.getTime();
+//            String dateNow = sdf.format(date);
+//            System.out.println("日期："+dateNow+"，六位验车码："+encryptedNumbers(dateNow));
+//        }
     }
 
 }
