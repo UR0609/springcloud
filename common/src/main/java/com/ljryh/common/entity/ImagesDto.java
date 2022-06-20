@@ -113,7 +113,7 @@ public class ImagesDto {
                 private String STATUS;
                 @JsonProperty("CREATE_USER")
                 @XStreamAlias("CREATE_USER")
-                private long CREATEUSER;
+                private String CREATEUSER;
                 @JsonProperty("CREATE_DATE")
                 @XStreamAlias("CREATE_DATE")
                 private String CREATEDATE;
@@ -226,10 +226,36 @@ public class ImagesDto {
                     private String ORIGINALNAME;
                     @JsonProperty("PAGE_EXT")
                     @XStreamAlias("PAGE_EXT")
-                    private String PAGEEXT;
+                    private PAGEEXTDTO PAGEEXT;
                     @JsonProperty("PAGE_DESCS")
                     @XStreamAlias("PAGE_DESCS")
                     private String PAGEDESCS;
+
+                    @Data
+                    @XStreamAlias("PAGE_EXT")
+                    public static class PAGEEXTDTO {
+
+                        @JsonProperty("EXT_ATTR")
+                        @XStreamImplicit(itemFieldName = "EXT_ATTR")
+                        private List<EXTATTRDTO> EXTATTR;
+
+                        @Data
+                        @XStreamAlias("EXT_ATTR")
+                        public static class EXTATTRDTO {
+                            @JsonProperty("ID")
+                            @XStreamAlias("ID")
+                            @XStreamAsAttribute
+                            private String ID;
+                            @JsonProperty("NAME")
+                            @XStreamAlias("NAME")
+                            @XStreamAsAttribute
+                            private String NAME;
+                            @JsonProperty("APP_CODE")
+                            @XStreamAlias("APP_CODE")
+                            @XStreamAsAttribute
+                            private String VALUE;
+                        }
+                    }
 
                 }
             }
@@ -246,8 +272,6 @@ public class ImagesDto {
                 @JsonProperty("NODE")
                 @XStreamImplicit(itemFieldName = "NODE")
                 private List<NODEDTO> NODE;
-
-
 
                 @Data
                 @XStreamAlias("NODE")
