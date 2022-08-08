@@ -18,9 +18,9 @@ spring:
       max-lifetime: 1800000
       pool-name: DatebookHikariCP
       maximum-pool-size: 30
-      jdbc-url: jdbc:mysql://127.0.0.1:3306/demo?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+      jdbc-url: jdbc:mysql://103.72.144.239:63306/new_demo?characterEncoding=utf8&useSSL=true&serverTimezone=CTT
       username: root
-      password: abc123###
+      password: J@^S%TCE9dTXusVC
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
     #Redis数据库IP地址
@@ -28,7 +28,7 @@ spring:
     #Redis数据库的端口号
     port: 6379
     #使用的数据库
-    database: 0
+    database: 10
     #密码
     password:
     # 连接超时时间（毫秒）
@@ -74,13 +74,13 @@ knife4j:
 
 stop:
   word:
-    path: E:\springcloud\file\stopWords\hit_stopwords.txt
+    path: /Users/yibaiyi/IdeaProjects/springcloud/file/stopWords/hit_stopwords.txt
 
 svm:
   list:
     - name: jianhang
       type: 1
-      path: E:\springcloud\file\intention\20210412075958.xlsx
+      path: /Users/yibaiyi/IdeaProjects/springcloud/file/intention/20210412075958.xlsx
       sheet: 1
       intention: 0
       example: 1
