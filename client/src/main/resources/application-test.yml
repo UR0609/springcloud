@@ -73,11 +73,11 @@ spring:
         max-wait: -1
   mail:
     host: smtp.qq.com
-    username: 124732719@qq.com
-    password: uhuqjlzolrftbicj
+    username:
+    password:
 #    host: smtp.exmail.qq.com
 #    username: no-reply@samic.com.cn
-#    password: B8b2aakD7fcS2zPd
+#    password:
 #    port: 587
     port: 465
     default-encoding: UTF-8
