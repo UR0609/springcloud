@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class ListUtil {
+public class ListUtils {
 
     /**
      * list去重方法

@@ -9,7 +9,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import java.util.List;
 import java.util.Map;
 
-public class FastjsonUtil {
+public class FastjsonUtils {
 
         private static final SerializeConfig config;
 

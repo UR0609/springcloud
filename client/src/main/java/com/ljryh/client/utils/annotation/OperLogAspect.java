@@ -6,7 +6,7 @@ import com.ljryh.client.entity.OperationLog;
 import com.ljryh.client.service.IExceptionLogService;
 import com.ljryh.client.service.IOperationLogService;
 import com.ljryh.client.utils.UserShiroUtil;
-import com.ljryh.common.utils.IpUtil;
+import com.ljryh.common.utils.IpUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -112,7 +112,7 @@ public class OperLogAspect {
             operlog.setOperRespParam(JSON.toJSONString(keys)); // 返回结果
             operlog.setOperUserId(UserShiroUtil.getUserId()); // 请求用户ID
             operlog.setOperUserName(UserShiroUtil.getUserName()); // 请求用户名称
-            operlog.setOperIp(IpUtil.getIpAddr(request)); // 请求IP
+            operlog.setOperIp(IpUtils.getIpAddr(request)); // 请求IP
             operlog.setOperUri(request.getRequestURI()); // 请求URI
             operlog.setCreateTime(LocalDateTime.now()); // 创建时间
             operlog.setOperVer(operVer); // 操作版本
@@ -159,7 +159,7 @@ public class OperLogAspect {
             excepLog.setOperUserId(UserShiroUtil.getUserId()); // 操作员ID
             excepLog.setOperUserName(UserShiroUtil.getUserName()); // 操作员名称
             excepLog.setOperUri(request.getRequestURI()); // 操作URI
-            excepLog.setOperIp(IpUtil.getIpAddr(request)); // 操作员IP
+            excepLog.setOperIp(IpUtils.getIpAddr(request)); // 操作员IP
             excepLog.setOperVer(operVer); // 操作版本号
             excepLog.setCreateTime(LocalDateTime.now()); // 发生异常时间
 

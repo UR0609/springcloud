@@ -1,0 +1,127 @@
+spring:
+  # 文件上传大小
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+      enabled: true
+  data:
+    mongodb:
+      #      uri: mongodb://127.0.0.1:57017/admin
+      host: 103.72.144.239
+      port: 57017
+      database: admin
+  rabbitmq:
+    host: 103.72.144.239
+    port: 5672
+    password: yby
+    username: yby
+  cloud:
+    sentinel:
+      transport:
+        dashboard: localhost:8090
+  application:
+    name: client
+  # 数据源配置
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      auto-commit: true
+      minimum-idle: 5
+      idle-timeout: 60000
+      connection-timeout: 30000
+      max-lifetime: 1800000
+      pool-name: DatebookHikariCP
+      maximum-pool-size: 30
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/demo?characterEncoding=utf8&useSSL=true&serverTimezone=CTT
+      username: root
+      password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  cache:
+    #缓存类型
+    type: redis
+    redis:
+      #缓存有效时间
+      time-to-live:
+        seconds: 3600
+    #Redis连接配置
+  redis:
+    #Redis数据库IP地址
+    host: 127.0.0.1
+    #Redis数据库的端口号
+    port: 6379
+    #使用的数据库
+    database: 1
+    #密码
+    password:
+#    #Redis数据库IP地址
+#    host: 103.72.144.239
+#    #Redis数据库的端口号
+#    port: 26378
+#    #使用的数据库
+#    database: 1
+#    #密码
+#    password: lovebubble#1314
+    # 连接超时时间（毫秒）
+    timeout: 3000
+    lettuce:
+      shutdown-timeout: 3000
+      pool:
+        max-active: 20
+        max-idle: 20
+        min-idle: 10
+        max-wait: -1
+  mail:
+    host: smtp.qq.com
+    username: 124732719@qq.com
+    password: uhuqjlzolrftbicj
+#    host: smtp.exmail.qq.com
+#    username: no-reply@samic.com.cn
+#    password: B8b2aakD7fcS2zPd
+#    port: 587
+    port: 465
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          socketFactoryClass: javax.net.ssl.SSLSocketFactory
+        debug: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka.ljryh.com/eureka/
+
+#eureka:
+#  instance:
+#    hostname: localhost
+#    port: 8761
+#  client:
+#    service-url:
+#      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/eureka/
+
+server:
+#  servlet:
+#    context-path: /client
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 1000
+    min-spare-threads: 30
+  port: 8661
+  connection-timeout: 5000ms
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  typeAliasesPackage: com.ljryh.client.entity
+  configuration:
+    mapUnderscoreToCamelCase: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+#自定义ribbon的超时时间
+ribbon:
+  ReadTimeout: 5000               #处理请求的超时时间，默认为5秒
+  ConnectTimeout: 5000            #连接建立的超时时长，默认5秒
+  MaxAutoRetries: 1               #同一台实例的最大重试次数，但是不包括首次调用，默认为1次
+  MaxAutoRetriesNextServer: 0     #重试负载均衡其他实例的最大重试次数，不包括首次调用，默认为0次
+  OkToRetryOnAllOperations: false #/是否对所有操作都重试，默认false
+

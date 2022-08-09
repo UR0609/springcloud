@@ -4,7 +4,7 @@ import cn.hutool.core.codec.Base64Decoder;
 import cn.hutool.core.util.StrUtil;
 import com.ljryh.common.tools.log.LoggerHelper;
 import com.ljryh.common.tools.redis.MyJedisPool;
-import com.ljryh.common.utils.CharsetUtil;
+import com.ljryh.common.utils.CharsetUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.net.ftp.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -663,7 +663,7 @@ public class FTPUtil {
             // FTP上传文件
             byte[] bytes = file.getBytes();
             if (bytes.length != 0) {
-                success = ftpClient.storeFile(CharsetUtil.changeCharset(fileName, CharsetUtil.GBK, CharsetUtil.ISO_8859_1),
+                success = ftpClient.storeFile(CharsetUtils.changeCharset(fileName, CharsetUtils.GBK, CharsetUtils.ISO_8859_1),
                         file.getInputStream());
             }
             if (success) {

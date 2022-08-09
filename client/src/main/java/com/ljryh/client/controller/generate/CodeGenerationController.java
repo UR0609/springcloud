@@ -4,7 +4,7 @@ import com.ljryh.client.entity.generate.ColumnData;
 import com.ljryh.client.entity.generate.TableData;
 import com.ljryh.client.service.generate.ICodeGenerationService;
 import com.ljryh.common.entity.CallResult;
-import com.ljryh.common.utils.JacksonUtil;
+import com.ljryh.common.utils.JacksonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,9 +64,9 @@ public class CodeGenerationController {
 //
 //        System.out.println(getPathFromClass(this.getClass()));
 
-        Map<String, Object> map = JacksonUtil.jsonToMap(parameter);
+        Map<String, Object> map = JacksonUtils.jsonToMap(parameter);
 
-        List<ColumnData> list = JacksonUtil.jsonToList(JacksonUtil.objToJson(map.get("data")), ColumnData.class);
+        List<ColumnData> list = JacksonUtils.jsonToList(JacksonUtils.objToJson(map.get("data")), ColumnData.class);
 
         codeGenerationService.generateCode(list,map.get("tableName").toString());
 

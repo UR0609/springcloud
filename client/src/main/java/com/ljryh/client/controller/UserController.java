@@ -10,7 +10,7 @@ import com.ljryh.client.entity.shiro.User;
 import com.ljryh.client.service.IRoleService;
 import com.ljryh.client.service.IUserService;
 import com.ljryh.common.entity.CallResult;
-import com.ljryh.common.utils.GsonUtil;
+import com.ljryh.common.utils.GsonUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -123,7 +123,7 @@ public class UserController {
         userService.test();
         user.setAge(++age);
         System.out.println(access_token);
-        System.out.println(GsonUtil.ModuleTojosn(user));
+        System.out.println(GsonUtils.ModuleTojosn(user));
 
         return "wp.ljryh.com";
     }

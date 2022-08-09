@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  *
  */
-public class JacksonUtil {
+public class JacksonUtils {
     private final static ObjectMapper objectMapper = new ObjectMapper();
 
     public static ObjectMapper getInstance() {

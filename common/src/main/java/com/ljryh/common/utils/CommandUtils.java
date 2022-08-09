@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * 使用 java 来执行 linux 命令
  */
-public class CommandUtil {
+public class CommandUtils {
 
     public static List<String> executeNewFlow(List<String> commands) {
         List<String> rspList = new ArrayList<String>();

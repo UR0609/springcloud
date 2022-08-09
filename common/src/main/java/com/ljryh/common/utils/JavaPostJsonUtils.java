@@ -9,7 +9,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JavaPostJson {
+public class JavaPostJsonUtils {
 
     final static String url = "http://localhost:1111/sendData";
     final static String params = "{\"token\":\"12345\","

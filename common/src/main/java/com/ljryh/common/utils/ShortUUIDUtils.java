@@ -2,7 +2,7 @@ package com.ljryh.common.utils;
 
 import java.util.UUID;
 
-public class ShortUUIDUtil {
+public class ShortUUIDUtils {
 
     public static String[] chars = new String[]
             {

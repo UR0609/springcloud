@@ -1,6 +1,6 @@
 package com.ljryh.common.utils;
 
-public class SnowflakeIdUtil {
+public class SnowflakeIdUtils {
 
     // ==============================Fields===========================================
     /**
@@ -81,7 +81,7 @@ public class SnowflakeIdUtil {
      * @param workerId     工作ID (0~31)
      * @param datacenterId 数据中心ID (0~31)
      */
-    public SnowflakeIdUtil(long workerId, long datacenterId) {
+    public SnowflakeIdUtils(long workerId, long datacenterId) {
         if (workerId > maxWorkerId || workerId < 0) {
             throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0", maxWorkerId));
         }
@@ -161,7 +161,7 @@ public class SnowflakeIdUtil {
      * 测试
      */
     public static void main(String[] args) {
-        SnowflakeIdUtil idWorker = new SnowflakeIdUtil(0, 0);
+        SnowflakeIdUtils idWorker = new SnowflakeIdUtils(0, 0);
 
         for (int i = 0; i < 100; i++) {
             long id = idWorker.nextId();

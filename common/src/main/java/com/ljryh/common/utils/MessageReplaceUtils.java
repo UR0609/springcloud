@@ -8,7 +8,7 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MessageReplaceUtil {
+public class MessageReplaceUtils {
 
     /**
      * 替换${XXX}内容

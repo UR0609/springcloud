@@ -3,7 +3,7 @@ package com.ljryh.common.utils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class NumericUtil {
+public class NumericUtils {
 	final static char[] digits = { '0', '1', '2', '3', '4', '5', '6', '7', '8',
 			'9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M',
 			'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'W', 'X', 'Y', 'Z' };
@@ -94,7 +94,7 @@ public class NumericUtil {
  
     
 	public static void main(String[] args) {
-		NumericUtil de = new NumericUtil();
+		NumericUtils de = new NumericUtils();
 		System.out.println(de.stringToNumeric("0A", 32));
 		System.out.println(de.stringToNumeric("00A", 32));
 		System.out.println(de.stringToNumeric("0000A", 32));

@@ -19,8 +19,8 @@ import java.util.regex.Pattern;
  *
  * @author xuxueli 2016-5-22 11:38:05
  */
-public class IpUtil {
-    private static final Logger logger = LoggerFactory.getLogger(IpUtil.class);
+public class IpUtils {
+    private static final Logger logger = LoggerFactory.getLogger(IpUtils.class);
 
     private static final String ANYHOST_VALUE = "0.0.0.0";
     private static final String LOCALHOST_VALUE = "127.0.0.1";

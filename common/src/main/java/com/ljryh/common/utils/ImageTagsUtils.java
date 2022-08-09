@@ -13,7 +13,7 @@ import java.io.File;
  * @version 1.0
  * @date 2022/6/20 09:14
  */
-public class ImageTagsUtil {
+public class ImageTagsUtils {
 
     private static String printImageTags(String s, File file) throws ImageProcessingException, Exception {
         Metadata metadata = ImageMetadataReader.readMetadata(file);

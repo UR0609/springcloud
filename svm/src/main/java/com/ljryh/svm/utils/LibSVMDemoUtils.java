@@ -1,6 +1,6 @@
 package com.ljryh.svm.utils;
 
-import com.ljryh.common.utils.JacksonUtil;
+import com.ljryh.common.utils.JacksonUtils;
 import libsvm.*;
 import lombok.SneakyThrows;
 
@@ -93,7 +93,7 @@ public class LibSVMDemoUtils {
         }
         svm_node[][] svmNodes = listToSvmNode(testList);
 
-        System.out.println(JacksonUtil.objToJson(svmNodes));
+        System.out.println(JacksonUtils.objToJson(svmNodes));
 
         svm_problem sp = new svm_problem();
         sp.x = svmNodes;

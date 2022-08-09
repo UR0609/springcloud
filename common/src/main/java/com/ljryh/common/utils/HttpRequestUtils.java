@@ -7,7 +7,7 @@ import java.net.URLConnection;
 import java.util.List;
 import java.util.Map;
 
-public class HttpRequestUtil {
+public class HttpRequestUtils {
     /**
      * 向指定URL发送GET方法的请求
      *

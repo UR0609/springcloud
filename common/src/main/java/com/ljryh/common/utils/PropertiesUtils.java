@@ -13,18 +13,18 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Properties;
 
-public class PropertiesUtil {
+public class PropertiesUtils {
 
 	private static final String DEFAULT_ENCODING = "UTF-8";
 
-	private static Logger log = LoggerFactory.getLogger(PropertiesUtil.class);
+	private static Logger log = LoggerFactory.getLogger(PropertiesUtils.class);
 
 	private static PropertiesPersister propertiesPersister = new DefaultPropertiesPersister();
 	private static ResourceLoader resourceLoader = new DefaultResourceLoader();
 
 	private static Properties properties;
 
-	public PropertiesUtil(String resourcesPaths) {
+	public PropertiesUtils(String resourcesPaths) {
 		try {
 			properties = loadProperties(resourcesPaths);
 		} catch (Exception e) {
@@ -126,7 +126,7 @@ public class PropertiesUtil {
 	}
 
 	public static void main(String[] args) {
-		PropertiesUtil propertiesUtil = new PropertiesUtil("/redis.properties");
+		PropertiesUtils propertiesUtil = new PropertiesUtils("/redis.properties");
 		System.out.println("jedis.pool.maxActive:"+propertiesUtil.getString("jedis.pool.maxActive", "0"));
 	}
 

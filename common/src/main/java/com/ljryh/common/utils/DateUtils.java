@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  */
-public class DateUtil {
+public class DateUtils {
 
     /**
      * Base ISO 8601 Date format yyyyMMdd i.e., 20021225 for the 25th day of December in the year 2002
@@ -725,7 +725,7 @@ public class DateUtil {
 		 public static String todayForWeek() throws Exception {  
 			//获取今天日期
 			String today = dateToString(new Date());
-			String week = DateUtil.dayForWeek(today);
+			String week = DateUtils.dayForWeek(today);
 			return week;  
 		 } 
 	 
@@ -824,7 +824,7 @@ public class DateUtil {
 		 */
 		@SuppressWarnings("deprecation")
 		public static String excutetime (String time) throws ParseException{
-			String today = DateUtil.dateToString(new Date());
+			String today = DateUtils.dateToString(new Date());
 	        StringBuilder sb = new StringBuilder();
 			if(time != null && !time.equals("")){
 				//String startTime = time.split("-")[0];
@@ -876,7 +876,7 @@ public class DateUtil {
 		 */
 		@SuppressWarnings("deprecation")
 		public static String excutetime2 (String time) throws ParseException{
-			String today = DateUtil.dateToString(new Date());
+			String today = DateUtils.dateToString(new Date());
 	        StringBuilder sb = new StringBuilder();
 			if(time != null && !time.equals("")){
 				//String startTime = time.split("-")[0];
@@ -917,7 +917,7 @@ public class DateUtil {
 	        calendar.setTime(new Date());  
 	        calendar.add(Calendar.DAY_OF_MONTH, -1);  
 	        Date date = calendar.getTime();  
-	        String lastDay = DateUtil.dateToString(date);
+	        String lastDay = DateUtils.dateToString(date);
 	        return lastDay;  
 	    }
 		

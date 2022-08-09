@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author ljryh
  * @date 2021/8/2 16:50
  */
-public class ImportExcelUtil {
+public class ImportExcelUtils {
 
     // 自定义列英文名称
     public static String customColENName = "col";

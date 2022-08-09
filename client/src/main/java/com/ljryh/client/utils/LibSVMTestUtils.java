@@ -1,6 +1,6 @@
 package com.ljryh.client.utils;
 
-import com.ljryh.common.utils.GsonUtil;
+import com.ljryh.common.utils.GsonUtils;
 import libsvm.*;
 import org.ansj.domain.Result;
 import org.ansj.domain.Term;
@@ -23,7 +23,7 @@ public class LibSVMTestUtils {
             }
         }
 
-        System.out.println(GsonUtil.ModuleTojosn(name));
+        System.out.println(GsonUtils.ModuleTojosn(name));
     }
     private static String packAge = LibSVMTestUtils.class.getPackage().getName();
     public static void main(String[] args) {

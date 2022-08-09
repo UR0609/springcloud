@@ -3,7 +3,7 @@ package com.ljryh.common.utils;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class CollectionUtil {
+public class CollectionUtils {
     public static boolean isEmpty(Collection<?> coll) {
         return coll == null || coll.isEmpty();
     }
@@ -13,6 +13,6 @@ public class CollectionUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(CollectionUtil.isEmpty(new ArrayList()));
+        System.out.println(CollectionUtils.isEmpty(new ArrayList()));
     }
 }

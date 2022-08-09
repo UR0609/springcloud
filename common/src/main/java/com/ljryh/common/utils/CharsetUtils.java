@@ -7,7 +7,7 @@ import java.io.UnsupportedEncodingException;
  * 转换字符串的编码
  * 
  */
-public class CharsetUtil {
+public class CharsetUtils {
 
 	/** 7位ASCII字符，也叫作ISO646-US、Unicode字符集的基本拉丁块 */
 	public static final String US_ASCII = "US-ASCII";

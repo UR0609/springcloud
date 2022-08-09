@@ -14,11 +14,11 @@ import java.io.InputStream;
  * @version 1.0
  * @date 2022/4/27 10:47
  */
-public class AsposeUtil {
+public class AsposeUtils {
 
     public static void main(String[] args) {
 
-        AsposeUtil.wordToPdf("/Users/yibaiyi/Documents/work/demo.doc",
+        AsposeUtils.wordToPdf("/Users/yibaiyi/Documents/work/demo.doc",
                 "/Users/yibaiyi/Documents/work/demo.pdf");
 
     }
@@ -31,7 +31,7 @@ public class AsposeUtil {
      */
     @SneakyThrows
     private static void getLicense() {
-        try (InputStream is = AsposeUtil.class.getClassLoader().getResourceAsStream("License.xml")) {
+        try (InputStream is = AsposeUtils.class.getClassLoader().getResourceAsStream("License.xml")) {
             License license = new License();
             license.setLicense(is);
         }

@@ -2,7 +2,7 @@ package com.ljryh.client.controller.shiro;
 
 import com.ljryh.client.entity.shiro.User;
 import com.ljryh.client.utils.annotation.OperLog;
-import com.ljryh.common.utils.GsonUtil;
+import com.ljryh.common.utils.GsonUtils;
 import io.swagger.annotations.Api;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -21,7 +21,7 @@ public class TestController {
     @OperLog(operModul = "保存功能", operType = "save", operDesc = "保存测试")
     public Map<String, Object> save(@RequestHeader("token") String token,@RequestBody String path) {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        System.out.println(GsonUtil.ModuleTojosn(user));
+        System.out.println(GsonUtils.ModuleTojosn(user));
         System.out.println("save");
         Map<String, Object> map = new ConcurrentHashMap<>();
         map.put("status", 200);

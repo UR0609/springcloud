@@ -2,7 +2,7 @@ package com.ljryh.common.utils;
 
 import java.util.Random;
 
-public class RandomUtil {
+public class RandomUtils {
 	private static Random strGen = new Random();;
 	private static char[] numbersAndLetters = ("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 			.toCharArray();
