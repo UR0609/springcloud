@@ -104,11 +104,14 @@ public class OperLogAspect {
             operlog.setOperMethod(methodName); // 请求方法
 
             // 请求的参数
-            Map<String, String> rtnMap = converMap(request.getParameterMap());
             // 将参数所在的数组转换成json
-            String params = JSON.toJSONString(rtnMap);
+            StringBuilder params = new StringBuilder();
+            Object[] args = joinPoint.getArgs();
+            for(Object o : args){
+                params.append(o.toString()).append(",");
+            }
 
-            operlog.setOperRequParam(params); // 请求参数
+            operlog.setOperRequParam(params.toString()); // 请求参数
             operlog.setOperRespParam(JSON.toJSONString(keys)); // 返回结果
             operlog.setOperUserId(UserShiroUtil.getUserId()); // 请求用户ID
             operlog.setOperUserName(UserShiroUtil.getUserName()); // 请求用户名称
