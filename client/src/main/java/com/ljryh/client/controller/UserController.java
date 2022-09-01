@@ -9,6 +9,7 @@ import com.ljryh.client.entity.UserRole;
 import com.ljryh.client.entity.shiro.User;
 import com.ljryh.client.service.IRoleService;
 import com.ljryh.client.service.IUserService;
+import com.ljryh.client.utils.annotation.OperLog;
 import com.ljryh.common.entity.CallResult;
 import com.ljryh.common.utils.GsonUtils;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author ljryh
@@ -38,19 +39,20 @@ public class UserController {
     @Resource
     private IRoleService roleService;
 
-    @RequestMapping(value = "/list",method = RequestMethod.POST)
-    public Object findAll(@RequestBody User user/*, HttpServletRequest request*/){
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    @OperLog(operModul = "查询", operType = "select", operDesc = "查询")
+    public Object findAll(@RequestBody User user/*, HttpServletRequest request*/) {
         //获取前台发送过来的数据
 //        Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
 //        Integer pageSize = Integer.valueOf(request.getParameter("pageSize"));
         IPage<User> page = new Page<>(user.getPageNo(), user.getPageSize());
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.setEntity(user);
-        return CallResult.success(userService.page(page,wrapper));
+        return CallResult.success(userService.page(page, wrapper));
     }
 
-    @RequestMapping(value = "/exportExcel",method = RequestMethod.POST)
-    public Object exportExcel(@RequestBody User user/*, HttpServletRequest request*/){
+    @RequestMapping(value = "/exportExcel", method = RequestMethod.POST)
+    public Object exportExcel(@RequestBody User user/*, HttpServletRequest request*/) {
         //获取前台发送过来的数据
 //        Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
 //        Integer pageSize = Integer.valueOf(request.getParameter("pageSize"));
@@ -60,8 +62,8 @@ public class UserController {
         return CallResult.success(userService.list(wrapper));
     }
 
-    @RequestMapping(value = "/add",method = RequestMethod.POST)
-    public Object add(@RequestBody User user){
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public Object add(@RequestBody User user) {
         boolean judge = userService.save(user);
         if (judge) {
             return CallResult.success("添加成功");
@@ -70,8 +72,8 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/mod",method = RequestMethod.POST)
-    public Object mod(@RequestBody User user){
+    @RequestMapping(value = "/mod", method = RequestMethod.POST)
+    public Object mod(@RequestBody User user) {
         boolean judge = userService.updateById(user);
         if (judge) {
             return CallResult.success("修改成功");
@@ -80,8 +82,8 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/del",method = RequestMethod.POST)
-    public Object del(@RequestBody User user){
+    @RequestMapping(value = "/del", method = RequestMethod.POST)
+    public Object del(@RequestBody User user) {
         boolean judge = userService.removeById(user.getId());
         if (judge) {
             return CallResult.success("删除成功");
@@ -90,8 +92,8 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/sel",method = RequestMethod.POST)
-    public Object sel(@RequestBody User user){
+    @RequestMapping(value = "/sel", method = RequestMethod.POST)
+    public Object sel(@RequestBody User user) {
         User result = userService.getById(user.getId());
         if (result != null) {
             return CallResult.success(result);
@@ -100,25 +102,25 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/selAllRole",method = RequestMethod.POST)
-    public Object selAllRole(@RequestBody User user){
+    @RequestMapping(value = "/selAllRole", method = RequestMethod.POST)
+    public Object selAllRole(@RequestBody User user) {
 
-        Map<String,Object> map = new ConcurrentHashMap<>();
+        Map<String, Object> map = new ConcurrentHashMap<>();
 
         List<Role> list = roleService.list();
-        map.put("role",list);
+        map.put("role", list);
         if (list.size() != 0) {
             Long id = userService.getRoleIdByUserId(user);
             if (id != null)
-                map.put("id",id);
+                map.put("id", id);
             return CallResult.success(map);
         } else {
             return CallResult.fail("查询数据失败！");
         }
     }
 
-    @RequestMapping(value = "/test",method = RequestMethod.POST)
-    public String hello(@RequestBody User user,String access_token) {
+    @RequestMapping(value = "/test", method = RequestMethod.POST)
+    public String hello(@RequestBody User user, String access_token) {
         int age = 15;
         userService.test();
         user.setAge(++age);
@@ -128,7 +130,7 @@ public class UserController {
         return "wp.ljryh.com";
     }
 
-    @RequestMapping(value = "/bind",method = RequestMethod.POST)
+    @RequestMapping(value = "/bind", method = RequestMethod.POST)
     public Object bind(@RequestBody UserRole userRole) {
         boolean judge = userService.bind(userRole);
         if (judge) {
