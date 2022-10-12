@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
+ *
  */
 public class DateUtils {
 
@@ -13,7 +14,7 @@ public class DateUtils {
      * Base ISO 8601 Date format yyyyMMdd i.e., 20021225 for the 25th day of December in the year 2002
      */
     public static final String ISO_DATE_FORMAT = "yyyyMMdd";
-    
+
     /**
      * Base ISO 8601 Date format yyyyMMddHH i.e., 2002122512 for 12h the 25th day of December in the year 2002
      */
@@ -106,7 +107,7 @@ public class DateUtils {
      * the opposite. Relying on specific times is problematic.
      *
      * @param early the "first date"
-     * @param late the "second date"
+     * @param late  the "second date"
      * @return the days between the two dates
      */
     public static final int daysBetween(Date early, Date late) {
@@ -138,6 +139,7 @@ public class DateUtils {
      * based from calculations found at
      * <a href="http://quasar.as.utexas.edu/BillInfo/JulianDatesG.html">Julian Day Calculations
      * (Gregorian Calendar)</a>, provided by Bill Jeffrys.
+     *
      * @param c a calendar instance
      * @return the julian day number
      */
@@ -161,6 +163,7 @@ public class DateUtils {
      * based from calculations found at
      * <a href="http://quasar.as.utexas.edu/BillInfo/JulianDatesG.html">Julian Day Calculations
      * (Gregorian Calendar)</a>, provided by Bill Jeffrys.
+     *
      * @param date
      * @return the julian day number
      */
@@ -175,7 +178,7 @@ public class DateUtils {
     /**
      * @param isoString
      * @param fmt
-     * @param field   Calendar.YEAR/Calendar.MONTH/Calendar.DATE
+     * @param field     Calendar.YEAR/Calendar.MONTH/Calendar.DATE
      * @param amount
      * @return
      * @throws ParseException
@@ -201,10 +204,10 @@ public class DateUtils {
      * Rolls (up/down) a single unit of time on the given time field.
      *
      * @param isoString
-     * @param field the time field.
-     * @param up Indicates if rolling up or rolling down the field value.
-     * @param expanded use formating char's
-     * @exception ParseException if an unknown field value is given.
+     * @param field     the time field.
+     * @param up        Indicates if rolling up or rolling down the field value.
+     * @param expanded  use formating char's
+     * @throws ParseException if an unknown field value is given.
      */
     public static final String roll(String isoString, String fmt, int field,
                                     boolean up) throws ParseException {
@@ -222,9 +225,9 @@ public class DateUtils {
      * Rolls (up/down) a single unit of time on the given time field.
      *
      * @param isoString
-     * @param field the time field.
-     * @param up Indicates if rolling up or rolling down the field value.
-     * @exception ParseException if an unknown field value is given.
+     * @param field     the time field.
+     * @param up        Indicates if rolling up or rolling down the field value.
+     * @throws ParseException if an unknown field value is given.
      */
     public static final String roll(String isoString, int field, boolean up) throws
             ParseException {
@@ -233,7 +236,8 @@ public class DateUtils {
     }
 
     /**
-     *  java.util.Date
+     * java.util.Date
+     *
      * @param dateText
      * @param format
      * @param lenient
@@ -275,7 +279,9 @@ public class DateUtils {
         return new java.sql.Timestamp(new Date().getTime());
     }
 
-    /** java.util.Date
+    /**
+     * java.util.Date
+     *
      * @param dateText
      * @param format
      * @return
@@ -287,6 +293,7 @@ public class DateUtils {
 
     /**
      * java.util.Date
+     *
      * @param dateText
      */
     public static Date stringToDate(String dateString) {
@@ -294,9 +301,9 @@ public class DateUtils {
     }
 
     /**
-     * @return
      * @param pattern
      * @param date
+     * @return
      */
     public static String dateToString(Date date, String pattern) {
 
@@ -319,6 +326,7 @@ public class DateUtils {
 
     /**
      * yyyy-MM-dd
+     *
      * @param date
      * @return
      */
@@ -332,12 +340,14 @@ public class DateUtils {
 
     /**
      * yyyy-MM-dd
+     *
      * @param date
      * @return
      */
     public static String dateToString3(Date date) {
         return dateToString(date, "yyyy-MM-dd HH:mm");
     }
+
     /**
      * @return
      */
@@ -349,7 +359,6 @@ public class DateUtils {
     }
 
     /**
-     *
      * @param pattern
      * @return
      */
@@ -358,7 +367,8 @@ public class DateUtils {
     }
 
     /**
-     *   yyyy-MM-dd
+     * yyyy-MM-dd
+     *
      * @return
      */
     public static String getCurrentDateString() {
@@ -367,18 +377,20 @@ public class DateUtils {
 
     /**
      * 返回固定格式的当前时间
-     *   yyyy-MM-dd hh:mm:ss
+     * yyyy-MM-dd hh:mm:ss
+     *
      * @param date
      * @return
      */
-    public static String dateToStringWithTime( ) {
+    public static String dateToStringWithTime() {
 
         return dateToString(new Date(), DATETIME_PATTERN);
     }
 
 
     /**
-     *   yyyy-MM-dd hh:mm:ss
+     * yyyy-MM-dd hh:mm:ss
+     *
      * @param date
      * @return
      */
@@ -388,7 +400,6 @@ public class DateUtils {
     }
 
     /**
-     *
      * @param date
      * @param days
      * @return java.util.Date
@@ -404,7 +415,6 @@ public class DateUtils {
     }
 
     /**
-     *
      * @param date
      * @param days
      * @return java.util.Date
@@ -420,7 +430,6 @@ public class DateUtils {
     }
 
     /**
-     *
      * @param date
      * @param mnt
      * @return java.util.Date
@@ -436,10 +445,9 @@ public class DateUtils {
     }
 
     /**
-     *
-     * @param date   yyyy-MM-dd
+     * @param date yyyy-MM-dd
      * @param days
-     * @return  yyyy-MM-dd
+     * @return yyyy-MM-dd
      */
     public static String dateIncreaseByDay(String date, int days) {
         return dateIncreaseByDay(date, ISO_DATE_FORMAT, days);
@@ -456,7 +464,6 @@ public class DateUtils {
     }
 
     /**
-     *
      * @param src
      * @param srcfmt
      * @param desfmt
@@ -468,7 +475,6 @@ public class DateUtils {
     }
 
     /**
-     *
      * @param date
      * @return string
      */
@@ -480,7 +486,6 @@ public class DateUtils {
     }
 
     /**
-     *
      * @param date
      * @return string
      */
@@ -524,7 +529,8 @@ public class DateUtils {
     /**
      * Function to convert String to Date Object. If invalid input then current or next day date
      * is returned (Added by Ali Naqvi on 2006-5-16).
-     * @param str String input in YYYY-MM-DD HH:MM[:SS] format.
+     *
+     * @param str      String input in YYYY-MM-DD HH:MM[:SS] format.
      * @param isExpiry boolean if set and input string is invalid then next day date is returned
      * @return Date
      */
@@ -567,375 +573,391 @@ public class DateUtils {
         int hour = minute / 60;
         int min = minute % 60;
         dateFormat = String.valueOf(year)
-                     +
-                     (month > 9 ? String.valueOf(month) :
-                      "0" + String.valueOf(month))
-                     +
-                     (day > 9 ? String.valueOf(day) : "0" + String.valueOf(day))
-                     + " "
-                     +
-                     (hour > 9 ? String.valueOf(hour) : "0" + String.valueOf(hour))
-                     +
-                     (min > 9 ? String.valueOf(min) : "0" + String.valueOf(min))
-                     + "00";
+                +
+                (month > 9 ? String.valueOf(month) :
+                        "0" + String.valueOf(month))
+                +
+                (day > 9 ? String.valueOf(day) : "0" + String.valueOf(day))
+                + " "
+                +
+                (hour > 9 ? String.valueOf(hour) : "0" + String.valueOf(hour))
+                +
+                (min > 9 ? String.valueOf(min) : "0" + String.valueOf(min))
+                + "00";
         return dateFormat;
     }
-    
+
     /**
      * 根据用户生日计算年龄
      */
     public static int getAgeByBirthday(Date birthday) {
-    	Calendar cal = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance();
 
-    	if (cal.before(birthday)) {
-    		throw new IllegalArgumentException(
-    				"The birthDay is before Now.It's unbelievable!");
-    	}
+        if (cal.before(birthday)) {
+            throw new IllegalArgumentException(
+                    "The birthDay is before Now.It's unbelievable!");
+        }
 
-    	int yearNow = cal.get(Calendar.YEAR);
-    	int monthNow = cal.get(Calendar.MONTH) + 1;
-    	int dayOfMonthNow = cal.get(Calendar.DAY_OF_MONTH);
+        int yearNow = cal.get(Calendar.YEAR);
+        int monthNow = cal.get(Calendar.MONTH) + 1;
+        int dayOfMonthNow = cal.get(Calendar.DAY_OF_MONTH);
 
-    	cal.setTime(birthday);
-    	int yearBirth = cal.get(Calendar.YEAR);
-    	int monthBirth = cal.get(Calendar.MONTH) + 1;
-    	int dayOfMonthBirth = cal.get(Calendar.DAY_OF_MONTH);
+        cal.setTime(birthday);
+        int yearBirth = cal.get(Calendar.YEAR);
+        int monthBirth = cal.get(Calendar.MONTH) + 1;
+        int dayOfMonthBirth = cal.get(Calendar.DAY_OF_MONTH);
 
-    	int age = yearNow - yearBirth;
+        int age = yearNow - yearBirth;
 
-    	if (monthNow <= monthBirth) {
-    		if (monthNow == monthBirth) {
-    			// monthNow==monthBirth 
-    			if (dayOfMonthNow < dayOfMonthBirth) {
-    				age--;
-    			}
-    		} else {
-    			// monthNow>monthBirth 
-    			age--;
-    		}
-    	}
-    	return age;
+        if (monthNow <= monthBirth) {
+            if (monthNow == monthBirth) {
+                // monthNow==monthBirth
+                if (dayOfMonthNow < dayOfMonthBirth) {
+                    age--;
+                }
+            } else {
+                // monthNow>monthBirth
+                age--;
+            }
+        }
+        return age;
     }
-    
+
     public static String sDateFormat() {
-    	return new SimpleDateFormat(DATE_PATTERN).format(Calendar.getInstance().getTime());	
+        return new SimpleDateFormat(DATE_PATTERN).format(Calendar.getInstance().getTime());
     }
    /* public static void main(String[] args) {
     	System.out.println(getAgeByBirthday(stringToDate("1983-05-02 00:00:00"))) ;
 	}*/
-    /**    
-     * 获得指定日期所在当月第一天    
-     *     
-     * @param date    
-     * @return    
-    * @throws ParseException 
-     */    
-    public static String getFirstDayOfMonth(Date dated, String formatStr) throws ParseException { 
-    	SimpleDateFormat formatDate = new SimpleDateFormat(formatStr);
-        Calendar c = Calendar.getInstance();    
-        c.setTime(dated);    
-        c.set(Calendar.DAY_OF_MONTH, 1);    
-        return formatDate.format(c.getTime());  
-    }    
-    
-    /**    
-     * 获得指定日期所在当月最后一天    
-     *     
-     * @param date    
-     * @return    
-    * @throws ParseException 
-     */    
-    public static String getLastDayOfMonth(Date dated, String formatStr) throws ParseException {    
-   	 	SimpleDateFormat formatDate = new SimpleDateFormat(formatStr);
-        Calendar c = Calendar.getInstance();    
-        c.setTime(dated);    
-        c.set(Calendar.DATE, 1);    
-        c.add(Calendar.MONTH, 1);    
-        c.add(Calendar.DATE, -1);    
-        return  formatDate.format(c.getTime());  
+
+    /**
+     * 获得指定日期所在当月第一天
+     *
+     * @param date
+     * @return
+     * @throws ParseException
+     */
+    public static String getFirstDayOfMonth(Date dated, String formatStr) throws ParseException {
+        SimpleDateFormat formatDate = new SimpleDateFormat(formatStr);
+        Calendar c = Calendar.getInstance();
+        c.setTime(dated);
+        c.set(Calendar.DAY_OF_MONTH, 1);
+        return formatDate.format(c.getTime());
     }
-	public static List<String> getStartEndDateList(String sdate,String edate) throws ParseException{
-		List<String> rtnList = new ArrayList<String>();
-		if(sdate.compareTo(edate)>0){
-			return rtnList;
-		}
-		if(sdate.compareTo(edate)==0){
-			rtnList.add(sdate);
-			return rtnList;
-		}
-		SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
-		Calendar cal = Calendar.getInstance();
-		
-		Date startDate = formatDate.parse(sdate);
-		Date endDate = formatDate.parse(edate);
-		
-		while(startDate.before(endDate)){
-			String str = formatDate.format(startDate);
-			rtnList.add(str);
-			cal.setTime(startDate);
-			cal.add(Calendar.DATE, 1);
-			startDate = cal.getTime();
-		}
-		rtnList.add(edate);
-		return rtnList;
-	}
-	
-	// 季度一年四季， 第一季度：1月-3月， 第二季度：4月-6月， 第三季度：7月-9月， 第四季度：10月-12月  
-    public static int getQuarterInMonth(int month, boolean isQuarterStart) {  
-    	int months[] = {0, 3, 6, 9};  
-        if (!isQuarterStart) {  
-            months = new int[] {2, 5, 8, 11 };  
-        }  
-        if (month >= 0 && month <= 2)  
-            return months[0];  
-        else if (month >= 3 && month <= 5)  
-            return months[1];  
-        else if (month >= 6 && month <= 8)  
-            return months[2];  
-        else  
-            return months[3]; 
-    } 
-    /** 
-     * 判断给定日期是星期几<br> 
-     * <br> 
-     * @param pTime 修要判断的时间<br> 
-     * @return dayForWeek 判断结果<br> 
-     * @Exception 发生异常<br> 
-     */  
-	 public static String dayForWeek(String pTime) throws Exception {  
-		  SimpleDateFormat  format = new SimpleDateFormat("yyyy-MM-dd");  
-		  Calendar c = Calendar.getInstance();  
-		  c.setTime(format.parse(pTime));  
-		  int dayForWeek = 0;  
-		  if(c.get(Calendar.DAY_OF_WEEK) == 1){  
-			  dayForWeek = 7;  
-		  }else{  
-			  dayForWeek = c.get(Calendar.DAY_OF_WEEK) - 1;  
-		  }  
-		  return String.valueOf(dayForWeek);  
-	 } 
-	 
-	 /** 
-	     * 判断当前日期是星期几<br> 
-	     * <br> 
-	     * @param pTime 修要判断的时间<br> 
-	     * @return dayForWeek 判断结果<br> 
-	     * @Exception 发生异常<br> 
-	     */  
-		 public static String todayForWeek() throws Exception {  
-			//获取今天日期
-			String today = dateToString(new Date());
-			String week = DateUtils.dayForWeek(today);
-			return week;  
-		 } 
-	 
-	 /**
-	 * 判断时间是否在[startTime, endTime]区间，注意时间格式要一致
-	 * @param nowTime
-	 * @param startTime
-	 * @param endTime
-	 * @return
-	 */
-	 public static boolean isEffectiveDate(String startTime, String endTime) {
-		 String today = dateToString(new Date());
-		 DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-	     
-	     Date nowDate = null;
-	     Date startDate = null;
-	     Date endDate = null;
-		 try {
-			 nowDate = df.parse(today);
-			 startDate = df.parse(startTime);
-			 endDate = df.parse(endTime);
-		 } catch (ParseException e) {
-			 e.printStackTrace();
-		 }
-	     
-         if (nowDate.getTime() == startDate.getTime()
-                 || nowDate.getTime() == endDate.getTime()) {
-             return true;
-         }
 
-         Calendar date = Calendar.getInstance();
-         date.setTime(nowDate);
+    /**
+     * 获得指定日期所在当月最后一天
+     *
+     * @param date
+     * @return
+     * @throws ParseException
+     */
+    public static String getLastDayOfMonth(Date dated, String formatStr) throws ParseException {
+        SimpleDateFormat formatDate = new SimpleDateFormat(formatStr);
+        Calendar c = Calendar.getInstance();
+        c.setTime(dated);
+        c.set(Calendar.DATE, 1);
+        c.add(Calendar.MONTH, 1);
+        c.add(Calendar.DATE, -1);
+        return formatDate.format(c.getTime());
+    }
 
-         Calendar begin = Calendar.getInstance();
-         begin.setTime(startDate);
+    public static List<String> getStartEndDateList(String sdate, String edate) throws ParseException {
+        List<String> rtnList = new ArrayList<String>();
+        if (sdate.compareTo(edate) > 0) {
+            return rtnList;
+        }
+        if (sdate.compareTo(edate) == 0) {
+            rtnList.add(sdate);
+            return rtnList;
+        }
+        SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar cal = Calendar.getInstance();
 
-         Calendar end = Calendar.getInstance();
-         end.setTime(endDate);
+        Date startDate = formatDate.parse(sdate);
+        Date endDate = formatDate.parse(edate);
 
-         if (date.after(begin) && date.before(end)) {
-             return true;
-         } else {
-             return false;
-         }
-	 }
-	 
-	 
-	 /**
-		 * 判断时间是否在[startTime, endTime]区间，注意时间格式要一致
-		 * @param nowTime
-		 * @param startTime
-		 * @param endTime
-		 * @return
-		 */
-		 public static boolean isEffectiveDate2(Date startDate, Date endDate) {
-			 String today = dateToString(new Date());
-			 DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-		     
-		     Date nowDate = null;
-			 try {
-				 nowDate = df.parse(today);
-			 } catch (ParseException e) {
-				 e.printStackTrace();
-			 }
-		     
-	         if (nowDate.getTime() == startDate.getTime()
-	                 || nowDate.getTime() == endDate.getTime()) {
-	             return true;
-	         }
+        while (startDate.before(endDate)) {
+            String str = formatDate.format(startDate);
+            rtnList.add(str);
+            cal.setTime(startDate);
+            cal.add(Calendar.DATE, 1);
+            startDate = cal.getTime();
+        }
+        rtnList.add(edate);
+        return rtnList;
+    }
 
-	         Calendar date = Calendar.getInstance();
-	         date.setTime(nowDate);
+    // 季度一年四季， 第一季度：1月-3月， 第二季度：4月-6月， 第三季度：7月-9月， 第四季度：10月-12月
+    public static int getQuarterInMonth(int month, boolean isQuarterStart) {
+        int months[] = {0, 3, 6, 9};
+        if (!isQuarterStart) {
+            months = new int[]{2, 5, 8, 11};
+        }
+        if (month >= 0 && month <= 2)
+            return months[0];
+        else if (month >= 3 && month <= 5)
+            return months[1];
+        else if (month >= 6 && month <= 8)
+            return months[2];
+        else
+            return months[3];
+    }
 
-	         Calendar begin = Calendar.getInstance();
-	         begin.setTime(startDate);
+    /**
+     * 判断给定日期是星期几<br>
+     * <br>
+     *
+     * @param pTime 修要判断的时间<br>
+     * @return dayForWeek 判断结果<br>
+     * @Exception 发生异常<br>
+     */
+    public static String dayForWeek(String pTime) throws Exception {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+        c.setTime(format.parse(pTime));
+        int dayForWeek = 0;
+        if (c.get(Calendar.DAY_OF_WEEK) == 1) {
+            dayForWeek = 7;
+        } else {
+            dayForWeek = c.get(Calendar.DAY_OF_WEEK) - 1;
+        }
+        return String.valueOf(dayForWeek);
+    }
 
-	         Calendar end = Calendar.getInstance();
-	         end.setTime(endDate);
+    /**
+     * 判断当前日期是星期几<br>
+     * <br>
+     *
+     * @param pTime 修要判断的时间<br>
+     * @return dayForWeek 判断结果<br>
+     * @Exception 发生异常<br>
+     */
+    public static String todayForWeek() throws Exception {
+        //获取今天日期
+        String today = dateToString(new Date());
+        String week = DateUtils.dayForWeek(today);
+        return week;
+    }
 
-	         if (date.after(begin) && date.before(end)) {
-	             return true;
-	         } else {
-	             return false;
-	         }
-		 }
-	 
-	 /**
-		 * @throws ParseException 
-		 * 
-		    * @Title: excutetime
-		    * @Description: 格式08:00-12:00 处理成 cron  格式为 "00 00 08 10 07 2018"
-		    * @param @param time
-		    * @param @return    参数
-		    * @return String    返回类型
-		    * @throws
-		 */
-		@SuppressWarnings("deprecation")
-		public static String excutetime (String time) throws ParseException{
-			String today = DateUtils.dateToString(new Date());
-	        StringBuilder sb = new StringBuilder();
-			if(time != null && !time.equals("")){
-				//String startTime = time.split("-")[0];
-				int startMinute = 0;
-				int startHour = 0;
-				Date nowTime = new Date();
-		        //如果想比较日期则写成"yyyy-MM-dd"就可以了  
-		        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		        //将字符串形式的时间转化为Date类型的时间  
-		        Date startTime=sdf.parse(today+ " "+time.split("-")[0]);
-		        Date endTime=sdf.parse(today+ " "+time.split("-")[1]);
-		        //Date类的一个方法，如果a早于b返回true，否则返回false  
-		        if(nowTime.before(startTime)) {
-		        	startMinute = startTime.getMinutes();
-		        	startHour = startTime.getHours();
-		        } else if (nowTime.before(endTime) && nowTime.after(startTime)) {
-		        	//当前时间 1分钟后执行
-		        	Date excutetime = new Date(nowTime.getTime() + 60000);
-		        	startMinute = excutetime.getMinutes();
-		        	startHour = excutetime.getHours();
-				}else{
-					return "";
-				}
-				sb.append("0").append(" ");
-				sb.append(startMinute).append(" ");
-				sb.append(startHour).append(" ");
-				sb.append(today.split("-")[2]).append(" ");
-				sb.append(today.split("-")[1]).append(" ");
-				sb.append("?").append(" ");
-				sb.append(today.split("-")[0]);
-			}
-			return sb.toString();
-		}
-		
-		public static void main(String[] args) throws ParseException {
-			String cron = excutetime("15:00-18:00");
-			System.out.println("result:"+cron);
-	  }
-		
-		/**
-		 * @throws ParseException 
-		 * 
-		    * @Title: excutetime
-		    * @Description: 格式08:00-12:00 处理成 cron  格式为 "00 00 08 10 07 2018"
-		    * @param @param time
-		    * @param @return    参数
-		    * @return String    返回类型
-		    * @throws
-		 */
-		@SuppressWarnings("deprecation")
-		public static String excutetime2 (String time) throws ParseException{
-			String today = DateUtils.dateToString(new Date());
-	        StringBuilder sb = new StringBuilder();
-			if(time != null && !time.equals("")){
-				//String startTime = time.split("-")[0];
-				int startMinute = 0;
-				int startHour = 0;
-				Date nowTime = new Date();
-		        //如果想比较日期则写成"yyyy-MM-dd"就可以了  
-		        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		        //将字符串形式的时间转化为Date类型的时间  
-		        Date startTime=sdf.parse(today+ " "+time.split("-")[0]);
-		        //Date类的一个方法，如果a早于b返回true，否则返回false  
-		        if(nowTime.before(startTime)) {
-		        	startMinute = startTime.getMinutes();
-		        	startHour = startTime.getHours();
-		        } else{
-					return "";
-				}
-				sb.append("0").append(" ");
-				sb.append(startMinute).append(" ");
-				sb.append(startHour).append(" ");
-				sb.append(today.split("-")[2]).append(" ");
-				sb.append(today.split("-")[1]).append(" ");
-				sb.append("?").append(" ");
-				sb.append(today.split("-")[0]);
-			}
-			return sb.toString();
-		}
-		public static Date getLastDay(Date date) {  
-	        Calendar calendar = Calendar.getInstance();  
-	        calendar.setTime(date);  
-	        calendar.add(Calendar.DAY_OF_MONTH, -1);  
-	        date = calendar.getTime();  
-	        return date;  
-	    } 
-		
-		public static String getLastDayString() {  
-	        Calendar calendar = Calendar.getInstance();  
-	        calendar.setTime(new Date());  
-	        calendar.add(Calendar.DAY_OF_MONTH, -1);  
-	        Date date = calendar.getTime();  
-	        String lastDay = DateUtils.dateToString(date);
-	        return lastDay;  
-	    }
-		
-		//time1 小于 time2 true
-		public static boolean compare(String time1,String time2) throws ParseException{
-			if(time1 == null || time1.equals("")){
-				return true;
-			}
-			//如果想比较日期则写成"yyyy-MM-dd"就可以了  
-			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-			////将字符串形式的时间转化为Date类型的时间  
-			Date a=sdf.parse(time1);
-			Date b=sdf.parse(time2);
-			////Date类的一个方法，如果a早于b返回true，否则返回false
-			if(a.before(b))
-				return true;
-			else 
-				return false;  
-		}	
+    /**
+     * 判断时间是否在[startTime, endTime]区间，注意时间格式要一致
+     *
+     * @param nowTime
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    public static boolean isEffectiveDate(String startTime, String endTime) {
+        String today = dateToString(new Date());
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
+        Date nowDate = null;
+        Date startDate = null;
+        Date endDate = null;
+        try {
+            nowDate = df.parse(today);
+            startDate = df.parse(startTime);
+            endDate = df.parse(endTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (nowDate.getTime() == startDate.getTime()
+                || nowDate.getTime() == endDate.getTime()) {
+            return true;
+        }
+
+        Calendar date = Calendar.getInstance();
+        date.setTime(nowDate);
+
+        Calendar begin = Calendar.getInstance();
+        begin.setTime(startDate);
+
+        Calendar end = Calendar.getInstance();
+        end.setTime(endDate);
+
+        if (date.after(begin) && date.before(end)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    /**
+     * 判断时间是否在[startTime, endTime]区间，注意时间格式要一致
+     *
+     * @param nowTime
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    public static boolean isEffectiveDate2(Date startDate, Date endDate) {
+        String today = dateToString(new Date());
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date nowDate = null;
+        try {
+            nowDate = df.parse(today);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (nowDate.getTime() == startDate.getTime()
+                || nowDate.getTime() == endDate.getTime()) {
+            return true;
+        }
+
+        Calendar date = Calendar.getInstance();
+        date.setTime(nowDate);
+
+        Calendar begin = Calendar.getInstance();
+        begin.setTime(startDate);
+
+        Calendar end = Calendar.getInstance();
+        end.setTime(endDate);
+
+        if (date.after(begin) && date.before(end)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @param @param  time
+     * @param @return 参数
+     * @return String    返回类型
+     * @throws ParseException
+     * @throws
+     * @Title: excutetime
+     * @Description: 格式08:00-12:00 处理成 cron  格式为 "00 00 08 10 07 2018"
+     */
+    @SuppressWarnings("deprecation")
+    public static String excutetime(String time) throws ParseException {
+        String today = DateUtils.dateToString(new Date());
+        StringBuilder sb = new StringBuilder();
+        if (time != null && !time.equals("")) {
+            //String startTime = time.split("-")[0];
+            int startMinute = 0;
+            int startHour = 0;
+            Date nowTime = new Date();
+            //如果想比较日期则写成"yyyy-MM-dd"就可以了
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            //将字符串形式的时间转化为Date类型的时间
+            Date startTime = sdf.parse(today + " " + time.split("-")[0]);
+            Date endTime = sdf.parse(today + " " + time.split("-")[1]);
+            //Date类的一个方法，如果a早于b返回true，否则返回false
+            if (nowTime.before(startTime)) {
+                startMinute = startTime.getMinutes();
+                startHour = startTime.getHours();
+            } else if (nowTime.before(endTime) && nowTime.after(startTime)) {
+                //当前时间 1分钟后执行
+                Date excutetime = new Date(nowTime.getTime() + 60000);
+                startMinute = excutetime.getMinutes();
+                startHour = excutetime.getHours();
+            } else {
+                return "";
+            }
+            sb.append("0").append(" ");
+            sb.append(startMinute).append(" ");
+            sb.append(startHour).append(" ");
+            sb.append(today.split("-")[2]).append(" ");
+            sb.append(today.split("-")[1]).append(" ");
+            sb.append("?").append(" ");
+            sb.append(today.split("-")[0]);
+        }
+        return sb.toString();
+    }
+
+
+    /**
+     * @param @param  time
+     * @param @return 参数
+     * @return String    返回类型
+     * @throws ParseException
+     * @throws
+     * @Title: excutetime
+     * @Description: 格式08:00-12:00 处理成 cron  格式为 "00 00 08 10 07 2018"
+     */
+    @SuppressWarnings("deprecation")
+    public static String excutetime2(String time) throws ParseException {
+        String today = DateUtils.dateToString(new Date());
+        StringBuilder sb = new StringBuilder();
+        if (time != null && !time.equals("")) {
+            //String startTime = time.split("-")[0];
+            int startMinute = 0;
+            int startHour = 0;
+            Date nowTime = new Date();
+            //如果想比较日期则写成"yyyy-MM-dd"就可以了
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            //将字符串形式的时间转化为Date类型的时间
+            Date startTime = sdf.parse(today + " " + time.split("-")[0]);
+            //Date类的一个方法，如果a早于b返回true，否则返回false
+            if (nowTime.before(startTime)) {
+                startMinute = startTime.getMinutes();
+                startHour = startTime.getHours();
+            } else {
+                return "";
+            }
+            sb.append("0").append(" ");
+            sb.append(startMinute).append(" ");
+            sb.append(startHour).append(" ");
+            sb.append(today.split("-")[2]).append(" ");
+            sb.append(today.split("-")[1]).append(" ");
+            sb.append("?").append(" ");
+            sb.append(today.split("-")[0]);
+        }
+        return sb.toString();
+    }
+
+    public static Date getLastDay(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        date = calendar.getTime();
+        return date;
+    }
+
+    public static String getLastDayString() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        Date date = calendar.getTime();
+        String lastDay = DateUtils.dateToString(date);
+        return lastDay;
+    }
+
+    //time1 小于 time2 true
+    public static boolean compare(String time1, String time2) throws ParseException {
+        if (time1 == null || time1.equals("")) {
+            return true;
+        }
+        //如果想比较日期则写成"yyyy-MM-dd"就可以了
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        ////将字符串形式的时间转化为Date类型的时间
+        Date a = sdf.parse(time1);
+        Date b = sdf.parse(time2);
+        ////Date类的一个方法，如果a早于b返回true，否则返回false
+        if (a.before(b))
+            return true;
+        else
+            return false;
+    }
+
+    public static String dateTimeNow(String isoDateFormat) {
+        // 取得系统当前时间
+        Date date = new Date();
+        // 讲时间转换成字符串
+        SimpleDateFormat sdf = new SimpleDateFormat(isoDateFormat);
+        String nowTime = sdf.format(date);
+        return nowTime;
+    }
+
+    public static void main(String[] args) throws ParseException {
+        System.out.println(dateTimeNow(ISO_DATE_FORMAT));
+//        String cron = excutetime("15:00-18:00");
+//        System.out.println("result:" + cron);
+    }
 }

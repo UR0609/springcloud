@@ -12,6 +12,7 @@ import com.ljryh.client.service.IUserService;
 import com.ljryh.client.utils.annotation.OperLog;
 import com.ljryh.common.entity.CallResult;
 import com.ljryh.common.utils.GsonUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -63,7 +64,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public Object add(@RequestBody User user) {
+    public Object add(@RequestBody @Validated(User.add.class) User user) {
         boolean judge = userService.save(user);
         if (judge) {
             return CallResult.success("添加成功");

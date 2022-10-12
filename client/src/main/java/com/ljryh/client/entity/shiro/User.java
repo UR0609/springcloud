@@ -17,6 +17,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -53,11 +55,13 @@ public class User extends PageResponse implements Serializable {
     /**
      * 姓名
      */
+    @NotBlank(groups = {add.class})
     private String name;
 
     /**
      * 年龄
      */
+    @NotNull(groups = {add.class},message = "年龄不能为空")
     private Integer age;
 
     /**
@@ -84,5 +88,25 @@ public class User extends PageResponse implements Serializable {
     private LocalDateTime updateTime;
 
     private Integer del;
+
+    /**
+     * 新增时候参数校验
+     */
+    public interface list{}
+
+    /**
+     * 新增时候参数校验
+     */
+    public interface add{}
+
+    /**
+     * 修改时参数校验
+     */
+    public interface mod{}
+    /**
+     * 删除时参数校验
+     */
+    public interface del{}
+
 
 }
