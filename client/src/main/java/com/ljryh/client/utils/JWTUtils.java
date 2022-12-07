@@ -148,6 +148,16 @@ public class JWTUtils {
         return SecretKey;
     }
 
+    public static void main(String[] args) {
+        JWTUtils jwtUtils = new JWTUtils();
+        try {
+//            jwtUtils.parseJWT("eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IkZMeS1sNTJtY3g3NGxrNVFjM190Y0pUYmN6ayJ9.eyJhdWQiOiJ1cm46bWljcm9zb2Z0OnVzZXJpbmZvIiwiaXNzIjoiaHR0cDovL2FkZnMud3V4aWJpb2xvZ2ljcy5jb20vYWRmcy9zZXJ2aWNlcy90cnVzdCIsImlhdCI6MTY2NTQ3NjY3MSwiZXhwIjoxNjY1NDgwMjcxLCJhcHB0eXBlIjoiQ29uZmlkZW50aWFsIiwiYXBwaWQiOiJjMWYxMjVlYy1mNGZiLTQ0MGItYTg5MC0xN2I5ZmJkNmZhMWMiLCJhdXRobWV0aG9kIjoidXJuOm9hc2lzOm5hbWVzOnRjOlNBTUw6Mi4wOmFjOmNsYXNzZXM6UGFzc3dvcmRQcm90ZWN0ZWRUcmFuc3BvcnQiLCJhdXRoX3RpbWUiOiIyMDIyLTEwLTExVDAxOjU1OjAyLjMwN1oiLCJ2ZXIiOiIxLjAiLCJzY3AiOiJvcGVuaWQiLCJzdWIiOiJOY0Z5a3d1RU4vdmZOcDNkUStxeG8wbGxHRC82Qjd5cjR5ZjNNdytQczdrPSJ9.eG35zuSwgn166dNRCRPIHF_oYZphS6AcatY88j7FJ6dIaK1rydNoVndiUE3d5rELEqEh0CAFN7y_leX8dnlS9Cq4wAh0acpgYSHLbMRgNWoC0H-Dx8r88lIOkqm4yU-_WFRRQmWDmi6teqkB3DSEm9xaPm-6a1ANxr62dh2j6BwCZ3XqaQLL5KAyrFDv13NL-Z7SIPXAshnp99tS8sYx1Lb6ar3ypFI1NydHLdi94UMWEGXm9Yy9aonh3gBhVdhqqWNGau2vmQpgnyUcRpwfTU0zmQO-PUdZ_45ieJVoR7CQ_W3R8OGs-TlCx0U4kGuCdeFT8lTbcdYObm8Qwys-qg",true);
+            jwtUtils.parseJWTNoRedis("eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IkZMeS1sNTJtY3g3NGxrNVFjM190Y0pUYmN6ayJ9.eyJhdWQiOiJ1cm46bWljcm9zb2Z0OnVzZXJpbmZvIiwiaXNzIjoiaHR0cDovL2FkZnMud3V4aWJpb2xvZ2ljcy5jb20vYWRmcy9zZXJ2aWNlcy90cnVzdCIsImlhdCI6MTY2NTQ3NjY3MSwiZXhwIjoxNjY1NDgwMjcxLCJhcHB0eXBlIjoiQ29uZmlkZW50aWFsIiwiYXBwaWQiOiJjMWYxMjVlYy1mNGZiLTQ0MGItYTg5MC0xN2I5ZmJkNmZhMWMiLCJhdXRobWV0aG9kIjoidXJuOm9hc2lzOm5hbWVzOnRjOlNBTUw6Mi4wOmFjOmNsYXNzZXM6UGFzc3dvcmRQcm90ZWN0ZWRUcmFuc3BvcnQiLCJhdXRoX3RpbWUiOiIyMDIyLTEwLTExVDAxOjU1OjAyLjMwN1oiLCJ2ZXIiOiIxLjAiLCJzY3AiOiJvcGVuaWQiLCJzdWIiOiJOY0Z5a3d1RU4vdmZOcDNkUStxeG8wbGxHRC82Qjd5cjR5ZjNNdytQczdrPSJ9.eG35zuSwgn166dNRCRPIHF_oYZphS6AcatY88j7FJ6dIaK1rydNoVndiUE3d5rELEqEh0CAFN7y_leX8dnlS9Cq4wAh0acpgYSHLbMRgNWoC0H-Dx8r88lIOkqm4yU-_WFRRQmWDmi6teqkB3DSEm9xaPm-6a1ANxr62dh2j6BwCZ3XqaQLL5KAyrFDv13NL-Z7SIPXAshnp99tS8sYx1Lb6ar3ypFI1NydHLdi94UMWEGXm9Yy9aonh3gBhVdhqqWNGau2vmQpgnyUcRpwfTU0zmQO-PUdZ_45ieJVoR7CQ_W3R8OGs-TlCx0U4kGuCdeFT8lTbcdYObm8Qwys-qg");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * 解密+验证token
      *
@@ -155,7 +165,7 @@ public class JWTUtils {
      * @return
      * @throws Exception
      */
-    public Object parseJWT(String token,boolean judge) throws Exception {
+    public static Object parseJWT(String token, boolean judge) throws Exception {
         // 解析请求的token（获取：公钥与加密ID）
         DecodedJWT DecodedJWT = null;
         try {
@@ -221,10 +231,22 @@ public class JWTUtils {
     }
 
     public Object parseJWTNoRedis(String token) throws Exception {
+
+        // 获取字符串长度
+        int length = "6B7yr4yf3Mw+Ps7k=".length();
+        System.out.println(length);
         // 解析请求的token（获取：公钥与加密ID）
         DecodedJWT DecodedJWT = JWT.decode(token);
         String publicKey = DecodedJWT.getIssuer();
+        // 获取用户姓名
+        String userName = DecodedJWT.getSubject();
+        System.out.println("userName:" + userName);
+        String x = DecodedJWT.getIssuer();
+        System.out.println("x:" + x);
         String id = DecodedJWT.getId();
+        System.out.println("id:" + id);
+        List<String> audience = DecodedJWT.getAudience();
+        System.out.println("audience:" + audience);
         // 本地调试
 //        String publicKey = "a98f22ff358544ba94945b7f541fbd80";
         // 判断公钥是否存在

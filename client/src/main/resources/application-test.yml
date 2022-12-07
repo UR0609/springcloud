@@ -12,10 +12,10 @@ spring:
       port: 57017
       database: admin
   rabbitmq:
-    host: 103.72.144.239
+    host: 127.0.0.1
     port: 5672
-    password: yby
-    username: yby
+    password: guest
+    username: guest
   cloud:
     sentinel:
       transport:
@@ -90,7 +90,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://eureka.ljryh.com/eureka/
+      defaultZone: http://localhost:8761/eureka/
 
 #eureka:
 #  instance:

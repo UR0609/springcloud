@@ -5,6 +5,7 @@ import com.ljryh.client.entity.FileInfo;
 import com.ljryh.client.entity.shiro.User;
 import com.ljryh.client.mapper.FileMapper;
 import com.ljryh.client.service.FileService;
+import com.ljryh.common.entity.MicroException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -12,12 +13,11 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StreamUtils;
 
 import javax.annotation.Resource;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import javax.servlet.ServletOutputStream;
+import java.io.*;
 import java.security.MessageDigest;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -118,7 +118,48 @@ public class FileServiceImpl implements FileService {
             newFile.renameTo(new File(absPath.concat("/").concat(md5)));
         }
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        return saveOrUpdateFileInfo(fileId, fileName, contentType, user.getId(), filePath, fileSize, md5);
+        return saveOrUpdateFileInfo(fileId, fileName, contentType, 1L, filePath, fileSize, md5);
+    }
+
+    @Override
+    public FileInfo selectByIdOrMd5(String idOrMd5) {
+        if (null == idOrMd5) {
+            return null;
+        }
+        return fileMapper.selectByIdOrMd5(idOrMd5);
+    }
+
+    @Override
+    public void writeFile(String idOrMd5, ServletOutputStream outputStream, int skip)   throws IOException {
+        try (InputStream inputStream = readFile(idOrMd5)) {
+            if (skip > 0) {
+                long len = inputStream.skip(skip);
+            }
+            StreamUtils.copy(inputStream, outputStream);
+        }
+    }
+
+    public InputStream readFile(String fileIdOrMd5) {
+        FileInfo fileInfo = fileMapper.selectByIdOrMd5(fileIdOrMd5);
+        return readFile(fileInfo);
+    }
+
+    public InputStream readFile(FileInfo fileInfo) {
+        if (fileInfo == null ) {
+            throw new MicroException("file not found or disabled");
+        }
+        //配置中的文件上传根路径
+        String filePath = uploadFilePath + fileInfo.getFilePath();
+        File file = new File(filePath);
+        if (!file.exists()) {
+            throw new MicroException("file not found");
+        }
+        try {
+            return new FileInputStream(file);
+        } catch (FileNotFoundException ignore) {
+            //  never happen
+            throw new MicroException("file not found");
+        }
     }
 
     private FileInfo saveOrUpdateFileInfo(String fileId, String fileName, String type, Long id, String filePath, int fileSize, String md5) {

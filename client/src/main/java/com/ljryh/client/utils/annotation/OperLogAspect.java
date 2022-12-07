@@ -159,8 +159,8 @@ public class OperLogAspect {
             excepLog.setOperMethod(methodName); // 请求方法名
             excepLog.setExcName(e.getClass().getName()); // 异常名称
             excepLog.setExcMessage(stackTraceToString(e.getClass().getName(), e.getMessage(), e.getStackTrace())); // 异常信息
-            excepLog.setOperUserId(UserShiroUtil.getUserId()); // 操作员ID
-            excepLog.setOperUserName(UserShiroUtil.getUserName()); // 操作员名称
+//            excepLog.setOperUserId(UserShiroUtil.getUserId()); // 操作员ID
+//            excepLog.setOperUserName(UserShiroUtil.getUserName()); // 操作员名称
             excepLog.setOperUri(request.getRequestURI()); // 操作URI
             excepLog.setOperIp(IpUtils.getIpAddr(request)); // 操作员IP
             excepLog.setOperVer(operVer); // 操作版本号

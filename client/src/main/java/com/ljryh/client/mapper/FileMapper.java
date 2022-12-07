@@ -11,4 +11,5 @@ import com.ljryh.client.entity.FileInfo;
 public interface FileMapper extends BaseMapper<FileInfo> {
     FileInfo selectByMd5(String md5);
 
+    FileInfo selectByIdOrMd5(String idOrMd5);
 }

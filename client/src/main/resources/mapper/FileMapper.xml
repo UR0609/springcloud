@@ -9,4 +9,12 @@
         AND a.MD5 = #{md5}
 
     </select>
+
+    <select id="selectByIdOrMd5" resultType="com.ljryh.client.entity.FileInfo">
+
+        SELECT a.* FROM s_file_info a
+        where 1=1
+          AND a.del = 0
+        AND (a.ID = #{id} OR a.MD5 = #{md5})
+    </select>
 </mapper>
