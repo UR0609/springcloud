@@ -10,7 +10,7 @@
       </el-table-column>
     </el-table>
     <div>
-      <el-button type="primary" @click="addtableData">添加</el-button>
+<!--      <el-button type="primary" @click="addtableData">添加</el-button>-->
       <el-button type="primary" @click="present ">提交</el-button>
     </div>
   </div>
@@ -53,6 +53,10 @@ export default {
         url: "/sys/database/content/getTableData",
         data: {
           databaseId: 1,
+          // birthdayStart: "2000-01-01 00:00:00",
+          // birthdayEnd: "2004-01-01 00:00:00",
+          sex: 0,
+          name: '喜',
         },
       }).then(result => {
         if (result && result.status == 200) {
