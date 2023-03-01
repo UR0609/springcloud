@@ -50,11 +50,11 @@ public class MysqlGenerator {
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://mysql.ljryh.com:63306/demo?characterEncoding=utf8&useSSL=true&serverTimezone=CTT");
+        dsc.setUrl("jdbc:mysql://localhost:3306/demo?characterEncoding=utf8&useSSL=true&serverTimezone=CTT");
         // dsc.setSchemaName("public");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
-        dsc.setPassword("J@^S%TCE9dTXusVC");
+        dsc.setPassword("123456");
         mpg.setDataSource(dsc);
 
         // 包配置

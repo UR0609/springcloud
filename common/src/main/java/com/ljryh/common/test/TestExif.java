@@ -19,7 +19,7 @@ public class TestExif {
 
     public static void main(String[] args) throws Exception {
 
-        File file = new File("/Users/yibaiyi/Library/Containers/com.tencent.xinWeChat/Data/Library/Application Support/com.tencent.xinWeChat/2.0b4.0.9/363f9cbfe2b9addb1f277b74129580af/Message/MessageTemp/9818b952f4d84898c8a5335e97fa6bdf/File/归档/ps.jpeg");
+        File file = new File("/Users/yibaiyi/Library/Containers/com.tencent.xinWeChat/Data/Library/Application Support/com.tencent.xinWeChat/2.0b4.0.9/363f9cbfe2b9addb1f277b74129580af/Message/MessageTemp/21dbf2b3eb60ddb819b9cb20117ef67e/Image/34221676858120_.pic_hd.jpg");
 //        File file = new File("/Users/yibaiyi/Downloads/GetImage.jpeg");
 //        File file = new File("/Users/yibaiyi/Downloads/GetImage.jpeg");
 //        File file = new File("/Users/yibaiyi/Library/Containers/com.tencent.xinWeChat/Data/Library/Application Support/com.tencent.xinWeChat/2.0b4.0.9/363f9cbfe2b9addb1f277b74129580af/Message/MessageTemp/9818b952f4d84898c8a5335e97fa6bdf/Image/41711655276744_.pic.jpg");

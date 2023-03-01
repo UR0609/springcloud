@@ -1,130 +1,124 @@
 <template>
   <div>
-    <el-table
-        :data="tableData"
-        v-loading="listLoading"
-        border
-        stripe
-        height="700">
-      <el-table-column
-          v-for="info in headerData" :key="info.key"
-          :property="info.key"
-          :label="info.label"
-      >
+    <el-table class="tableBox" :data="tableData" align="center" border style="width: 100%;" :cell-style="myclass"
+              highlight-current-row>
+      <el-table-column align="center" v-for="(item, index) in headData" :key="index" :prop="item.name"
+                       :label="item.description" :v-if="true">
         <template slot-scope="scope">
-          {{ scope.row[scope.column.property] }}
-        </template>
-      </el-table-column>
-      <el-table-column label="启用状态">
-        <template slot-scope="scope">
-          <el-switch
-              v-model="scope.row.ifUse">
-          </el-switch>
+          <span>{{ scope.row[index].name }}</span>
         </template>
       </el-table-column>
     </el-table>
+    <div>
+      <el-button type="primary" @click="addtableData">添加</el-button>
+      <el-button type="primary" @click="present ">提交</el-button>
+    </div>
   </div>
 </template>
 
 <script>
+// import {showResult} from "@/utils/show-resutl";
 
 export default {
-  name: "EmpTest",
   created() {
-    this.getHeader();
-    this.getList();
+    // 在模板渲染成html前调用
+    this.getHeadData();
+    this.getTableData();
+
   },
   mounted() {
-    // 在模板渲染成html后调用
   },
   methods: {
-    getHeader() {
+    getHeadData() {
       this.$axios({
         method: "POST",
-        url: this.path + "/header",
-        data: {},
+        // url: this.path + "/getheadData",
+        url: "/sys/database/content/getheadData",
+        data: {
+          databaseId: 1,
+        },
       }).then(result => {
-        console.log(result);
         if (result && result.status == 200) {
-          this.headerData = result.data;
+          console.log(result.data, "表头数据");
+          this.headData = result.data;
+          // setTimeout(() => {
+          //   this.listLoading = false
+          // }, 0.5 * 1000)
         }
       });
     },
-    getList() {
-      // 请求url
+    getTableData() {
       this.$axios({
         method: "POST",
-        url: this.path + "/list",
-        data: {},
+        url: "/sys/database/content/getTableData",
+        data: {
+          databaseId: 1,
+        },
       }).then(result => {
-        console.log(result);
         if (result && result.status == 200) {
-          setTimeout(() => {
-            this.tableData = result.data;
-            this.listLoading = false
-          }, 0.5 * 1000)
+          console.log(result.data, "表头数据");
+          this.headData = result.data;
+          // setTimeout(() => {
+          //   this.listLoading = false
+          // }, 0.5 * 1000)
         }
       });
+    },
+    // 删除
+    deleteData(index, row) {
+      console.log(row.id, "参数");
+    },
+    //根据条件修改单元格字体样式（sfcb字段为false且不为null时）
+    myclass({row, columnIndex}) {
+      if (row[columnIndex] && !row[columnIndex].sfcb && row[columnIndex].sfcb != null) {
+        return "color: red";
+      }
+    },
+    // 提交操作
+    present() {
+      let result = [];
+      // 通过双层循环拿到所需字段
+      this.tableData.forEach((item) => {
+        let data = {};
+        item.forEach((e) => {
+          // 将字段名、字段值以键值对的形式赋值
+          data[e.zdm] = e.value;
+        });
+        // 每一行数据为一个对象添加到数组中 [{},{},{},...]
+        result.push(data);
+      });
+      console.log(result, "参数");
+      // 执行接口操作
     },
   },
   data() {
     return {
-      listLoading: true,
-      path: this.$route.path,
-      headerData: [],
-      // headerData: [
-      //   {
-      //     label: '编码',
-      //     key: 'code'
-      //   },
-      //   {
-      //     label: '姓名',
-      //     key: 'name'
-      //   },
-      //   {
-      //     label: '权限描述',
-      //     key: 'description'
-      //   }
-      // ],
+      centerDialogVisible: true, //弹框显隐状态
+      // 模拟表头数据
+      headData: [],
+      // 模拟表格数据
       tableData: [],
-      // rightsDate: [{
-      //   "id": 221,
-      //   "code": "01",
-      //   "name": "西药开立权限",
-      //   "description": "医生对西药处方权限",
-      //   "ifUse": "0"
-      // }, {
-      //   "id": 222,
-      //   "code": "02",
-      //   "name": "草药开立权限",
-      //   "description": "医生对草药处方权限",
-      //   "ifUse": "0"
-      // }, {
-      //   "id": 223,
-      //   "code": "03",
-      //   "name": "成药开立权限",
-      //   "description": "医生对成药处方权限",
-      //   "ifUse": "0"
-      // }, {
-      //   "id": 224,
-      //   "code": "04",
-      //   "name": "麻醉开立权限",
-      //   "description": "医生对麻醉处方权限",
-      //   "ifUse": "0"
-      // },
-      //   {
-      //     "id": 225,
-      //     "code": "05",
-      //     "name": "精一开立权限",
-      //     "description": "医生对精一处方权限",
-      //     "ifUse": "0"
-      //   }
-      // ]
-    }
-  }
-}
+    };
+  },
+
+};
 </script>
 
 <style scoped>
+.tableBox {
+  margin-bottom: 20px;
+}
 
+/* 通过显隐控制input框的状态 */
+.tableBox .el-input {
+  display: none;
+}
+
+.tableBox .current-row .el-input {
+  display: block;
+}
+
+.tableBox .current-row .el-input + span {
+  display: none;
+}
 </style>

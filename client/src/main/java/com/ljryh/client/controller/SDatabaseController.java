@@ -74,4 +74,19 @@ public class SDatabaseController {
         return result != null ? CallResult.success(result) : CallResult.fail();
     }
 
+    /**
+     * 生成数据库表
+     *
+     * @param entity
+     * @return
+     */
+    @RequestMapping(value = "/createTable", method = RequestMethod.POST)
+    public Object createTable(@RequestBody SDatabase entity) {
+//        boolean judge = sDatabaseService.removeById(entity.getId());
+//        return judge ? CallResult.success() : CallResult.fail();
+        System.out.println("id:" + entity.getId());
+        int result = sDatabaseService.createTable(entity);
+        return result == 0 ? CallResult.success() : CallResult.fail();
+    }
+
 }

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljryh.client.mapper.SDatabaseContentMapper">
+
+    <select id="selectList"
+            resultType="com.ljryh.client.entity.SDatabaseContent">
+        SELECT a.*
+             ,b.name as "fieldName"
+             ,b.value as "fieldValue"
+             ,c.name as "queryName"
+             ,d.name as "inputName"
+             ,e.name as "verifyName"
+        FROM s_database_content a
+            left join s_dict b on b.id = a.field_type
+            left join s_dict c on c.id = a.query_type
+            left join s_dict d on d.id = a.input_type
+            left join s_dict e on e.id = a.verify_type
+        where 1=1
+
+        ORDER BY a.id
+    </select>
+
+    <update id="createTable">
+        CREATE TABLE IF NOT EXISTS `${database.tableName}`
+        (
+        `id`          bigint auto_increment comment 'id'        primary key,
+        <foreach collection="list" item="item" separator=",">
+            ${item.name}
+            <choose>
+                <when test="item.fieldValue == 'varchar'">
+                    varchar(${item.fieldLength})
+                </when>
+                <otherwise>
+                    ${item.fieldValue}
+                </otherwise>
+            </choose>
+            <if test="item.defaultValue != null and item.defaultValue != ''">
+                default ${item.defaultValue}
+            </if>
+            null comment #{item.description}
+        </foreach>
+        ,create_time datetime           null comment '创建时间'
+        ,creater     bigint             null comment '创建人'
+        ,update_time datetime           null comment '更新时间'
+        ,updater     bigint             null comment '更新人'
+        ) comment #{database.remarks} collate = utf8_german2_ci;
+    </update>
+</mapper>

@@ -72,14 +72,19 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="操作" align="center" min-width="100px">
+        <el-table-column label="操作" align="center" min-width="150px">
           <template slot-scope="scope">
 <!--            绿色按钮-->
 
             <el-button
                 size="mini"
                 type="success"
-                @click="handleRole(scope.$index, scope.row)">设计
+                @click="databaseFieldDesign(scope.$index, scope.row)">设计
+            </el-button>
+            <el-button
+                size="mini"
+                type="warning"
+                @click="databaseFieldGenerate(scope.$index, scope.row)">生成
             </el-button>
             <el-button
                 size="mini"
@@ -108,19 +113,6 @@
         <el-form-item label="表名" :label-width="formLabelWidth" prop="tableName">
           <el-input v-model="dataFrom.tableName" autocomplete="off"></el-input>
         </el-form-item>
-<!--        <el-form-item label="初始化状态" :label-width="formLabelWidth" prop="initType">-->
-<!--          <el-select v-model="dataFrom.initType" placeholder="请选择">-->
-<!--            <el-option label="未初始" value="0"></el-option>-->
-<!--            <el-option label="初始化" value="1"></el-option>-->
-<!--            <el-option label="更新" value="2"></el-option>-->
-<!--          </el-select>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="使用状态" :label-width="formLabelWidth" prop="useType">-->
-<!--          <el-select v-model="dataFrom.useType" placeholder="请选择">-->
-<!--            <el-option label="未使用" value="0"></el-option>-->
-<!--            <el-option label="已使用" value="1"></el-option>-->
-<!--          </el-select>-->
-<!--        </el-form-item>-->
         <el-form-item label="排序" :label-width="formLabelWidth" prop="sort">
           <el-input v-model="dataFrom.sort" autocomplete="off"></el-input>
         </el-form-item>
@@ -135,6 +127,14 @@
       </div>
     </el-dialog>
 
+    <!--  字段设计弹出层  -->
+    <el-dialog :title="this.titleType" :visible.sync="fieldDesignVisible"  style="overflow-x: hidden;width: 90%;height: 80%;">
+      <el-table style="width: 100%" border :data="tableDataa">
+        <template v-for="(item,index) in tableHead">
+          <el-table-column :prop="item.column_name" :label="item.column_comment" :key="index" v-if="item.column_name != 'id'"></el-table-column>
+        </template>
+      </el-table>
+    </el-dialog>
 
   </div>
 </template>
@@ -219,6 +219,24 @@ export default {
         }
       })
     },
+    databaseFieldGenerate(index, row) {
+      this.$axios({
+        method: "POST",
+        url: this.path + "/createTable",
+        data: {
+          id: row.id
+        },
+      }).then(result => {
+        var judge = showResult(result);
+        if (judge) {
+          this.getList();
+        }
+      });
+    },
+    databaseFieldDesign(index, row) {
+      console.log(row.id);
+      this.fieldDesignVisible = true;
+    },
     // 修改弹出页
     handleUpdate(index, row) {
       this.$axios({
@@ -291,42 +309,6 @@ export default {
       this.listQuery.page = 1
       this.getList()
     },
-    // 导出
-    // handleDownload() {
-    //   this.downloadLoading = true
-    //   import('@/vendor/Export2Excel').then(excel => {
-    //     this.$axios({
-    //       method: "POST",
-    //       url: this.path + "/exportExcel",
-    //       data: {
-    //         name: this.listQuery.name,
-    //         username: this.listQuery.username,
-    //       },
-    //     }).then(result => {
-    //       if (result && result.status == 200) {
-    //         const tHeader = ['姓名', '用户名', '密码', '年龄', '邮箱', '电话', '备注', '创建时间']
-    //         const filterVal = ['name', 'username', 'password', 'age', 'email', 'phone', 'remarks', 'createTime']
-    //         const list = result.data;
-    //         const data = this.formatJson(filterVal, list)
-    //         excel.export_json_to_excel({
-    //           header: tHeader,
-    //           data,
-    //           filename: '用户列表',
-    //           autoWidth: true,
-    //           bookType: 'xlsx'
-    //         })
-    //         this.downloadLoading = false
-    //       } else {
-    //         Message({
-    //           showClose: true,
-    //           message: "操作失败，请联系管理员",
-    //           type: "error",
-    //           duration: "3000"
-    //         });
-    //       }
-    //     });
-    //   })
-    // },
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
         if (j === 'timestamp') {
@@ -337,9 +319,41 @@ export default {
       }))
     },
   },
+
   data() {
 
     return {
+
+
+// 表格数据
+      tableDataa: [{
+        column_age: '3',
+        column_name: '鞠婧祎',
+        column_sex: '女'
+      },
+        {
+          column_age: '25',
+          column_name: '魏大勋',
+          column_sex: '男'
+        },
+        {
+          column_age: '18',
+          column_name: '关晓彤',
+          column_sex: '女'
+        }],
+//javascript
+// 表头数据
+      tableHead:[
+        {
+          column_name: "column_name",column_comment:"姓名"
+        },
+        {
+          column_name: "column_age",column_comment:"年龄"
+        },
+        {
+          column_name: "column_sex",column_comment:"性别"
+        }
+      ],
       // 规则验证
       dataRules: {
         name: [
@@ -371,6 +385,7 @@ export default {
       tableData: null,
       // 弹出层
       dialogFormVisible: false,
+      fieldDesignVisible: false,
       // 弹出页 定义字段长度
       formLabelWidth: '120px',
       // 提交到后台的url
@@ -395,11 +410,11 @@ export default {
       options: [],
 
       downloadLoading: false,
+
     }
   }
 }
 </script>
 
-<style scoped>
-
+<style>
 </style>
