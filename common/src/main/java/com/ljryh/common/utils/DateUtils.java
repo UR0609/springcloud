@@ -3,6 +3,9 @@ package com.ljryh.common.utils;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 
 /**
@@ -953,6 +956,16 @@ public class DateUtils {
         SimpleDateFormat sdf = new SimpleDateFormat(isoDateFormat);
         String nowTime = sdf.format(date);
         return nowTime;
+    }
+
+    // String 转 LocalDateTime
+    public static LocalDateTime stringToLocalDateTime(String strDate) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = sdf.parse(strDate);
+        Instant instant = date.toInstant();
+        ZoneId zoneId = ZoneId.systemDefault();
+        LocalDateTime localDateTime = instant.atZone(zoneId).toLocalDateTime();
+        return localDateTime;
     }
 
     public static void main(String[] args) throws ParseException {

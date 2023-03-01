@@ -3,6 +3,11 @@ package com.ljryh.client.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -144,6 +149,9 @@ public class SDatabaseContent extends PageResponse implements Serializable {
     /**
      * 创建时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime createTime;
 
     /**
@@ -154,6 +162,9 @@ public class SDatabaseContent extends PageResponse implements Serializable {
     /**
      * 更新时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime updateTime;
 
     /**
@@ -166,5 +177,32 @@ public class SDatabaseContent extends PageResponse implements Serializable {
      */
     private Integer del;
 
+    /**
+     * 是否展示（0：列表展示，1：列表隐藏）
+     */
+    private Integer isShow;
+
+    /**
+     * 是否可以编辑（0：可以编辑，1：不可编辑）
+     */
+    private Integer isEdit;
+
+    /**
+     * 查询条件
+     */
+    @TableField(exist = false)
+    private String queryCondition;
+
+    /**
+     * 查询条件-开始时间
+     */
+    @TableField(exist = false)
+    private LocalDateTime queryConditionStart;
+
+    /**
+     * 查询条件-结束时间
+     */
+    @TableField(exist = false)
+    private LocalDateTime queryConditionEnd;
 
 }

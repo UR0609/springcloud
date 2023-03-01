@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.text.ParseException;
+import java.util.Map;
 
 /**
  * <p>
@@ -35,10 +37,9 @@ public class SDatabaseContentController {
     }
 
     @RequestMapping(value = "/getTableData", method = RequestMethod.POST)
-    public Object getTableData(@RequestBody SDatabaseContent entity) {
-        QueryWrapper<SDatabaseContent> wrapper = new QueryWrapper<>();
-        wrapper.setEntity(entity);
-        return CallResult.success(databaseContentService.list(wrapper));
+    public Object getTableData(@RequestBody Map<String,Object> map) throws ParseException {
+        Map<String,Object> result = databaseContentService.getTableData(map);
+        return CallResult.success(result);
     }
 
 }

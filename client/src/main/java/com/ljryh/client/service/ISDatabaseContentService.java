@@ -1,7 +1,10 @@
 package com.ljryh.client.service;
 
-import com.ljryh.client.entity.SDatabaseContent;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ljryh.client.entity.SDatabaseContent;
+
+import java.text.ParseException;
+import java.util.Map;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ISDatabaseContentService extends IService<SDatabaseContent> {
 
+    Map<String,Object> getTableData(Map<String, Object> map) throws ParseException;
 }

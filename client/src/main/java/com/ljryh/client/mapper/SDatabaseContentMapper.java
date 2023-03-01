@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -18,4 +19,8 @@ import java.util.List;
 public interface SDatabaseContentMapper extends BaseMapper<SDatabaseContent> {
 
     Integer createTable(@Param("database") SDatabase database,@Param("list") List<SDatabaseContent> databaseContentList);
+
+    List<Map<String, Object>> getTableData(Map<String, Object> map);
+
+    Integer getTableDataCount(Map<String, Object> map);
 }

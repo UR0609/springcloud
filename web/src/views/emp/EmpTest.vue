@@ -53,10 +53,12 @@ export default {
         url: "/sys/database/content/getTableData",
         data: {
           databaseId: 1,
+          pageNo: 2,
+          pageSize: 3,
           // birthdayStart: "2000-01-01 00:00:00",
           // birthdayEnd: "2004-01-01 00:00:00",
-          sex: 0,
-          name: '喜',
+          // sex: 0,
+          // name: '喜',
         },
       }).then(result => {
         if (result && result.status == 200) {

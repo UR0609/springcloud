@@ -45,4 +45,76 @@
         ,updater     bigint             null comment '更新人'
         ) comment #{database.remarks} collate = utf8_german2_ci;
     </update>
+
+    <select id="getTableData" resultType="java.util.Map">
+        select
+            id as "id",
+        <foreach collection="list" item="item" separator=",">
+            <if test="item.isShow == 0">
+                ${item.name} as "${item.name}"
+                <if test="item.inputType == 12">
+                    ,(select name from s_dict where type = #{item.dictType} and value = ${item.name}) as "${item.name}Name"
+                </if>
+            </if>
+        </foreach>
+        from ${database.tableName}
+        <where>
+            1=1
+            <foreach collection="list" item="item">
+                <choose>
+                    <when test="item.queryType == 8">
+                        <if test="item.queryCondition != null">
+                           and ${item.name} like concat('%',#{item.queryCondition},'%')
+                        </if>
+                    </when>
+                    <when test="item.queryType == 10">
+                        <if test="item.queryConditionStart != null">
+                            and ${item.name} &gt;= #{item.queryConditionStart}
+                        </if>
+                        <if test="item.queryConditionEnd != null">
+                            and ${item.name} &lt;= #{item.queryConditionEnd}
+                        </if>
+                    </when>
+                    <otherwise>
+                        <if test="item.queryCondition != null">
+                            and ${item.name} = #{item.queryCondition}
+                        </if>
+                    </otherwise>
+                </choose>
+            </foreach>
+        </where>
+        order by id desc
+        limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="getTableDataCount" resultType="java.lang.Integer">
+        select
+            count(1)
+        from ${database.tableName}
+        <where>
+            1=1
+            <foreach collection="list" item="item">
+                <choose>
+                    <when test="item.queryType == 8">
+                        <if test="item.queryCondition != null">
+                            and ${item.name} like concat('%',#{item.queryCondition},'%')
+                        </if>
+                    </when>
+                    <when test="item.queryType == 10">
+                        <if test="item.queryConditionStart != null">
+                            and ${item.name} &gt;= #{item.queryConditionStart}
+                        </if>
+                        <if test="item.queryConditionEnd != null">
+                            and ${item.name} &lt;= #{item.queryConditionEnd}
+                        </if>
+                    </when>
+                    <otherwise>
+                        <if test="item.queryCondition != null">
+                            and ${item.name} = #{item.queryCondition}
+                        </if>
+                    </otherwise>
+                </choose>
+            </foreach>
+        </where>
+    </select>
 </mapper>
