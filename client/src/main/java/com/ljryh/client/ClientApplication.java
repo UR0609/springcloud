@@ -16,6 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 // git config --global http.sslVerify "false"
+// git config --global http.version HTTP/1.1
+// 取消全局代理：
+//git config --global --unset http.proxy
+//git config --global --unset https.proxy
 // netstat -aon|findstr "8661"
 // 自动化接口生成
 @EnableHasor()
