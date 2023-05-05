@@ -9,13 +9,15 @@ spring:
     mongodb:
       #      uri: mongodb://127.0.0.1:57017/admin
       host: 127.0.0.1
-      port: 57017
+      port: 27017
       database: admin
+      username: ljryh
+      password: abc123###
   rabbitmq:
     host: 127.0.0.1
     port: 5672
-    password: admin
-    username: admin
+    username: ljryh
+    password: abc123###
   cloud:
     sentinel:
       transport:
@@ -33,9 +35,9 @@ spring:
       max-lifetime: 1800000
       pool-name: DatebookHikariCP
       maximum-pool-size: 30
-      jdbc-url: jdbc:mysql://127.0.0.1:3306/springcloud?characterEncoding=utf8&useSSL=true&serverTimezone=CTT
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/demo?createDatabaseIfNotExist=true&useSSL=false
       username: root
-      password: root
+      password: abc123###
     driver-class-name: com.mysql.cj.jdbc.Driver
   cache:
     #缓存类型
