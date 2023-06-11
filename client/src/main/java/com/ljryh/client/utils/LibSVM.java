@@ -45,6 +45,7 @@ public class LibSVM {
         test[0].value = -45.5;
         test[1].index = 2;
         test[1].value = 20.2;
+
         //归一化
         test[0].value = (test[0].value+100)/200;
         test[1].value = (test[1].value+100)/200;
