@@ -120,11 +120,11 @@ public class XmlUtils {
         Map<String, Object> map = new HashMap<>();
         String timestamp = String.format("%010d", System.currentTimeMillis() / 1000);
         String nocestr = UUID.randomUUID().toString().replace("-", "");
-        String ticket = "54_lykUQOsEkocW9kbPKwkIyfZXHEIr3Hpc1E7fkybhGdSLIPC7I4w8aPygZHOxlwpLksV7fuWX__-ErfPrvHQ262y0etL9XZ8zdIrRCPscdW9NRHdR1cXAaE7yOgPCF9GEm1JHqNmrRdmlBKOCJZPeABAPFV";
-        String string1 = "jsapi ticket=" + ticket + "&noncestr=" + nocestr + "&timestamp=" + timestamp + "&url=" + url;
+        String ticket = "";
+        String string1 = "";
         String signature = SHA1(string1);
         if (signature != null) {
-            map.put("appid", "wxfb8668b88c06d733");
+            map.put("appid", "null");
             map.put("timestamp", timestamp);
             map.put("noncestr", nocestr);
             map.put("signature", signature);
