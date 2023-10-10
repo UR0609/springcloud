@@ -1,7 +1,7 @@
 package com.ljryh.common.utils.pdf;
 
 import com.aspose.cells.*;
-import com.ruoyi.common.utils.aliyun.ShortUUIDUtils;
+import com.ljryh.common.utils.ShortUUIDUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
