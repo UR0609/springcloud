@@ -15,7 +15,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 // git config --global http.sslVerify "false"
 // git config --global http.version HTTP/1.1
 // 取消全局代理：
