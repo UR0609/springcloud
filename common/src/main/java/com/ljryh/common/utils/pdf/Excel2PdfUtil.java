@@ -1,11 +1,11 @@
 package com.ljryh.common.utils.pdf;
 
 import com.aspose.cells.*;
-import com.ljryh.common.utils.ShortUUIDUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
+import java.util.UUID;
 
 /**
  * @author ljryh
@@ -74,7 +74,7 @@ public class Excel2PdfUtil {
             }
 
             // arrayInputStream 输入到PDF文件中去
-            String name = ShortUUIDUtils.getUuid() + ".pdf";
+            String name = UUID.randomUUID().toString().replace("-", "") + ".pdf";
             String filePath = "/Users/yibaiyi/IdeaProjects/ruoyi-vue-activiti-master/uploadPath/file/" + name;
             File file = new File(filePath);
             if (!file.exists()) {
@@ -106,6 +106,58 @@ public class Excel2PdfUtil {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+
+    /**
+     * @param fileUrl
+     */
+    public static void excel2Pdf(String fileUrl) {
+        System.out.println("pdf转换中...");
+        long old = System.currentTimeMillis();
+        try {
+            // 验证
+            if (!getLicense()) {
+                throw new RuntimeException("文件转换失败!");
+            }
+            // 设置字体包位置
+            IndividualFontConfigs configs = new IndividualFontConfigs();
+
+            String os = System.getProperty("os.name");
+            if(os.startsWith("Linux")){
+                configs.setFontFolder("/usr/share/fonts/Fonts", true);
+            }else if(os.startsWith("Mac")){
+                configs.setFontFolder("/System/Library/Fonts", true);
+            }else{
+
+            }
+
+
+            LoadOptions loadOptions = new LoadOptions();
+            loadOptions.setFontConfigs(configs);
+
+
+
+            // 也可以直接指定路径 workbook = new Workbook(docPath, loadOptions);
+//            Workbook workbook = new Workbook(inputStream, loadOptions);
+            Workbook workbook = new Workbook(fileUrl, loadOptions);
+
+            PdfSaveOptions opts = new PdfSaveOptions();
+            // 设置excel不换行在pdf显示
+            // opts.setAllColumnsInOnePagePerSheet(true);
+            // 设置一个sheet在一页pdf
+            opts.setOnePagePerSheet(true);
+//            workbook.save(fos, opts);
+            workbook.save(fileUrl.replace(".xlsx",".pdf") , opts);
+
+            long now = System.currentTimeMillis();
+            System.out.println("pdf转换成功，共耗时：" + ((now - old) / 1000.0) + "秒");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("文件转换失败!");
+        } finally {
+
         }
     }
 

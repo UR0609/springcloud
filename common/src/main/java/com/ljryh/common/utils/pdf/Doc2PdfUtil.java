@@ -1,16 +1,11 @@
 package com.ljryh.common.utils.pdf;
 
-import com.aspose.cells.SaveFormat;
-import com.aspose.words.Document;
-import com.aspose.words.FontSettings;
-import com.aspose.words.License;
-import com.aspose.words.LoadOptions;
+
+
+import com.aspose.words.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URLEncoder;
 
 /**
@@ -92,6 +87,60 @@ public class Doc2PdfUtil {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+
+    /**
+     * doc转pdf
+     *
+     * @param docPath
+     * @return
+     */
+    public static void doc2Pdf(String docPath) {
+        System.out.println("pdf转换中...");
+        long old = System.currentTimeMillis();
+
+        try  {
+            // 验证
+            if (!getLicense()) {
+                throw new RuntimeException("文件转换失败!");
+            }
+            // 加载字体
+            FontSettings settings = FontSettings.getDefaultInstance();
+
+            String os = System.getProperty("os.name");
+            if(os.startsWith("Linux")){
+                settings.setFontsFolder("/usr/share/fonts/Fonts", true);
+            }else if(os.startsWith("Mac")){
+                settings.setFontsFolder("/System/Library/Fonts", true);
+            }else{
+
+            }
+            LoadOptions loadOptions = new LoadOptions();
+            loadOptions.setFontSettings(settings);
+
+//             也可以直接指定路径 document = new Document(docPath);
+//            Document document = new Document(inputStream, loadOptions);
+            Document document = new Document(docPath, loadOptions);
+
+            //  DocumentBuilder builder = new DocumentBuilder(document);
+            // 设置纸张大小
+            //  builder.getPageSetup().setPaperSize(PaperSize.A3);
+            // 设置横向
+            // builder.getPageSetup().setOrientation(Orientation.LANDSCAPE);
+
+            SaveOptions pdfSaveOptions = PdfSaveOptions.createSaveOptions(SaveFormat.PDF);
+
+            document.save(docPath.replace(".docx",".pdf"),pdfSaveOptions);
+
+            long now = System.currentTimeMillis();
+            System.out.println("pdf转换成功，共耗时：" + ((now - old) / 1000.0) + "秒");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("文件转换失败!");
+        } finally {
+
         }
     }
 
