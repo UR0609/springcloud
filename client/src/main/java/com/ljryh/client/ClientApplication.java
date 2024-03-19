@@ -1,6 +1,5 @@
 package com.ljryh.client;
 
-import com.ljryh.client.utils.RedisUtils;
 import net.hasor.spring.boot.EnableHasor;
 import net.hasor.spring.boot.EnableHasorWeb;
 import org.mybatis.spring.annotation.MapperScan;
@@ -8,8 +7,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.Resource;
 
 // git config --global http.sslVerify "false"
 // git config --global http.version HTTP/1.1
@@ -26,8 +23,8 @@ import javax.annotation.Resource;
 @RestController
 public class ClientApplication {
 
-    @Resource
-    private RedisUtils redisUtils;
+//    @Resource
+//    private RedisUtils redisUtils;
 
     public static void main(String[] args) {
         SpringApplication.run(ClientApplication.class, args);
