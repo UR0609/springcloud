@@ -8,8 +8,8 @@ spring:
   data:
     mongodb:
       #      uri: mongodb://127.0.0.1:57017/admin
-      host: 103.72.144.239
-      port: 57017
+      host: 127.0.0.1
+      port: 27017
       database: admin
   rabbitmq:
     host: 127.0.0.1
@@ -33,9 +33,9 @@ spring:
       max-lifetime: 1800000
       pool-name: DatebookHikariCP
       maximum-pool-size: 30
-      jdbc-url: jdbc:mysql://127.0.0.1:3306/demo?characterEncoding=utf8&useSSL=true&serverTimezone=CTT
+      jdbc-url: jdbc:mysql://60.205.9.169:3306/demo?characterEncoding=utf8&useSSL=true&serverTimezone=CTT
       username: root
-      password: 123456
+      password: _WZa1ia}u5kXdQ:!s+c,
     driver-class-name: com.mysql.cj.jdbc.Driver
   cache:
     #缓存类型
