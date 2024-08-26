@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * sudo vi /etc/hosts
  *
- * 140.82.112.3 github.com
- * 151.101.1.6 github.global.ssl.fastly.net
- * 151.101.65.6 github.global.ssl.fastly.net
- * 151.101.129.6 github.global.ssl.fastly.net
- * 151.101.193.6 github.global.ssl.fastly.net
- * 140.82.112.3 assets-cdn.github.com
+ * 140.82.114.3     github.com
+ * 151.101.1.6      github.global.ssl.fastly.net
+ * 151.101.65.6     github.global.ssl.fastly.net
+ * 151.101.129.6    github.global.ssl.fastly.net
+ * 151.101.193.6    github.global.ssl.fastly.net
+ * 140.82.114.3     assets-cdn.github.com
  *
  * sudo killall -HUP mDNSResponder
  */

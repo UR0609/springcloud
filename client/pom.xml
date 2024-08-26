@@ -22,6 +22,12 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.3.3</version>
+        </dependency>
+
         <!-- 阿里云oss -->
         <dependency>
             <groupId>com.aliyun.oss</groupId>

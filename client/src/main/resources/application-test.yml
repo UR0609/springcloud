@@ -101,6 +101,7 @@ eureka:
 #      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/eureka/
 
 server:
+  host: http://localhost:8661/
 #  servlet:
 #    context-path: /client
   tomcat:
