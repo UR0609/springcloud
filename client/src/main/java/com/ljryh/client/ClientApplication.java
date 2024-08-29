@@ -7,7 +7,25 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.web.bind.annotation.RestController;
-
+/**
+ * https://github.com.ipaddress.com/
+ * 获取 github.com
+ * https://fastly.net.ipaddress.com/github.global.ssl.fastly.net#ipinfo
+ * 获取 github.global.ssl.fastly.net
+ * https://github.com.ipaddress.com/assets-cdn.github.com
+ * 获取 assets-cdn.github.com
+ *
+ * sudo vi /etc/hosts
+ *
+ * 140.82.114.3     github.com
+ * 151.101.1.6      github.global.ssl.fastly.net
+ * 151.101.65.6     github.global.ssl.fastly.net
+ * 151.101.129.6    github.global.ssl.fastly.net
+ * 151.101.193.6    github.global.ssl.fastly.net
+ * 140.82.114.3     assets-cdn.github.com
+ *
+ * sudo killall -HUP mDNSResponder
+ */
 // git config --global http.sslVerify "false"
 // git config --global http.version HTTP/1.1
 // 取消全局代理：

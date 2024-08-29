@@ -52,7 +52,8 @@ public class ShiroConfig {
         // 线程测试
         filterMap.put("/task/**", "anon");
         // 除了以上路径，其他都需要权限验证
-        filterMap.put("/**", "auth");
+        filterMap.put("/**", "anon");
+//        filterMap.put("/**", "auth");
         shiroFilter.setFilterChainDefinitionMap(filterMap);
 
         return shiroFilter;

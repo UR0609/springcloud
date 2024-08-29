@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ljryh.client.mapper.shorturl.UrlMapper">
+
+    <select id="getLongUrl" resultType="java.lang.String">
+        select lurl from url_map where surl = #{url}
+    </select>
+
+    <insert id="saveUrlInfo">
+        insert into url_map (surl, lurl, views, create_time)
+        values (#{surl}, #{lurl}, #{views}, #{createTime})
+    </insert>
+
+    <update id="updataUrlViews">
+        update url_map set views=views+1 where surl = #{surl}
+    </update>
+
+    <select id="getAllUrlInfo" resultType="com.ljryh.client.entity.shorturl.UrlInfo">
+        select * from url_map
+    </select>
+</mapper>
