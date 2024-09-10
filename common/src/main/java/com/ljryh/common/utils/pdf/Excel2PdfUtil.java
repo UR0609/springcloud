@@ -162,6 +162,7 @@ public class Excel2PdfUtil {
     }
 
     public static void main(String[] args) {
+//        excel2Pdf("/Users/yibaiyi/IdeaProjects/mes/print/ranyou.xlsx");
         excel2Pdf("/Users/yibaiyi/IdeaProjects/mes/print/ranyou.xlsx");
     }
 
