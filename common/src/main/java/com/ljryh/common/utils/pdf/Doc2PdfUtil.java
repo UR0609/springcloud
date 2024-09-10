@@ -144,4 +144,9 @@ public class Doc2PdfUtil {
         }
     }
 
+
+    public static void main(String[] args) {
+        doc2Pdf("/Users/yibaiyi/IdeaProjects/mes/print/huanbao2024_LSYKGAAC1RK010041_1.docx");
+    }
+
 }
