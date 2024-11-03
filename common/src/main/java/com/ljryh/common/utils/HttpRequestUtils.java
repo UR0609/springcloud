@@ -188,6 +188,12 @@ public class HttpRequestUtils {
         return bos.toByteArray();
     }
 
+    /**
+     * http post json
+     * @param url
+     * @param param
+     * @return
+     */
     public static String sendPostJson(String url, String param) {
         PrintWriter out = null;
         BufferedReader in = null;
