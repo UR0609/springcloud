@@ -223,4 +223,14 @@ public class JacksonUtils {
     public static <T> T objTopojo(Object obj, Class<T> clazz) {
         return objectMapper.convertValue(obj, clazz);
     }
+
+    public static void main(String[] args) {
+        try {
+            Map map = jsonToPojo("{\"session_key\":\"rCR0o0bPi/amnkW88RZGdA\\u003d\\u003d\",\"openid\":\"oYKV67SmKZdJM_VeCkiER_b6Y0Pk\",\"unionid\":\"ov9dx0SAtAVEafzM7BNqcKxCoUtY\"}",Map.class);
+            System.out.println(map.get("openid"));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
