@@ -17,6 +17,12 @@
     <dependencies>
 
         <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <version>9.0.98</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.aspose.cells</groupId>
             <artifactId>aspose-cells</artifactId>
             <version>20.4 - c</version>
